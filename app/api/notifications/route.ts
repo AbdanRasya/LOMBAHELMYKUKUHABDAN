@@ -12,8 +12,17 @@ export async function GET() {
       take: 50,
     });
     return NextResponse.json({ notifications });
-  } catch {
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+  } catch (error) {
+    console.error("[api/notifications GET] DB error:", error);
+    return NextResponse.json(
+      {
+        notifications: [],
+        demo: true,
+        error: "Gagal mengambil notifikasi. Detail: " +
+          (error instanceof Error ? error.message : String(error)),
+      },
+      { status: 200 },
+    );
   }
 }
 
@@ -24,11 +33,20 @@ export async function PATCH(request: NextRequest) {
     const body = await request.json();
     if (body.markAllRead) {
       await db.notification.updateMany({ where: { userId: session.user.id, read: false }, data: { read: true } });
+      return NextResponse.json({ success: true });
     } else if (body.id) {
       await db.notification.update({ where: { id: body.id }, data: { read: true } });
+      return NextResponse.json({ success: true });
     }
-    return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+    return NextResponse.json({ error: "Sertakan 'id' atau 'markAllRead: true'" }, { status: 400 });
+  } catch (error) {
+    console.error("[api/notifications PATCH] DB error:", error);
+    return NextResponse.json(
+      {
+        error: "Gagal menandai notifikasi dibaca. Detail: " +
+          (error instanceof Error ? error.message : String(error)),
+      },
+      { status: 500 },
+    );
   }
 }

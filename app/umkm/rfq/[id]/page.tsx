@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Calendar, DollarSign, Package, FileText, Clock, Building2, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Calendar, DollarSign, Package, FileText, Building2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,6 +20,12 @@ const statusMap: Record<string, { label: string; className: string }> = {
   COMPLETED: { label: "Selesai", className: "bg-emerald-100 text-emerald-700" },
   CANCELLED: { label: "Dibatalkan", className: "bg-red-100 text-red-700" },
 };
+
+function getDaysLeft(deadline: Date | null): number | null {
+  if (!deadline) return null;
+  const now = Date.now();
+  return Math.ceil((deadline.getTime() - now) / 86400000);
+}
 
 export default async function UmkmRfqDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -41,7 +47,7 @@ export default async function UmkmRfqDetailPage({ params }: { params: Promise<{ 
   if (!rfq) return notFound();
 
   const s = statusMap[rfq.status] ?? { label: rfq.status, className: "bg-slate-100 text-slate-600" };
-  const daysLeft = rfq.deadline ? Math.ceil((rfq.deadline.getTime() - Date.now()) / 86400000) : null;
+  const daysLeft = getDaysLeft(rfq.deadline);
   const existingQuotation = rfq.quotations[0] || null;
 
   return (

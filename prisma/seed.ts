@@ -1,4 +1,4 @@
-import { PrismaClient, Role, RFQStatus, QuotationStatus, ProjectStatus, UmkmVerificationStatus, CertificationStatus } from "@prisma/client";
+import { PrismaClient, Role, RFQStatus, QuotationStatus, UmkmVerificationStatus, CertificationStatus } from "@prisma/client";
 import { neonConfig } from "@neondatabase/serverless";
 import { PrismaNeon } from "@prisma/adapter-neon";
 import bcrypt from "bcryptjs";
@@ -57,7 +57,7 @@ async function main() {
 
   // 2. Create Admin User
   const adminPassword = await bcrypt.hash("admin12345", 12);
-  const admin = await prisma.user.create({
+  await prisma.user.create({
     data: {
       email: "admin@sourcehub.id",
       name: "Super Admin SourceHub",

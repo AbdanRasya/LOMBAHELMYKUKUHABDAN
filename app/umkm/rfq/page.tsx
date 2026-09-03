@@ -1,10 +1,9 @@
 import { db } from "@/lib/db";
-import { auth } from "@/lib/auth";
 import Link from "next/link";
-import { FileText, Calendar, DollarSign, Package, ArrowRight, MessageSquare } from "lucide-react";
+import { FileText, ArrowRight, MessageSquare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 function formatRp(n: number) {
   return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(n);

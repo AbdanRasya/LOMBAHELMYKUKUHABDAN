@@ -6,7 +6,6 @@ export async function GET() {
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
-    // SavedSupplier has no Prisma relation to umkmProfile, so we join manually
     const savedList = await db.savedSupplier.findMany({
       where: { userId: session.user.id },
       orderBy: { createdAt: "desc" },
@@ -27,8 +26,17 @@ export async function GET() {
     }));
 
     return NextResponse.json({ saved });
-  } catch {
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+  } catch (error) {
+    console.error("[api/saved GET] DB error:", error);
+    return NextResponse.json(
+      {
+        saved: [],
+        demo: true,
+        error: "Belum ada supplier disimpan atau DB tidak terhubung. Detail: " +
+          (error instanceof Error ? error.message : String(error)),
+      },
+      { status: 200 },
+    );
   }
 }
 
@@ -37,6 +45,7 @@ export async function POST(request: NextRequest) {
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const { umkmId } = await request.json();
+    if (!umkmId) return NextResponse.json({ error: "umkmId wajib diisi" }, { status: 400 });
     const existing = await db.savedSupplier.findUnique({
       where: { userId_umkmId: { userId: session.user.id, umkmId } },
     });
@@ -47,7 +56,14 @@ export async function POST(request: NextRequest) {
       await db.savedSupplier.create({ data: { userId: session.user.id, umkmId } });
       return NextResponse.json({ saved: true });
     }
-  } catch {
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+  } catch (error) {
+    console.error("[api/saved POST] DB error:", error);
+    return NextResponse.json(
+      {
+        error: "Gagal toggle supplier tersimpan. Cek koneksi database. Detail: " +
+          (error instanceof Error ? error.message : String(error)),
+      },
+      { status: 500 },
+    );
   }
 }

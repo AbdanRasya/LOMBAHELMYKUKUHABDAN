@@ -23,6 +23,21 @@ type Message = {
   isOwn: boolean;
 };
 
+type ConversationApiItem = {
+  id: string;
+  otherUser?: { id: string; companyName?: string; businessName?: string };
+  messages?: { content: string }[];
+  lastMessageAt?: string;
+  createdAt?: string;
+};
+
+type MessageApiItem = {
+  id: string;
+  senderId: string;
+  content: string;
+  createdAt: string;
+};
+
 export default function UMKMMessagesPage() {
   const { data: session } = useSession();
   const currentUserId = session?.user?.id;
@@ -34,19 +49,25 @@ export default function UMKMMessagesPage() {
 
   const [showListOnMobile, setShowListOnMobile] = useState(true);
 
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
+
   useEffect(() => {
     const fetchConvs = async () => {
       try {
         const res = await fetch("/api/conversations");
         if (res.ok) {
           const data = await res.json();
-          const list = data.conversations || [];
-          const formatted = list.map((c: any) => ({
+          const list = (data.conversations || []) as ConversationApiItem[];
+          const formatted = list.map((c: ConversationApiItem) => ({
             id: c.id,
             partnerId: c.otherUser?.id || "",
             partnerName: c.otherUser?.companyName || "Unknown Company",
             lastMessage: c.messages?.[0]?.content || "",
-            lastMessageAt: c.lastMessageAt || c.createdAt,
+            lastMessageAt: c.lastMessageAt || c.createdAt || "",
             unreadCount: 0
           }));
           setConversations(formatted);
@@ -63,8 +84,8 @@ export default function UMKMMessagesPage() {
       const res = await fetch(`/api/conversations/${convId}/messages`);
       if (res.ok) {
         const data = await res.json();
-        const list = data.messages || [];
-        const formatted = list.map((m: any) => ({
+        const list = (data.messages || []) as MessageApiItem[];
+        const formatted = list.map((m: MessageApiItem) => ({
           ...m,
           isOwn: m.senderId === currentUserId
         }));
@@ -78,17 +99,11 @@ export default function UMKMMessagesPage() {
 
   useEffect(() => {
     if (activeConvId) {
-      fetchMessages(activeConvId);
+      queueMicrotask(() => fetchMessages(activeConvId));
       const interval = setInterval(() => fetchMessages(activeConvId), 3000);
       return () => clearInterval(interval);
     }
   }, [activeConvId, currentUserId]);
-
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  };
 
   const sendMessage = async () => {
     if (!inputText.trim() || !activeConvId) return;

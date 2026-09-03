@@ -5,8 +5,13 @@ import { useState, useEffect } from "react";
 import { Menu, X, Sparkles, ChevronRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
+import type { Role } from "@prisma/client";
 
 import { cn } from "@/lib/utils";
+
+type SessionUserWithRole = {
+  role?: Role;
+};
 
 const navLinks = [
   { label: "Fitur", href: "#features" },
@@ -27,10 +32,11 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
+  const userRole = (session?.user as SessionUserWithRole | undefined)?.role;
   const dashboardUrl = session?.user
-    ? (session.user as any).role === "UMKM"
+    ? userRole === "UMKM"
       ? "/umkm/dashboard"
-      : (session.user as any).role === "ADMIN"
+      : userRole === "ADMIN"
       ? "/admin/dashboard"
       : "/company/dashboard"
     : null;

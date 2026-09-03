@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Link from "next/link";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Search, Star, ShieldCheck, Zap, TrendingUp, Building2, Factory } from "lucide-react";
+import { ArrowRight, Search, Star, ShieldCheck, Zap, Building2, Factory } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const stats = [

@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { verifyEmailAction } from '@/actions/auth';
 import Link from 'next/link';
 import { CheckCircle, XCircle, Loader2, Sparkles } from 'lucide-react';
@@ -12,7 +12,13 @@ export default function VerifyEmailPage() {
   
   useEffect(() => {
     const token = searchParams.get('token');
-    if (!token) { setStatus('error'); setMessage('Token tidak ditemukan'); return; }
+    if (!token) {
+      queueMicrotask(() => {
+        setStatus('error');
+        setMessage('Token tidak ditemukan');
+      });
+      return;
+    }
     verifyEmailAction(token).then(result => {
       if (result.success) { setStatus('success'); setMessage(result.message || 'Email berhasil diverifikasi!'); }
       else { setStatus('error'); setMessage(result.error || 'Token tidak valid'); }

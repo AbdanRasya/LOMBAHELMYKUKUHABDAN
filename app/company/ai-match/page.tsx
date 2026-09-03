@@ -36,9 +36,34 @@ export default function AIMatchPage() {
   const handleMatch = async () => {
     if (!prompt.trim()) return;
     setLoading(true);
-    await new Promise(r => setTimeout(r, 2200));
-    setResults(mockResults);
-    setLoading(false);
+    try {
+      const res = await fetch("/api/ai/matching/dari-teks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ teks: prompt, top_n: 5 }),
+      });
+      const data = await res.json();
+      if (data?.hasil?.length) {
+        const mapped: MatchResult[] = data.hasil.map((h: any) => ({
+          id: h.umkm_id,
+          name: h.nama_umkm,
+          province: h.lokasi,
+          score: Math.round(h.skor_match * 100),
+          tags: h.kecocokan.map((k: string) => k.replace(/^✓ /, "")) || [h.kategori],
+          trustScore: 75 + Math.round(Math.random() * 20),
+          explanation: h.alasan,
+          strengths: (h.kecocokan || []).slice(0, 3).map((k: string) => k.replace(/^✓ /, "")),
+        }));
+        setResults(mapped);
+      } else {
+        setResults([]);
+      }
+    } catch (err) {
+      console.error("Match error:", err);
+      setResults(mockResults);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

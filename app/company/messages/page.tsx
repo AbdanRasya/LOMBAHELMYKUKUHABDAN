@@ -24,6 +24,21 @@ type Message = {
   isOwn: boolean;
 };
 
+type ConversationApiItem = {
+  id: string;
+  otherUser?: { id: string; companyName?: string; businessName?: string };
+  messages?: { content: string }[];
+  lastMessageAt?: string;
+  createdAt?: string;
+};
+
+type MessageApiItem = {
+  id: string;
+  senderId: string;
+  content: string;
+  createdAt: string;
+};
+
 export default function CompanyMessagesPage() {
   const { data: session } = useSession();
   const currentUserId = session?.user?.id;
@@ -38,6 +53,12 @@ export default function CompanyMessagesPage() {
   // Responsive state
   const [showListOnMobile, setShowListOnMobile] = useState(!queryConvId);
 
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
+
   useEffect(() => {
     // Fetch conversations
     const fetchConvs = async () => {
@@ -45,13 +66,13 @@ export default function CompanyMessagesPage() {
         const res = await fetch("/api/conversations");
         if (res.ok) {
           const data = await res.json();
-          const list = data.conversations || [];
-          const formatted = list.map((c: any) => ({
+          const list = (data.conversations || []) as ConversationApiItem[];
+          const formatted = list.map((c: ConversationApiItem) => ({
             id: c.id,
             partnerId: c.otherUser?.id || "",
             partnerName: c.otherUser?.businessName || "Unknown Supplier",
             lastMessage: c.messages?.[0]?.content || "",
-            lastMessageAt: c.lastMessageAt || c.createdAt,
+            lastMessageAt: c.lastMessageAt || c.createdAt || "",
             unreadCount: 0
           }));
           setConversations(formatted);
@@ -68,8 +89,8 @@ export default function CompanyMessagesPage() {
       const res = await fetch(`/api/conversations/${convId}/messages`);
       if (res.ok) {
         const data = await res.json();
-        const list = data.messages || [];
-        const formatted = list.map((m: any) => ({
+        const list = (data.messages || []) as MessageApiItem[];
+        const formatted = list.map((m: MessageApiItem) => ({
           ...m,
           isOwn: m.senderId === currentUserId
         }));
@@ -83,17 +104,11 @@ export default function CompanyMessagesPage() {
 
   useEffect(() => {
     if (activeConvId) {
-      fetchMessages(activeConvId);
+      queueMicrotask(() => fetchMessages(activeConvId));
       const interval = setInterval(() => fetchMessages(activeConvId), 3000);
       return () => clearInterval(interval);
     }
   }, [activeConvId, currentUserId]);
-
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  };
 
   const sendMessage = async () => {
     if (!inputText.trim() || !activeConvId) return;

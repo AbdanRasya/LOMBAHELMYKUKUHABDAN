@@ -4,11 +4,33 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { z } from "zod";
+import type { Role } from "@prisma/client";
 
 const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1),
 });
+
+type AuthorizedUser = {
+  id: string;
+  email: string | null;
+  name: string | null;
+  image: string | null;
+  role: Role;
+  emailVerified: Date | null;
+};
+
+type JwtWithRole = {
+  id: string;
+  role: Role;
+  emailVerified: Date | null;
+};
+
+type SessionUserWithRole = {
+  id: string;
+  role?: Role;
+  emailVerified?: Date | null;
+};
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(db),
@@ -53,17 +75,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.role = (user as any).role;
-        token.emailVerified = (user as any).emailVerified;
+        const authUser = user as AuthorizedUser;
+        token.id = authUser.id;
+        token.role = authUser.role;
+        token.emailVerified = authUser.emailVerified;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id as string;
-        (session.user as any).role = token.role;
-        (session.user as any).emailVerified = token.emailVerified;
+        const jwtToken = token as JwtWithRole;
+        session.user.id = jwtToken.id;
+        const sessionUser = session.user as SessionUserWithRole;
+        sessionUser.role = jwtToken.role;
+        sessionUser.emailVerified = jwtToken.emailVerified;
       }
       return session;
     },

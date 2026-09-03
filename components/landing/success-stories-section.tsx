@@ -77,7 +77,7 @@ export function SuccessStoriesSection() {
 
               {/* Quote */}
               <p className="text-neutral-700 text-sm leading-relaxed mb-5 italic">
-                "{story.quote}"
+                &ldquo;{story.quote}&rdquo;
               </p>
 
               {/* Metric pill */}

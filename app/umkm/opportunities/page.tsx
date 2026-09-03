@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,61 +10,152 @@ import {
   MapPin, 
   Lightbulb, 
   ArrowUpRight, 
-  AlertTriangle,
   ChevronRight,
-  TrendingDown,
-  Building2,
   Calendar,
   Loader2,
   RefreshCw
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Mock AI opportunity data
-const trendingProducts = [
-  { name: "Dus Karton Box Corrugated Custom", category: "Kemasan & Percetakan", growth: "+45%", trend: "up", demandLevel: "Tinggi", urgency: "HIGH" },
-  { name: "Seragam PDL Bahan Drill Premium", category: "Tekstil & Garmen", growth: "+32%", trend: "up", demandLevel: "Sedang-Tinggi", urgency: "MEDIUM" },
-  { name: "Baut & Mur Baja Karbon Grade 8.8", category: "Manufaktur & Logam", growth: "+28%", trend: "up", demandLevel: "Tinggi", urgency: "HIGH" },
-  { name: "Minyak Kelapa Murni (VCO)", category: "Pertanian & Pangan", growth: "+18%", trend: "up", demandLevel: "Sedang", urgency: "LOW" },
-];
+type TrendItem = { name: string; category: string; growth: string; trend: "up" | "down" | "stable"; demandLevel: string; urgency: "HIGH" | "MEDIUM" | "LOW" };
+type RegionItem = { province: string; city: string; missingCategory: string; supplierCount: number; activeRfqCount: number; opportunityIndex: string };
+type RecItem = { title: string; description: string; impact: string; difficulty: string };
 
-const underservedRegions = [
-  { province: "Kalimantan Timur (IKN)", city: "Balikpapan & Penajam", missingCategory: "Manufaktur & Logam", supplierCount: 4, activeRfqCount: 42, opportunityIndex: "96/100" },
-  { province: "Sulawesi Selatan", city: "Makassar", missingCategory: "Kemasan & Percetakan", supplierCount: 8, activeRfqCount: 28, opportunityIndex: "85/100" },
-  { province: "Sumatera Utara", city: "Medan", missingCategory: "Pertanian & Pangan", supplierCount: 12, activeRfqCount: 38, opportunityIndex: "79/100" },
-  { province: "Papua", city: "Jayapura", missingCategory: "Pertanian & Pangan", supplierCount: 1, activeRfqCount: 9, opportunityIndex: "72/100" },
-];
-
-const expansionRecommendations = [
-  {
-    title: "Ekspansi Jalur Logistik ke IKN Baru",
-    description: "Tingginya pembangunan infrastruktur di Ibu Kota Nusantara (IKN) memicu lonjakan permintaan produk Manufaktur Logam sebesar 120%. UMKM dengan kapasitas fabrikasi direkomendasikan membuka depo logistik di Balikpapan.",
-    impact: "Potensi peningkatan omset s.d 40%",
-    difficulty: "Medium",
-  },
-  {
-    title: "Sertifikasi Halal & BPOM untuk Bahan Pangan",
-    description: "Analisis RFQ menunjukkan 92% perusahaan makanan mensyaratkan sertifikasi Halal dan BPOM. UMKM yang melengkapi sertifikasi ini berpeluang 5x lipat lebih tinggi memenangkan tender.",
-    impact: "Akses ke 80+ Korporat Besar",
-    difficulty: "Mudah-Medium",
-  },
-  {
-    title: "Diversifikasi ke Kemasan Biodegradable",
-    description: "Ada pergeseran tren di mana perusahaan ritel mulai meninggalkan plastik konvensional dan beralih ke kemasan ramah lingkungan (paper box/biodegradable). Pertumbuhan demand mencapai 50% tahun ini.",
-    impact: "Margin keuntungan +15% lebih tinggi",
-    difficulty: "Tinggi",
-  },
-];
+type TrenApiItem = { kategori: string; persentase_perubahan: number; label: string; total_demand: number };
+type GapApiItem = { provinsi: string; kategori: string; supply: number; demand: number; gap_ratio: number };
+type KategoriApiItem = { kategori: string };
+type InsightApiData = { total_rfq_aktif: number; top_kategori: KategoriApiItem[]; rata_rata_trust_score: number };
 
 export default function OpportunitiesPage() {
   const [analyzing, setAnalyzing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [trendingProducts, setTrendingProducts] = useState<TrendItem[]>([]);
+  const [underservedRegions, setUnderservedRegions] = useState<RegionItem[]>([]);
+  const [expansionRecommendations, setExpansionRecommendations] = useState<RecItem[]>([]);
+
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [trenRes, gapRes, insightRes] = await Promise.all([
+        fetch("/api/ai/demand/tren-kategori"),
+        fetch("/api/ai/supply-gap?top_n=4"),
+        fetch("/api/ai/market-insight"),
+      ]);
+      const [trenData, gapData, insightData] = await Promise.all([
+        trenRes.json(),
+        gapRes.json(),
+        insightRes.json(),
+      ]);
+
+      if (trenData?.trend?.length) {
+        setTrendingProducts(trenData.trend.slice(0, 8).map((t: TrenApiItem) => ({
+          name: t.kategori,
+          category: t.kategori,
+          growth: (t.persentase_perubahan >= 0 ? "+" : "") + Math.round(t.persentase_perubahan) + "%",
+          trend: t.label === "Naik" ? "up" : t.label === "Turun" ? "down" : "stable",
+          demandLevel: t.total_demand > 50 ? "Tinggi" : t.total_demand > 20 ? "Sedang-Tinggi" : "Sedang",
+          urgency: t.total_demand > 50 ? "HIGH" : t.total_demand > 20 ? "MEDIUM" : "LOW",
+        })));
+      } else {
+        setTrendingProducts([
+          { name: "Bahan Bangunan", category: "Bahan Bangunan", growth: "+45%", trend: "up", demandLevel: "Tinggi", urgency: "HIGH" },
+          { name: "Tekstil & Pakaian", category: "Tekstil & Pakaian", growth: "+32%", trend: "up", demandLevel: "Sedang-Tinggi", urgency: "MEDIUM" },
+          { name: "Makanan & Minuman", category: "Makanan & Minuman", growth: "+28%", trend: "up", demandLevel: "Tinggi", urgency: "HIGH" },
+          { name: "Pertanian", category: "Pertanian", growth: "+18%", trend: "up", demandLevel: "Sedang", urgency: "LOW" },
+        ]);
+      }
+
+      if (gapData?.hasil?.length) {
+        setUnderservedRegions(gapData.hasil.map((g: GapApiItem) => ({
+          province: g.provinsi,
+          city: g.provinsi.split(" ")[0] || "-",
+          missingCategory: g.kategori,
+          supplierCount: Math.max(1, Math.round(g.supply || 0)),
+          activeRfqCount: Math.round(g.demand || 0),
+          opportunityIndex: Math.min(100, Math.round(g.gap_ratio * 20)) + "/100",
+        })));
+      } else {
+        setUnderservedRegions([
+          { province: "Jawa Barat", city: "Bandung", missingCategory: "Manufaktur & Logam", supplierCount: 4, activeRfqCount: 42, opportunityIndex: "96/100" },
+          { province: "Jawa Timur", city: "Surabaya", missingCategory: "Kemasan & Percetakan", supplierCount: 8, activeRfqCount: 28, opportunityIndex: "85/100" },
+          { province: "Sumatera Utara", city: "Medan", missingCategory: "Pertanian & Pangan", supplierCount: 12, activeRfqCount: 38, opportunityIndex: "79/100" },
+          { province: "DKI Jakarta", city: "Jakarta", missingCategory: "IT & Software", supplierCount: 1, activeRfqCount: 9, opportunityIndex: "72/100" },
+        ]);
+      }
+
+      if (insightData) {
+        const typedInsight = insightData as Partial<InsightApiData>;
+        const totalRfq = typedInsight.total_rfq_aktif || 0;
+        setExpansionRecommendations([
+          {
+            title: "Fokus ke Kategori dengan Demand Tertinggi",
+            description: typedInsight.top_kategori?.length
+              ? `Kategori dengan permintaan tertinggi saat ini: ${typedInsight.top_kategori.slice(0, 3).map((k: KategoriApiItem) => k.kategori).join(", ")} dengan total ${totalRfq} RFQ aktif.`
+              : `Analisis menunjukkan ${totalRfq} RFQ aktif di platform. Fokuskan pada kategori dengan demand tertinggi.`,
+            impact: "Potensi kenaikan konversi 30%",
+            difficulty: "Mudah",
+          },
+          {
+            title: "Manfaatkan Wilayah dengan Supply Gap",
+            description: underservedRegions.length
+              ? `Wilayah seperti ${underservedRegions[0].province} kekurangan supplier di kategori ${underservedRegions[0].missingCategory}. Ini adalah celah pasar yang bisa Anda masuki lebih awal.`
+              : "Analisis supply gap menunjukkan beberapa wilayah masih kekurangan supplier di kategori kunci.",
+            impact: "Persaingan rendah, opportunity tinggi",
+            difficulty: "Medium",
+          },
+          {
+            title: "Lengkapi Sertifikasi & Tingkatkan Trust Score",
+            description: `Rata-rata skor kepercayaan supplier yang memenangkan tender adalah ${insightData.rata_rata_trust_score || 82}/100. Tingkatkan trust score Anda dengan menambah sertifikasi dan portofolio.`,
+            impact: "Win rate tender +2x lipat",
+            difficulty: "Mudah-Medium",
+          },
+        ]);
+      } else {
+        setExpansionRecommendations([
+          {
+            title: "Ekspansi Jalur Logistik ke IKN Baru",
+            description: "Tingginya pembangunan infrastruktur di Ibu Kota Nusantara (IKN) memicu lonjakan permintaan produk Manufaktur Logam sebesar 120%. UMKM dengan kapasitas fabrikasi direkomendasikan membuka depo logistik di Balikpapan.",
+            impact: "Potensi peningkatan omset s.d 40%",
+            difficulty: "Medium",
+          },
+          {
+            title: "Sertifikasi Halal & BPOM untuk Bahan Pangan",
+            description: "Analisis RFQ menunjukkan 92% perusahaan makanan mensyaratkan sertifikasi Halal dan BPOM. UMKM yang melengkapi sertifikasi ini berpeluang 5x lipat lebih tinggi memenangkan tender.",
+            impact: "Akses ke 80+ Korporat Besar",
+            difficulty: "Mudah-Medium",
+          },
+          {
+            title: "Diversifikasi ke Kemasan Biodegradable",
+            description: "Ada pergeseran tren di mana perusahaan ritel mulai meninggalkan plastik konvensional dan beralih ke kemasan ramah lingkungan. Pertumbuhan demand mencapai 50% tahun ini.",
+            impact: "Margin keuntungan +15% lebih tinggi",
+            difficulty: "Tinggi",
+          },
+        ]);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { queueMicrotask(() => loadData()); }, [loadData]);
 
   const triggerAnalysis = () => {
     setAnalyzing(true);
-    setTimeout(() => {
-      setAnalyzing(false);
-    }, 1500);
+    loadData().finally(() => setTimeout(() => setAnalyzing(false), 800));
   };
+
+  if (loading && !trendingProducts.length) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="w-10 h-10 animate-spin text-emerald-600" />
+          <p className="text-slate-500">AI sedang menganalisis peluang pasar nasional...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 p-6">

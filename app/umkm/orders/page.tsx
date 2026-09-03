@@ -12,7 +12,6 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
-  ChevronRight,
   Send
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -36,6 +35,11 @@ type Order = {
   notes: string | null;
   trackingInfo: string | null;
   createdAt: string;
+};
+
+type UpdateOrderPayload = {
+  status: OrderStatus;
+  trackingInfo?: string;
 };
 
 const STATUS_CONFIG: Record<OrderStatus, { label: string; color: string; icon: React.ElementType }> = {
@@ -62,7 +66,7 @@ export default function UMKMOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [trackingInput, setTrackingInput] = useState("");
-  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [, setSelectedOrderId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -83,7 +87,7 @@ export default function UMKMOrdersPage() {
 
   const updateOrderStatus = async (orderId: string, newStatus: OrderStatus, tracking?: string) => {
     try {
-      const payload: any = { status: newStatus };
+      const payload: UpdateOrderPayload = { status: newStatus };
       if (tracking) payload.trackingInfo = tracking;
 
       const res = await fetch(`/api/orders/${orderId}`, {
@@ -148,7 +152,7 @@ export default function UMKMOrdersPage() {
           {orders.map((order) => {
             const statusCfg = STATUS_CONFIG[order.status];
             const StatusIcon = statusCfg.icon;
-            const currentStepIndex = ORDER_STEPS.indexOf(order.status as any);
+            const currentStepIndex = (ORDER_STEPS as readonly OrderStatus[]).indexOf(order.status);
 
             return (
               <div key={order.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm shadow-slate-100/50 hover:shadow-md transition-shadow duration-300">
