@@ -51,11 +51,40 @@ export async function PATCH(request: NextRequest) {
     if (categories && !Array.isArray(categories)) {
       return NextResponse.json({ error: "Format categories harus berupa array" }, { status: 400 });
     }
+
+    // Calculate completeness based on filled fields
+    let filledFields = 0;
+    const keyFields = [
+      data.businessName, data.tagline, data.description,
+      data.province, data.city, data.address,
+      data.phone, data.email, data.logo,
+      data.foundedYear, data.employeeCount,
+      data.npwp, data.nib
+    ];
+    keyFields.forEach(f => {
+      if (f !== undefined && f !== null && f !== "") filledFields++;
+    });
+    const calculatedCompleteness = Math.min(100, Math.round((filledFields / keyFields.length) * 100));
+
+    const profileData = {
+      ...data,
+      profileCompleteness: Math.max(data.profileCompleteness || 0, calculatedCompleteness),
+    };
+
     const profile = await db.umkmProfile.upsert({
       where: { userId: session.user.id },
-      create: { userId: session.user.id, businessName: data.businessName || "My Business", ...data },
-      update: data,
+      create: { userId: session.user.id, businessName: data.businessName || "My Business", ...profileData },
+      update: profileData,
     });
+
+    // Also update user image if logo was provided
+    if (data.logo) {
+      await db.user.update({
+        where: { id: session.user.id },
+        data: { image: data.logo },
+      }).catch(() => {});
+    }
+
     return NextResponse.json({ profile });
   } catch (error) {
     console.error("[api/umkm/profile PATCH] DB error:", error);
@@ -68,3 +97,4 @@ export async function PATCH(request: NextRequest) {
     );
   }
 }
+

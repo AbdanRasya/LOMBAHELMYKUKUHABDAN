@@ -17,12 +17,14 @@ import {
   ChevronLeft,
   ShoppingCart,
   MessageSquare,
+  Building2,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { signOut } from "next-auth/react";
 
 const navItems = [
   { name: "Dashboard", href: "/company/dashboard", icon: LayoutDashboard },
+  { name: "Profil Perusahaan", href: "/company/profile", icon: Building2 },
   { name: "Cari Supplier", href: "/company/suppliers", icon: Search },
   { name: "RFQ", href: "/company/rfq", icon: FileText },
   { name: "Pesanan", href: "/company/orders", icon: ShoppingCart },
@@ -33,6 +35,7 @@ const navItems = [
   { name: "Asisten AI", href: "/company/assistant", icon: MessageCircle },
   { name: "Pengaturan", href: "/company/settings", icon: Settings },
 ];
+
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();

@@ -34,12 +34,25 @@ export default async function SupplierDetailPage({ params }: { params: Promise<{
 
       {/* Hero */}
       <Card className="overflow-hidden border-0 shadow-sm">
-        <div className="h-32 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600" />
+        {supplier.coverImage ? (
+          <div className="h-40 w-full overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={supplier.coverImage} alt="Cover" className="h-full w-full object-cover" />
+          </div>
+        ) : (
+          <div className="h-32 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600" />
+        )}
         <CardContent className="p-6 -mt-12">
           <div className="flex flex-col sm:flex-row gap-5 items-start">
-            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-4 border-white bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-3xl font-bold shadow-lg">
-              {supplier.businessName.charAt(0)}
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-4 border-white bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-3xl font-bold shadow-lg overflow-hidden">
+              {supplier.logo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={supplier.logo} alt={supplier.businessName} className="h-full w-full object-cover" />
+              ) : (
+                supplier.businessName.charAt(0)
+              )}
             </div>
+
             <div className="flex-1 pt-10 sm:pt-4">
               <div className="flex flex-wrap items-center gap-2">
                 <h1 className="text-xl font-bold text-slate-900">{supplier.businessName}</h1>

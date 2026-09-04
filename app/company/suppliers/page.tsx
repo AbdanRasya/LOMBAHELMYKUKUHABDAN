@@ -16,6 +16,7 @@ type Supplier = {
   tagline?: string | null;
   province?: string | null;
   city?: string | null;
+  logo?: string | null;
   readinessScore: number;
   verificationStatus: string;
   categories: { id: string; name: string }[];
@@ -97,9 +98,15 @@ export default function SuppliersPage() {
               <CardContent className="p-0">
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-3">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold text-lg">
-                      {s.businessName?.charAt(0) || "S"}
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold text-lg overflow-hidden">
+                      {s.logo ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={s.logo} alt={s.businessName} className="h-full w-full object-cover" />
+                      ) : (
+                        s.businessName?.charAt(0) || "S"
+                      )}
                     </div>
+
                     <button onClick={() => toggleSave(s.id)} className="text-slate-400 hover:text-blue-600 transition-colors mt-1">
                       {savedIds.has(s.id) ? <BookmarkCheck className="h-5 w-5 text-blue-600" /> : <Bookmark className="h-5 w-5" />}
                     </button>

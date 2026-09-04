@@ -19,6 +19,7 @@ import {
   ChevronLeft,
   ShoppingCart,
   MessageSquare,
+  Sparkles,
 } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { signOut } from 'next-auth/react';
@@ -27,6 +28,7 @@ const navItems = [
   { name: 'Dashboard', href: '/umkm/dashboard', icon: LayoutDashboard },
   { name: 'Profil Saya', href: '/umkm/profile', icon: User },
   { name: 'Pasar RFQ', href: '/umkm/rfq', icon: FileSearch },
+  { name: 'Peluang Pasar', href: '/umkm/opportunities', icon: Sparkles },
   { name: 'Penawaran', href: '/umkm/quotations', icon: FileText },
   { name: 'Pesanan', href: '/umkm/orders', icon: ShoppingCart },
   { name: 'Pesan', href: '/umkm/messages', icon: MessageSquare },
@@ -37,6 +39,7 @@ const navItems = [
   { name: 'Notifikasi', href: '/umkm/notifications', icon: Bell },
   { name: 'Pengaturan', href: '/umkm/settings', icon: Settings },
 ];
+
 
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();

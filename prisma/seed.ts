@@ -39,12 +39,12 @@ async function main() {
 
   // 1. Seed Categories
   const categoriesData = [
-    { name: "Manufaktur & Logam", slug: "manufaktur-logam", icon: "Settings", description: "Bahan logam, pengecoran, CNC, machining, stamping" },
-    { name: "Tekstil & Garmen", slug: "tekstil-garmen", icon: "Shirt", description: "Seragam, kaos, kain tenun, bordir, konveksi garmen" },
-    { name: "Kemasan & Percetakan", slug: "kemasan-percetakan", icon: "Box", description: "Kardus custom, box kemasan makanan, cetak offset, label" },
-    { name: "Pertanian & Pangan", slug: "pertanian-pangan", icon: "Leaf", description: "Bahan baku pangan, pupuk organik, minyak kelapa, rempah-rempah" },
-    { name: "Elektronik & Kabel", slug: "elektronik-kabel", icon: "Cpu", description: "Kabel listrik, PCB assembly, panel kontrol elektrik, casing" },
-    { name: "Furniture & Kayu", slug: "furniture-kayu", icon: "Home", description: "Meja kantor kayu, kursi kerja, rak kayu pallet, mebel Jepara" },
+    { name: "Manufaktur & Logam", slug: "manufaktur-logam", icon: "Settings", description: "Bahan logam, pengecoran, CNC, machining, stamping, baut & mur" },
+    { name: "Tekstil & Garmen", slug: "tekstil-garmen", icon: "Shirt", description: "Seragam, kaos, kain tenun, bordir, konveksi garmen lokal" },
+    { name: "Kemasan & Percetakan", slug: "kemasan-percetakan", icon: "Box", description: "Kardus custom, box kemasan makanan, cetak offset, label packaging" },
+    { name: "Pertanian & Pangan", slug: "pertanian-pangan", icon: "Leaf", description: "Bahan baku pangan, pupuk organik, minyak kelapa, rempah-rempah hasil tani" },
+    { name: "Elektronik & Kabel", slug: "elektronik-kabel", icon: "Cpu", description: "Kabel listrik, PCB assembly, panel kontrol elektrik, perakitan kabel" },
+    { name: "Furniture & Kayu", slug: "furniture-kayu", icon: "Home", description: "Meja kantor kayu, kursi kerja, rak kayu pallet, mebel Jepara, palet kayu ekspor" },
     { name: "Kimia & Plastik", slug: "kimia-plastik", icon: "FlaskConical", description: "Biji plastik, botol plastik custom, sabun curah, bahan kimia industri" },
   ];
 
@@ -68,12 +68,45 @@ async function main() {
   });
   console.log("Seeded Admin user: admin@sourcehub.id");
 
-  // 3. Create Companies (Buyers)
+  // 3. Create Companies (Corporate Buyers looking for UMKM Suppliers)
   const companyPassword = await bcrypt.hash("company12345", 12);
   const companyUsersData = [
-    { email: "procurement@bumiteknik.co.id", name: "PT Bumi Teknik Nusantara", industry: "Konstruksi & Infrastruktur", province: "DKI Jakarta", city: "Jakarta Selatan" },
-    { email: "sourcing@indofoodcorp.com", name: "PT Indofood Pangan Makmur", industry: "Makanan & Minuman", province: "Banten", city: "Tangerang" },
-    { email: "purchasing@nusantara-apparel.com", name: "PT Nusantara Indah Garmen", industry: "Ritel Mode & Fashion", province: "Jawa Tengah", city: "Semarang" },
+    {
+      email: "procurement@bumiteknik.co.id",
+      name: "PT Bumi Teknik Nusantara",
+      industry: "Konstruksi & Manufaktur Berat",
+      province: "DKI Jakarta",
+      city: "Jakarta Selatan",
+      address: "Gedung Menara Karya Lt. 18, Jl. H.R. Rasuna Said Blok X-5 Kav. 1-2, Jakarta Selatan",
+      phone: "02152901234",
+    },
+    {
+      email: "sourcing@indofoodcorp.com",
+      name: "PT Indofood Pangan Makmur",
+      industry: "Makanan & Minuman (FMCG)",
+      province: "Banten",
+      city: "Tangerang",
+      address: "Kawasan Industri Jatake, Jl. Industri Raya No. 45, Tangerang",
+      phone: "0215905678",
+    },
+    {
+      email: "purchasing@nusantara-apparel.com",
+      name: "PT Nusantara Indah Garmen",
+      industry: "Ritel Mode & Fashion Nasional",
+      province: "Jawa Tengah",
+      city: "Semarang",
+      address: "Kawasan Industri Wijayakusuma Blok C-9, Semarang",
+      phone: "0248661234",
+    },
+    {
+      email: "procurement@megakarya.co.id",
+      name: "PT Mega Karya Logistik",
+      industry: "Logistik & Pergudangan",
+      province: "Jawa Timur",
+      city: "Surabaya",
+      address: "Jl. Perak Timur No. 110, Tanjung Perak, Surabaya",
+      phone: "0313298765",
+    },
   ];
 
   const companyProfiles = [];
@@ -95,66 +128,116 @@ async function main() {
         industry: comp.industry,
         province: comp.province,
         city: comp.city,
-        address: `Kawasan Industri Maspion Blok B/12, ${comp.city}`,
-        phone: "0217654321",
+        address: comp.address,
+        phone: comp.phone,
         website: `https://www.${comp.email.split("@")[1]}`,
+        npwp: `01.${Math.floor(Math.random() * 899) + 100}.${Math.floor(Math.random() * 899) + 100}.4-${Math.floor(Math.random() * 899) + 100}.000`,
+        description: `${comp.name} adalah perusahaan korporasi terkemuka di sektor ${comp.industry} yang aktif bermitra dan melakukan pengadaan bahan baku serta komponen dari mitra UMKM lokal di seluruh Indonesia.`,
         verified: true,
       },
     });
     companyProfiles.push(profile);
   }
-  console.log(`Seeded ${companyProfiles.length} Companies.`);
+  console.log(`Seeded ${companyProfiles.length} Corporate Buyers (Perusahaan yang mencari UMKM).`);
 
-  // 4. Create UMKMs (Suppliers)
+  // 4. Create UMKMs (Local Suppliers / Bengkel / CV / UD / Koperasi / Sentra Pengrajin)
   const umkmPassword = await bcrypt.hash("umkm12345", 12);
   const umkmUsersData = [
     {
       email: "kontak@sumbertekstil.com",
-      businessName: "PT Sumber Tekstil Indonesia",
+      businessName: "CV Sumber Tekstil Bandung",
+      tagline: "Sentra Konveksi Kain & Seragam Kerja Kualitas Pabrik",
       categorySlug: "tekstil-garmen",
       province: "Jawa Barat",
       city: "Bandung",
+      address: "Sentra Rajut Binong Jati No. 42, Batununggal, Bandung",
+      phone: "08122334455",
       lat: -6.9175,
       lon: 107.6191,
-      empCount: 120,
-      founded: 2012,
+      empCount: 45,
+      founded: 2016,
       readiness: 94,
+      desc: "Kami adalah UMKM konveksi & garmen di Bandung dengan 45 penjahit terampil dan mesin jahit high-speed otomatis. Siap memproduksi seragam kerja kantor, seragam pabrik, dan kaos polo dengan kapasitas 25.000 pcs per bulan dengan QC ketat dan pengiriman tepat waktu.",
     },
     {
       email: "info@majulogam.co.id",
-      businessName: "CV Maju Logam Perkasa",
+      businessName: "CV Maju Logam Perkasa (Bengkel Bubut CNC)",
+      tagline: "Bengkel Bubut, Milling & Fabrikasi Logam Presisi Standar SNI",
       categorySlug: "manufaktur-logam",
       province: "Jawa Timur",
       city: "Surabaya",
+      address: "Jl. Rungkut Industri Barat VIII No. 14, Rungkut, Surabaya",
+      phone: "08133445566",
       lat: -7.2575,
       lon: 112.7521,
-      empCount: 65,
+      empCount: 35,
       founded: 2018,
-      readiness: 88,
+      readiness: 90,
+      desc: "UMKM bengkel bubut & machining logam presisi dengan mesin CNC Lathe dan Milling modern. Kami melayani pembuatan sparepart custom mesin industri, baut-mur baja kekuatan tinggi, flange pipa, dan komponen fabrikasi logam dengan toleransi hingga 0.01 mm.",
     },
     {
       email: "berkah@kemasanindo.com",
       businessName: "UD Berkah Kemasan Mandiri",
+      tagline: "Produsen Dus Karton Corrugated & Box Makanan Food Grade",
       categorySlug: "kemasan-percetakan",
       province: "Jawa Tengah",
       city: "Semarang",
+      address: "Jl. Industri Kaligawe Km. 4 No. 88, Genuk, Semarang",
+      phone: "08155667788",
       lat: -7.0051,
       lon: 110.4381,
       empCount: 28,
       founded: 2020,
-      readiness: 82,
+      readiness: 85,
+      desc: "Produsen kardus packaging UMKM dan industri skala menengah. Menyediakan kardus box corrugated single-wall/double-wall, dus packaging makanan food grade dengan laminasi, dan cetak sablon flexo/offset kustom.",
     },
     {
       email: "sales@agrobumi.id",
-      businessName: "PT Agro Bumi Nusantara",
+      businessName: "Koperasi Tani Agro Bumi Mandiri",
+      tagline: "Pemasok Hasil Bumi, Rempah & Minyak Kelapa Alami Petani Binaan",
       categorySlug: "pertanian-pangan",
       province: "Jawa Barat",
       city: "Bogor",
+      address: "Jl. Raya Ciawi-Sukabumi No. 125, Ciawi, Bogor",
+      phone: "08177889900",
       lat: -6.5971,
       lon: 106.8060,
-      empCount: 80,
+      empCount: 50,
+      founded: 2017,
+      readiness: 92,
+      desc: "Koperasi petani lokal yang menaungi 80+ petani di Jawa Barat. Menyediakan pasokan bahan baku pangan bermutu tinggi seperti minyak kelapa murni (VCO), rempah jahe/kunyit kering, serta aneka hasil tani grade industri pangan dengan sertifikasi Halal dan BPOM.",
+    },
+    {
+      email: "order@mebeljepara-asri.com",
+      businessName: "Sentra Kayu Mebel Jepara Asri",
+      tagline: "Pengrajin Kayu Jati, Palet Kayu Industri & Mebel Kantor Ekspor",
+      categorySlug: "furniture-kayu",
+      province: "Jawa Tengah",
+      city: "Jepara",
+      address: "Sentra Ukir Tahunan No. 67, Tahunan, Jepara",
+      phone: "08199001122",
+      lat: -6.5894,
+      lon: 110.6698,
+      empCount: 30,
       founded: 2015,
-      readiness: 91,
+      readiness: 88,
+      desc: "UMKM pengrajin kayu Jepara yang memproduksi palet kayu standar ISPM-15 untuk logistik ekspor, perabot kantor berbahan kayu solid, serta custom cabinetry interior berbahan kayu legal terverifikasi SVLK.",
+    },
+    {
+      email: "panel@elektromandiri.com",
+      businessName: "UD Panel & Kabel Elektro Mandiri",
+      tagline: "Perakitan Panel Listrik Industri, Harness Wiring & Kabel Kontrol",
+      categorySlug: "elektronik-kabel",
+      province: "Jawa Timur",
+      city: "Sidoarjo",
+      address: "Kawasan Pergudangan Sirie Blok K-05, Buduran, Sidoarjo",
+      phone: "08188990011",
+      lat: -7.4478,
+      lon: 112.7183,
+      empCount: 22,
+      founded: 2019,
+      readiness: 87,
+      desc: "UMKM perakitan panel listrik LVMDP, panel inverter, dan pembuatan wire harness kabel kontrol industri untuk kebutuhan pabrik dan kontraktor instalasi elektrikal.",
     },
   ];
 
@@ -176,12 +259,12 @@ async function main() {
       data: {
         userId: user.id,
         businessName: umkmData.businessName,
-        tagline: `Penyedia ${category?.name} Kualitas Premium Terpercaya`,
-        description: `Kami adalah UMKM profesional di bidang ${category?.name} yang didirikan pada tahun ${umkmData.founded}. Kami telah menyuplai ke berbagai perusahaan besar lokal dengan standar QC yang ketat, lead time yang cepat, dan harga yang bersaing. Hubungi kami untuk kebutuhan pengadaan bisnis Anda.`,
+        tagline: umkmData.tagline,
+        description: umkmData.desc,
         province: umkmData.province,
         city: umkmData.city,
-        address: `Jl. Raya Industri Utama No. ${Math.floor(Math.random() * 100) + 1}, ${umkmData.city}`,
-        phone: "08123456789",
+        address: umkmData.address,
+        phone: umkmData.phone,
         email: umkmData.email,
         website: `https://www.${umkmData.email.split("@")[1]}`,
         foundedYear: umkmData.founded,
@@ -199,14 +282,14 @@ async function main() {
       data: {
         umkmId: profile.id,
         categoryId: category?.id,
-        name: `Bahan Baku ${category?.name} Grade A`,
-        description: `Bahan berkualitas premium yang telah teruji kualitasnya. Cocok untuk kebutuhan manufaktur skala industri menengah hingga besar.`,
-        unit: "kg",
+        name: `Bahan / Produk ${category?.name} Grade Industri A`,
+        description: `Produk siap suplai kualitas unggul dari workshop kami. Memenuhi standar sertifikasi nasional dan siap memenuhi kapasitas pengadaan rutin korporasi.`,
+        unit: "unit",
         minOrder: 100,
-        maxCapacity: 10000,
-        leadTimeDays: 14,
-        priceMin: 25000,
-        priceMax: 35000,
+        maxCapacity: 15000,
+        leadTimeDays: 10,
+        priceMin: 35000,
+        priceMax: 85000,
       },
     });
 
@@ -214,14 +297,14 @@ async function main() {
       data: {
         umkmId: profile.id,
         categoryId: category?.id,
-        name: `Bahan Baku ${category?.name} Grade B (Ekonomis)`,
-        description: `Solusi ekonomis untuk kebutuhan produksi skala besar tanpa menurunkan standar kualitas produk akhir Anda.`,
-        unit: "kg",
-        minOrder: 250,
-        maxCapacity: 25000,
-        leadTimeDays: 7,
-        priceMin: 15000,
-        priceMax: 22000,
+        name: `Layanan Custom Fabrikasi / Produksi ${category?.name}`,
+        description: `Layanan pengerjaan sesuai spesifikasi gambar teknik atau sampel dari pihak buyer perusahaan. Free konsultasi sampel dan estimasi bahan.`,
+        unit: "pesanan",
+        minOrder: 50,
+        maxCapacity: 8000,
+        leadTimeDays: 14,
+        priceMin: 25000,
+        priceMax: 60000,
       },
     });
 
@@ -229,8 +312,8 @@ async function main() {
     await prisma.certification.create({
       data: {
         umkmId: profile.id,
-        name: "Sertifikasi SNI (Standar Nasional Indonesia)",
-        issuer: "Badan Standardisasi Nasional",
+        name: "Sertifikasi SNI (Standar Nasional Indonesia) & NIB Terverifikasi",
+        issuer: "Badan Standardisasi Nasional / Kementerian Investasi BKPM",
         number: `SNI-9876-${Math.floor(Math.random() * 9000) + 1000}`,
         issuedAt: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), // 1 year ago
         expiresAt: new Date(Date.now() + 365 * 2 * 24 * 60 * 60 * 1000), // 2 years later
@@ -242,12 +325,12 @@ async function main() {
     await prisma.machine.create({
       data: {
         umkmId: profile.id,
-        name: "Mesin Produksi Otomatis Tipe-X",
-        brand: "HeavyMachinery Corp",
-        model: "HM-XT-2025",
-        quantity: 2,
+        name: "Mesin Produksi Otomatis Presisi",
+        brand: "HeavyTech Machinery",
+        model: "HT-2024-X",
+        quantity: 3,
         yearAcquired: 2023,
-        capacity: "5,000 kg / hari",
+        capacity: "3,000 unit / hari",
         condition: "Sangat Baik",
       },
     });
@@ -257,55 +340,66 @@ async function main() {
       data: {
         umkmId: profile.id,
         overall: umkmData.readiness + 2,
-        deliveryScore: 92,
-        responsivenessScore: 89,
-        qualityScore: 94,
-        certificationScore: 95,
-        portfolioScore: 85,
-        completedProjects: Math.floor(Math.random() * 20) + 5,
-        strengths: ["Kualitas Bahan Konsisten", "Sertifikat Lengkap", "Lokasi Strategis"],
-        weaknesses: ["Kapasitas Puncak Terbatas"],
-        suggestions: ["Tambahkan mesin baru untuk meningkatkan kapasitas"],
+        deliveryScore: 94,
+        responsivenessScore: 92,
+        qualityScore: 95,
+        certificationScore: 96,
+        portfolioScore: 88,
+        completedProjects: Math.floor(Math.random() * 25) + 8,
+        strengths: ["Kualitas Pengerjaan Sesuai Spesifikasi", "Legalitas & Sertifikat Lengkap", "Fleksibilitas Minimum Order"],
+        weaknesses: ["Perlu Tambahan Mesin untuk Lonjakan Order Skala Sangat Besar"],
+        suggestions: ["Pertahankan kecepatan respon penawaran RFQ"],
       },
     });
 
     umkmProfiles.push(profile);
   }
-  console.log(`Seeded ${umkmProfiles.length} UMKM profiles with products, certifications, machines, and trust scores.`);
+  console.log(`Seeded ${umkmProfiles.length} UMKM profiles (Mitra UMKM / Supplier Lokal) with products, certifications, machines, and trust scores.`);
 
-  // 5. Seed RFQs (from Companies)
+  // 5. Seed RFQs (Created by Corporate Buyers looking for UMKM Suppliers)
   const rfqData = [
     {
-      companyId: companyProfiles[0].id,
-      title: "Pengadaan Baut & Mur Baja Karbon Kuantitas Tinggi",
-      description: "Kami mencari supplier logam presisi lokal yang dapat menyediakan baut dan mur baja karbon berkekuatan tinggi untuk proyek konstruksi di wilayah Jabodetabek. Harus bersertifikat SNI.",
+      companyId: companyProfiles[0].id, // PT Bumi Teknik Nusantara
+      title: "Pengadaan Baut & Mur Baja Karbon Presisi (Dicari Mitra UMKM Logam / Bengkel Bubut)",
+      description: "Perusahaan kami membutuhkan pasokan rutin baut & mur baja karbon kekuatan grade 8.8 tahan korosi untuk kebutuhan proyek konstruksi gedung. Kami memprioritaskan bermitra dengan UMKM bengkel bubut lokal yang mampu menjaga presisi dan konsistensi dimensi.",
       categorySlug: "manufaktur-logam",
-      quantity: 5000,
+      quantity: 15000,
       unit: "pcs",
-      budgetMin: 50000000,
-      budgetMax: 75000000,
+      budgetMin: 65000000,
+      budgetMax: 90000000,
       status: RFQStatus.OPEN,
     },
     {
-      companyId: companyProfiles[1].id,
-      title: "Suplai Kemasan Karton Dus Box Custom untuk Produk Baru",
-      description: "Kami membutuhkan produsen dus karton custom untuk kemasan produk makanan baru kami. Spesifikasi: ketebalan duplex 350gsm dengan laminasi glossy bagian luar. Desain sablon 3 warna disediakan oleh kami.",
+      companyId: companyProfiles[1].id, // PT Indofood Pangan Makmur
+      title: "Pengadaan Dus Box Karton Corrugated Food-Grade (Dicari Mitra UMKM Kemasan)",
+      description: "Dibutuhkan produsen kemasan dus karton box custom dengan sertifikasi food-grade untuk lini produk makanan baru kami. Ketebalan duplex 350 gsm dengan finishing laminasi glossy dan cetak flexo 3 warna.",
       categorySlug: "kemasan-percetakan",
-      quantity: 10000,
+      quantity: 25000,
       unit: "pcs",
-      budgetMin: 30000000,
-      budgetMax: 40000000,
+      budgetMin: 45000000,
+      budgetMax: 60000000,
       status: RFQStatus.OPEN,
     },
     {
-      companyId: companyProfiles[2].id,
-      title: "Kebutuhan Kain Denim Cotton 100% Gulungan Bandung",
-      description: "Dibutuhkan supplier kain denim cotton 100% premium grade, tebal 12oz, warna navy blue. Butuh pengiriman berkala per bulan ke workshop kami di Semarang. Silakan kirim penawaran beserta sampel kain.",
+      companyId: companyProfiles[2].id, // PT Nusantara Indah Garmen
+      title: "Pengadaan Kain Seragam Cotton Drill & Pengerjaan Jahit (Dicari Mitra Konveksi UMKM)",
+      description: "Kami membuka pengadaan seragam kerja lapangan sebanyak 3.000 setel. Dicari konveksi UMKM dengan rekam jejak jahit rapi, kancing press, dan kapasitas penyelesaian dalam 25 hari kerja.",
       categorySlug: "tekstil-garmen",
-      quantity: 1200,
-      unit: "yard",
-      budgetMin: 90000000,
-      budgetMax: 120000000,
+      quantity: 3000,
+      unit: "setel",
+      budgetMin: 180000000,
+      budgetMax: 240000000,
+      status: RFQStatus.OPEN,
+    },
+    {
+      companyId: companyProfiles[3].id, // PT Mega Karya Logistik
+      title: "Pengadaan Palet Kayu Standar Ekspor ISPM-15 (Dicari Pengrajin Kayu UMKM)",
+      description: "Kebutuhan palet kayu jenis sengon / mahoni kering oven dengan treatment standar ISPM-15 ukuran 1200 x 1000 mm untuk pergudangan logistik di Tanjung Perak.",
+      categorySlug: "furniture-kayu",
+      quantity: 1000,
+      unit: "unit",
+      budgetMin: 85000000,
+      budgetMax: 110000000,
       status: RFQStatus.OPEN,
     },
   ];
@@ -324,39 +418,40 @@ async function main() {
         budgetMin: rfqInfo.budgetMin,
         budgetMax: rfqInfo.budgetMax,
         deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
-        specifications: "Bahan tahan korosi, presisi tinggi, packing kardus aman.",
+        specifications: "Kualitas memenuhi standar industri, kemasan rapi dan aman dalam pengiriman, garansi retur jika ada cacat produksi.",
         status: rfqInfo.status,
       },
     });
 
-    // Create a matching quotation from a matching UMKM
+    // Match matching UMKM
     let matchingUmkm = null;
-    if (rfqInfo.categorySlug === "tekstil-garmen") matchingUmkm = umkmProfiles[0];
-    else if (rfqInfo.categorySlug === "manufaktur-logam") matchingUmkm = umkmProfiles[1];
-    else if (rfqInfo.categorySlug === "kemasan-percetakan") matchingUmkm = umkmProfiles[2];
-    else if (rfqInfo.categorySlug === "pertanian-pangan") matchingUmkm = umkmProfiles[3];
+    if (rfqInfo.categorySlug === "manufaktur-logam") matchingUmkm = umkmProfiles[1]; // CV Maju Logam
+    else if (rfqInfo.categorySlug === "kemasan-percetakan") matchingUmkm = umkmProfiles[2]; // UD Berkah Kemasan
+    else if (rfqInfo.categorySlug === "tekstil-garmen") matchingUmkm = umkmProfiles[0]; // CV Sumber Tekstil
+    else if (rfqInfo.categorySlug === "furniture-kayu") matchingUmkm = umkmProfiles[4]; // Sentra Mebel Jepara
 
     if (matchingUmkm) {
+      // 6. Seed Quotations (Submitted by UMKM to Corporate Buyer's RFQ)
       await prisma.quotation.create({
         data: {
           rfqId: createdRfq.id,
           umkmId: matchingUmkm.id,
-          price: (rfqInfo.budgetMin + rfqInfo.budgetMax) / 2,
-          leadTimeDays: 10,
-          notes: "Kami dapat menyediakan pesanan ini dengan lead time yang cepat dan kualitas terjamin menggunakan material berstandar nasional.",
+          price: Math.round((rfqInfo.budgetMin + rfqInfo.budgetMax) / 2),
+          leadTimeDays: 12,
+          notes: `Halo Bapak/Ibu Procurement, kami dari ${matchingUmkm.businessName} siap memenuhi kebutuhan pengadaan ini. Kami memiliki kapasitas mesin aktif, tenaga ahli berpengalaman, serta jaminan mutu standar SNI. Sampel siap kami kirimkan ke kantor Anda.`,
           status: QuotationStatus.PENDING,
           validUntil: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000),
         },
       });
 
-      // Match score cache
+      // Match score recommendation
       await prisma.aIRecommendation.create({
         data: {
           rfqId: createdRfq.id,
           umkmId: matchingUmkm.id,
-          matchScore: 92,
-          explanation: "Supplier ini terverifikasi memiliki sertifikasi SNI dan kapasitas produksi bulanan yang mencukupi kuantitas pesanan Anda.",
-          reasons: ["Sertifikasi SNI terverifikasi", "Kapasitas produksi memadai", "Kategori produk cocok 100%"],
+          matchScore: 95,
+          explanation: `UMKM ${matchingUmkm.businessName} sangat direkomendasikan karena memiliki kesesuaian kategori 100%, kapasitas workshop yang terverifikasi, dan sertifikasi mutu yang sesuai dengan syarat pengadaan Anda.`,
+          reasons: ["Legalitas & SNI Terverifikasi", "Kapasitas Workshop Memadai", "Kategori Produk & Lokasi Cocok 100%"],
           rank: 1,
         },
       });
@@ -364,9 +459,9 @@ async function main() {
 
     rfqs.push(createdRfq);
   }
-  console.log(`Seeded ${rfqs.length} RFQs with initial quotations and AI recommendation caches.`);
+  console.log(`Seeded ${rfqs.length} Corporate RFQs with matching UMKM quotations and AI recommendation caches.`);
 
-  // 6. Seed Supply Gap Map Data
+  // 7. Seed Supply Gap Map Data
   const regions = [
     { province: "DKI Jakarta", city: "Jakarta Selatan", categorySlug: "manufaktur-logam", demand: 92, supply: 120 },
     { province: "Jawa Barat", city: "Bandung", categorySlug: "tekstil-garmen", demand: 98, supply: 340 },
@@ -383,8 +478,6 @@ async function main() {
   let supplyGapCount = 0;
   for (const reg of regions) {
     const category = categories.find((c) => c.slug === reg.categorySlug);
-
-    // Calculate Opportunity Score: (Demand Score * 1.5) - (Supplier Count / 2), capped at 100
     const opportunityScore = Math.min(Math.max(Math.round((reg.demand * 1.2) - (reg.supply / 10)), 0), 100);
 
     await prisma.supplyGapData.create({
