@@ -1,15 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
+import type { Order } from '@prisma/client';
+
+type SessionUserWithRole = {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  role?: string | null;
+};
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const userId = session.user.id;
-  const rawRole = (session.user as any).role || '';
+  const sessionUser = session.user as SessionUserWithRole;
+  const rawRole = sessionUser.role || '';
   const role = String(rawRole).toUpperCase();
 
   try {
@@ -18,32 +28,24 @@ export async function GET(request: NextRequest) {
       db.umkmProfile.findUnique({ where: { userId } }),
     ]);
 
-    let ordersList: any[] = [];
+    let ordersList: Order[] = [];
 
     if (role === 'COMPANY' || companyProfile) {
       const companyId = companyProfile?.id;
-      ordersList = await db.order.findMany({
-        where: {
-          OR: [
-            ...(companyId ? [{ companyId }] : []),
-            { companyId: userId },
-          ],
-        },
-        orderBy: { createdAt: 'desc' },
-      });
+      if (companyId) {
+        ordersList = await db.order.findMany({
+          where: { companyId },
+          orderBy: { createdAt: 'desc' },
+        });
+      }
     } else if (role === 'UMKM' || umkmProfile) {
       const umkmId = umkmProfile?.id;
-      ordersList = await db.order.findMany({
-        where: {
-          OR: [
-            ...(umkmId ? [{ umkmId }] : []),
-            { umkmId: userId },
-          ],
-        },
-        orderBy: { createdAt: 'desc' },
-      });
-    } else {
-      ordersList = await db.order.findMany({ orderBy: { createdAt: 'desc' }, take: 100 });
+      if (umkmId) {
+        ordersList = await db.order.findMany({
+          where: { umkmId },
+          orderBy: { createdAt: 'desc' },
+        });
+      }
     }
 
     const rfqIds = [...new Set(ordersList.map(o => o.rfqId))];
@@ -83,6 +85,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const userId = session.user.id;
 
   try {
     const body = await request.json();
@@ -92,13 +95,19 @@ export async function POST(request: NextRequest) {
     const quotation = await db.quotation.findUnique({
       where: { id: quotationId },
       include: {
-        rfq: { include: { companyProfile: true } },
-        umkmProfile: true,
+        rfq: { include: { companyProfile: { select: { userId: true, companyName: true, id: true } } } },
+        umkmProfile: { select: { userId: true, businessName: true, id: true } },
       },
     });
     if (!quotation) return NextResponse.json({ error: 'Quotation tidak ditemukan' }, { status: 404 });
 
-    // Accept quotation if pending
+    if (quotation.rfq.companyProfile?.userId !== userId) {
+      return NextResponse.json(
+        { error: 'Hanya pemilik RFQ yang dapat menerima penawaran dan membuat pesanan' },
+        { status: 403 },
+      );
+    }
+
     if (quotation.status !== 'ACCEPTED') {
       await db.quotation.update({
         where: { id: quotationId },

@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
+import type { Quotation } from "@prisma/client";
+
+type SessionUserWithRole = {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  role?: string | null;
+};
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +18,8 @@ export async function GET() {
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const userId = session.user.id;
-  const rawRole = (session.user as any).role || '';
+  const sessionUser = session.user as SessionUserWithRole;
+  const rawRole = sessionUser.role || '';
   const role = String(rawRole).toUpperCase();
 
   try {
@@ -18,7 +28,7 @@ export async function GET() {
       db.companyProfile.findUnique({ where: { userId } }),
     ]);
 
-    let quotations: any[] = [];
+    let quotations: (Quotation & Record<string, unknown>)[] = [];
 
     if (role === "COMPANY" || companyProfile) {
       const companyId = companyProfile?.id;

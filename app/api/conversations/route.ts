@@ -2,12 +2,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 
+type SessionUserWithRole = {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  role?: string | null;
+};
+
 export async function GET() {
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const userId = session.user.id;
-  const role = (session.user as any).role;
+  const sessionUser = session.user as SessionUserWithRole;
+  const role = sessionUser.role;
 
   try {
     let conversations;
@@ -65,7 +74,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { otherUserId, rfqId } = body;
     if (!otherUserId) return NextResponse.json({ error: 'otherUserId wajib diisi' }, { status: 400 });
-    const role = (session.user as any).role;
+    const sessionUser = session.user as SessionUserWithRole;
+    const role = sessionUser.role;
 
     let companyUserId: string;
     let umkmUserId: string;

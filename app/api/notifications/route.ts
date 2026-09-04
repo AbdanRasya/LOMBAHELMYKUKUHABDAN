@@ -5,9 +5,10 @@ import { auth } from "@/lib/auth";
 export async function GET() {
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const userId = session.user.id;
   try {
     const notifications = await db.notification.findMany({
-      where: { userId: session.user.id },
+      where: { userId },
       orderBy: { createdAt: "desc" },
       take: 50,
     });
@@ -29,13 +30,20 @@ export async function GET() {
 export async function PATCH(request: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const userId = session.user.id;
   try {
     const body = await request.json();
     if (body.markAllRead) {
-      await db.notification.updateMany({ where: { userId: session.user.id, read: false }, data: { read: true } });
+      await db.notification.updateMany({ where: { userId, read: false }, data: { read: true } });
       return NextResponse.json({ success: true });
     } else if (body.id) {
-      await db.notification.update({ where: { id: body.id }, data: { read: true } });
+      const notifId = String(body.id);
+      const notif = await db.notification.findUnique({ where: { id: notifId } });
+      if (!notif) return NextResponse.json({ error: "Notifikasi tidak ditemukan" }, { status: 404 });
+      if (notif.userId !== userId) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
+      await db.notification.update({ where: { id: notifId }, data: { read: true } });
       return NextResponse.json({ success: true });
     }
     return NextResponse.json({ error: "Sertakan 'id' atau 'markAllRead: true'" }, { status: 400 });
