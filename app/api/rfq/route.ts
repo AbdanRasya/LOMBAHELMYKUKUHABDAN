@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
-import { DEMO_RFQ_EXPORTED } from "@/lib/ai";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   const session = await auth();
@@ -9,29 +10,16 @@ export async function GET() {
   try {
     const company = await db.companyProfile.findUnique({ where: { userId: session.user.id } });
     if (!company) {
-      return NextResponse.json({
-        rfqs: DEMO_RFQ_EXPORTED.map((r: any) => ({
-          id: r.rfq_id,
-          companyId: "demo-company",
-          title: `RFQ ${r.kategori_dibutuhkan} - ${r.nama_perusahaan}`,
-          description: `${r.kuantitas} ${r.satuan} ${r.sub_kategori_dibutuhkan} di ${r.provinsi_lokasi_diinginkan}`,
-          quantity: r.kuantitas,
-          unit: r.satuan,
-          budgetMin: null,
-          budgetMax: null,
-          deadline: null,
-          specifications: null,
-          status: "OPEN",
-          category: { id: "cat-demo", name: r.kategori_dibutuhkan },
-          _count: { quotations: 0 },
-          createdAt: new Date(r.tanggal_dibuat),
-          deletedAt: null,
-        })),
-        demo: true,
-      });
+      return NextResponse.json({ rfqs: [] });
     }
     const rfqs = await db.rFQ.findMany({
-      where: { companyId: company.id, deletedAt: null },
+      where: {
+        OR: [
+          { companyId: company.id },
+          { companyProfile: { userId: session.user.id } }
+        ],
+        deletedAt: null
+      },
       include: { category: true, _count: { select: { quotations: true } } },
       orderBy: { createdAt: "desc" },
     });
@@ -39,23 +27,8 @@ export async function GET() {
   } catch (error) {
     console.error("[api/rfq GET] DB error:", error);
     return NextResponse.json(
-      {
-        rfqs: DEMO_RFQ_EXPORTED.map((r: any) => ({
-          id: r.rfq_id,
-          companyId: "demo-company",
-          title: `RFQ ${r.kategori_dibutuhkan} - ${r.nama_perusahaan}`,
-          description: `${r.kuantitas} ${r.satuan} ${r.sub_kategori_dibutuhkan} di ${r.provinsi_lokasi_diinginkan}`,
-          quantity: r.kuantitas,
-          unit: r.satuan,
-          status: "OPEN",
-          category: { id: "cat-demo", name: r.kategori_dibutuhkan },
-          _count: { quotations: 0 },
-          createdAt: new Date(r.tanggal_dibuat),
-        })),
-        demo: true,
-        error: "DB gagal — detail: " + (error instanceof Error ? error.message : String(error)),
-      },
-      { status: 200 },
+      { rfqs: [], error: "Gagal mengambil daftar RFQ" },
+      { status: 500 },
     );
   }
 }
@@ -63,13 +36,25 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const body = await request.json();
-    const company = await db.companyProfile.findUnique({ where: { userId: session.user.id } });
-    if (!company) return NextResponse.json({ error: "Profil perusahaan belum dibuat" }, { status: 400 });
+    let company = await db.companyProfile.findUnique({ where: { userId: session.user.id } });
+
+    // Auto-create company profile if missing
+    if (!company) {
+      company = await db.companyProfile.create({
+        data: {
+          userId: session.user.id,
+          companyName: session.user.name || "Perusahaan Buyer",
+        },
+      });
+    }
+
     if (!body.title || !String(body.title).trim()) {
       return NextResponse.json({ error: "Judul RFQ wajib diisi" }, { status: 400 });
     }
+
     const rfq = await db.rFQ.create({
       data: {
         companyId: company.id,
@@ -84,15 +69,12 @@ export async function POST(request: NextRequest) {
         status: "OPEN",
       },
     });
+
     return NextResponse.json({ rfq });
   } catch (error) {
     console.error("[api/rfq POST] DB error:", error);
     return NextResponse.json(
-      {
-        error:
-          "Gagal membuat RFQ. Cek koneksi database/DATABASE_URL. " +
-          "Detail: " + (error instanceof Error ? error.message : String(error)),
-      },
+      { error: "Gagal membuat RFQ. Detail: " + (error instanceof Error ? error.message : String(error)) },
       { status: 500 },
     );
   }

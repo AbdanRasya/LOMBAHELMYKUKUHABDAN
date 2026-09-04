@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginSchema, type LoginFormData } from "@/lib/validations";
-import { loginAction } from "@/actions/auth";
+import { signIn, getSession } from "next-auth/react";
 
 type LoginSuccessData = {
   name?: string | null;
@@ -35,20 +35,36 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      const result = await loginAction(data.email, data.password, callbackUrl);
-      if (result?.success) {
+      const res = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
+
+      if (res?.error) {
+        toast.error("Email atau password salah");
+      } else if (res?.ok) {
         toast.success("Login berhasil! Selamat datang kembali.");
+        const session = await getSession();
+        const role = (session?.user as any)?.role || "COMPANY";
+        const targetUrl = callbackUrl || (
+          role === "ADMIN" ? "/admin/dashboard" :
+          role === "UMKM" ? "/umkm/dashboard" :
+          "/company/dashboard"
+        );
+
         setLoginSuccess({
-          name: result.user?.name,
-          email: result.user?.email,
-          role: result.user?.role,
-          redirectUrl: result.redirectUrl || "/",
+          name: session?.user?.name || data.email,
+          email: session?.user?.email || data.email,
+          role,
+          redirectUrl: targetUrl,
         });
-      } else if (result?.error) {
-        toast.error(result.error);
+      } else {
+        toast.error("Terjadi kesalahan saat login");
       }
-    } catch {
-      toast.error("Terjadi kesalahan saat login");
+    } catch (err) {
+      console.error(err);
+      toast.error("Terjadi kesalahan jaringan atau server");
     } finally {
       setIsLoading(false);
     }

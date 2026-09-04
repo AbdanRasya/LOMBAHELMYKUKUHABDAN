@@ -30,6 +30,8 @@ type Order = {
   shippedAt: string | null;
   deliveredAt: string | null;
   completedAt: string | null;
+  rfq?: { id: string; title: string } | null;
+  umkm?: { id: string; businessName: string } | null;
 };
 
 // Map status to Indonesian labels and styles
@@ -151,6 +153,12 @@ export default function CompanyOrdersPage() {
                       <span className="text-sm text-slate-500">•</span>
                       <span className="text-sm text-slate-500">{format(new Date(order.createdAt), "dd MMM yyyy")}</span>
                     </div>
+                    {order.rfq?.title && (
+                      <p className="text-sm font-semibold text-slate-800 mt-1">{order.rfq.title}</p>
+                    )}
+                    {order.umkm?.businessName && (
+                      <p className="text-xs text-slate-500">Supplier: <span className="font-medium text-slate-700">{order.umkm.businessName}</span></p>
+                    )}
                     <div className="text-2xl font-bold text-slate-900 mt-1">
                       {formatRupiah(order.totalAmount)}
                     </div>

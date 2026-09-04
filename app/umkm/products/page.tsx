@@ -5,6 +5,7 @@ import { Package, Plus, Calendar, Layers } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import AddProductDialog from "@/components/products/add-product-dialog";
 
 function formatRp(n: number) {
   return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(n);
@@ -28,12 +29,10 @@ export default async function UMKMProductsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Produk & Layanan</h1>
-          <p className="text-sm text-slate-500 mt-1">{products.length} produk terdaftar</p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Produk & Layanan B2B</h1>
+          <p className="text-sm text-slate-500 mt-1">{products.length} produk terdaftar di katalog sourcing</p>
         </div>
-        <Link href="/umkm/profile">
-          <Button className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"><Plus className="h-4 w-4" />Tambah Produk</Button>
-        </Link>
+        <AddProductDialog />
       </div>
 
       {products.length === 0 ? (

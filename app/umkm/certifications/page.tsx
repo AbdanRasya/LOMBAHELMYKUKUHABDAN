@@ -5,6 +5,7 @@ import { Award, Shield, Clock, XCircle, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import CertUploadDialog from "@/components/certifications/cert-upload-dialog";
 
 const statusConfig: Record<string, { label: string; icon: typeof Shield; cls: string }> = {
   VERIFIED: { label: "Terverifikasi", icon: Shield, cls: "text-emerald-600 bg-emerald-50" },
@@ -33,12 +34,10 @@ export default async function UMKMCertificationsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Sertifikasi</h1>
-          <p className="text-sm text-slate-500 mt-1">{verified} terverifikasi · {pending} menunggu</p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Sertifikasi Legal & Mutu</h1>
+          <p className="text-sm text-slate-500 mt-1">{verified} terverifikasi · {pending} menunggu verifikasi</p>
         </div>
-        <Link href="/umkm/profile">
-          <Button className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"><Award className="h-4 w-4" />Tambah Sertifikasi</Button>
-        </Link>
+        <CertUploadDialog />
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

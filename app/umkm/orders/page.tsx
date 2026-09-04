@@ -32,9 +32,10 @@ type Order = {
   rfqId: string;
   status: OrderStatus;
   totalAmount: number;
-  notes: string | null;
   trackingInfo: string | null;
   createdAt: string;
+  rfq?: { id: string; title: string } | null;
+  company?: { id: string; companyName: string } | null;
 };
 
 type UpdateOrderPayload = {
@@ -157,16 +158,22 @@ export default function UMKMOrdersPage() {
             return (
               <div key={order.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm shadow-slate-100/50 hover:shadow-md transition-shadow duration-300">
                 <div className="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50/50">
-                  <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-3">
-                      <span className="font-mono font-medium text-slate-900">#{order.id.slice(0, 8).toUpperCase()}</span>
-                      <span className="text-sm text-slate-500">•</span>
-                      <span className="text-sm text-slate-500">{format(new Date(order.createdAt), "dd MMM yyyy")}</span>
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono font-medium text-slate-900">#{order.id.slice(0, 8).toUpperCase()}</span>
+                        <span className="text-sm text-slate-500">•</span>
+                        <span className="text-sm text-slate-500">{format(new Date(order.createdAt), "dd MMM yyyy")}</span>
+                      </div>
+                      {order.rfq?.title && (
+                        <p className="text-sm font-semibold text-slate-800 mt-1">{order.rfq.title}</p>
+                      )}
+                      {order.company?.companyName && (
+                        <p className="text-xs text-slate-500">Pembeli: <span className="font-medium text-slate-700">{order.company.companyName}</span></p>
+                      )}
+                      <div className="text-2xl font-bold text-slate-900 mt-1">
+                        {formatRupiah(order.totalAmount)}
+                      </div>
                     </div>
-                    <div className="text-2xl font-bold text-slate-900 mt-1">
-                      {formatRupiah(order.totalAmount)}
-                    </div>
-                  </div>
                   <div className="flex items-center gap-3">
                     <div className={`px-3 py-1.5 rounded-full border text-sm font-medium flex items-center gap-2 ${statusCfg.color}`}>
                       <StatusIcon className="w-4 h-4" />

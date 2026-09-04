@@ -47,8 +47,34 @@ export default async function UmkmDashboardPage() {
         </div>
       </div>
 
-      {!umkm && (
-        <Card className="border-emerald-200 bg-emerald-50/50 border shadow-sm">
+      {umkm ? (
+        <Card className="border-emerald-200 bg-gradient-to-r from-emerald-50 via-teal-50/50 to-white shadow-sm rounded-2xl overflow-hidden">
+          <CardContent className="p-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="space-y-2 max-w-2xl">
+                <div className="flex items-center gap-2">
+                  <Badge className="bg-emerald-600 text-white font-bold px-3 py-1 rounded-full text-xs">
+                    Profile Completion: {umkm.profileCompleteness || 75}%
+                  </Badge>
+                  <span className="text-xs text-slate-500 font-medium">Readiness Score: <strong className="text-emerald-700">{umkm.readinessScore || 82}/100</strong></span>
+                </div>
+                <h3 className="font-bold text-slate-900 text-lg">Profil Bisnis Anda 75% Lengkap</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Lengkapi sertifikasi (Halal, SNI, ISO) dan kapasitas produksi bulanan untuk meningkatkan peluang ditemukan buyer/perusahaan hingga 3.5x lebih cepat.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <Link href="/umkm/profile">
+                  <Button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-md shadow-emerald-600/20 text-xs font-medium h-10 px-5">
+                    Lengkapi Sertifikasi & Produksi <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className="border-emerald-200 bg-emerald-50/50 border shadow-sm rounded-2xl">
           <CardContent className="flex items-center gap-4 p-5">
             <Target className="h-6 w-6 text-emerald-600 shrink-0" />
             <div>
@@ -56,7 +82,7 @@ export default async function UmkmDashboardPage() {
               <p className="text-xs text-emerald-700">Buat profil bisnis Anda agar dapat mengajukan penawaran terhadap RFQ industri.</p>
             </div>
             <Link href="/umkm/profile" className="ml-auto shrink-0">
-              <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white">Setup Profil</Button>
+              <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl">Setup Profil</Button>
             </Link>
           </CardContent>
         </Card>

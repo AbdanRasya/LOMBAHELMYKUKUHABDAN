@@ -29,27 +29,39 @@ export async function PATCH(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { ...data } = body;
+    const raw = body || {};
+
+    const scalarData: Record<string, any> = {};
+
+    if (raw.companyName !== undefined) scalarData.companyName = String(raw.companyName);
+    if (raw.industry !== undefined) scalarData.industry = String(raw.industry);
+    if (raw.province !== undefined) scalarData.province = String(raw.province);
+    if (raw.city !== undefined) scalarData.city = String(raw.city);
+    if (raw.address !== undefined) scalarData.address = String(raw.address);
+    if (raw.phone !== undefined) scalarData.phone = String(raw.phone);
+    if (raw.website !== undefined) scalarData.website = String(raw.website);
+    if (raw.description !== undefined) scalarData.description = String(raw.description);
+    if (raw.logo !== undefined) scalarData.logo = String(raw.logo);
+    if (raw.npwp !== undefined) scalarData.npwp = String(raw.npwp);
 
     const profile = await db.companyProfile.upsert({
       where: { userId: session.user.id },
       create: {
         userId: session.user.id,
-        companyName: data.companyName || "PT Perusahaan Indonesia",
-        ...data,
+        companyName: scalarData.companyName || session.user.name || "PT Perusahaan Indonesia",
+        ...scalarData,
       },
-      update: data,
+      update: scalarData,
     });
 
-    // Also update user image if logo is provided
-    if (data.logo) {
+    if (scalarData.logo) {
       await db.user.update({
         where: { id: session.user.id },
-        data: { image: data.logo },
+        data: { image: scalarData.logo },
       }).catch(() => {});
     }
 
-    return NextResponse.json({ profile });
+    return NextResponse.json({ profile, success: true });
   } catch (error) {
     console.error("[api/company/profile PATCH] Error:", error);
     return NextResponse.json(
