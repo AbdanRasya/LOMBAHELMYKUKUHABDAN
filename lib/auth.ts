@@ -94,6 +94,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return url;
+      try {
+        const urlObj = new URL(url);
+        if (urlObj.origin === baseUrl) return url;
+      } catch {}
+      return "/";
+    },
   },
   events: {
     async signIn({ user }) {

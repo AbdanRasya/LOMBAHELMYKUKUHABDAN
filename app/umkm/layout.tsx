@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -138,7 +138,14 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
       <div className="border-t border-slate-200 p-4">
         <button
           type="button"
-          onClick={() => signOut({ callbackUrl: "/" })}
+          onClick={async () => {
+            try {
+              await signOut({ redirect: false });
+            } catch (err) {
+              console.error("SignOut error:", err);
+            }
+            window.location.href = "/";
+          }}
           className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-500 hover:bg-red-50 hover:text-red-600 dark:text-slate-400 dark:hover:bg-red-950/30 dark:hover:text-red-400 transition-colors"
         >
           <LogOut className="h-4 w-4" />

@@ -332,7 +332,7 @@ npm run lint
 
 ```text
 Development: http://localhost:3000/api
-Production:  https://pusaka.vercel.app/api
+Production:  https://pusaka-lyart.vercel.app/api
 ```
 
 ### Key Endpoints
