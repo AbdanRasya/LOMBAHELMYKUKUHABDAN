@@ -106,13 +106,14 @@ Kecerdasan Buatan (Google Gemini AI) diintegrasikan untuk:
 ### Screenshot Aplikasi
 
 <div align="center">
-  <img src="public/hero-preview.png" alt="Homepage PUSAKA" width="800"/>
+  <img src="Homepage.png" alt="Homepage PUSAKA" width="800"/>
   <p><em>Homepage - Tampilan utama platform PUSAKA</em></p>
   
-  <img src="public/dashboard-preview.png" alt="Dashboard Perusahaan & UMKM" width="800"/>
+  <img src="dashboardumkm.png" alt="Dashboard Perusahaan & UMKM" width="800"/>
+  <img src="dashboardcompany.png" alt="Dashboard Perusahaan & UMKM" width="800"/>
   <p><em>Dashboard - Panel kontrol pengelolaan RFQ & Penawaran</em></p>
   
-  <img src="public/map-preview.png" alt="Peta Supply Gap AI" width="800"/>
+  <img src="peta.png" alt="Peta Supply Gap AI" width="800"/>
   <p><em>Peta Supply Gap AI - Pemetaan peluang pasar & ketersediaan supplier lokal</em></p>
 </div>
 
