@@ -6,7 +6,7 @@
   ### Pusat Pengadaan & Akreditasi Supplier Nusantara
   **Platform AI-Powered B2B Sourcing Pertama di Indonesia yang Menghubungkan Korporasi dengan UMKM Lokal Terpercaya**
   
-  [![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_Site-success?style=for-the-badge)](https://pusaka.vercel.app)
+  [![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_Site-success?style=for-the-badge)](https://pusaka-lyart.vercel.app)
   [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/AbdanRasya/LOMBAHELMYKUKUHABDAN)
   [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
   
@@ -101,7 +101,7 @@ Kecerdasan Buatan (Google Gemini AI) diintegrasikan untuk:
 
 ### Live Demo
 
-🔗 **[Kunjungi Website PUSAKA](https://pusaka.vercel.app)**
+🔗 **[Kunjungi Website PUSAKA](https://pusaka-lyart.vercel.app)**
 
 ### Screenshot Aplikasi
 
