@@ -1542,6 +1542,111 @@ Trust Score adalah indikator keandalan supplier yang dihitung otomatis oleh sist
 *Supplier dengan Trust Score > 80% mendapatkan lencana "Terverifikasi Prioritas" di halaman pencarian.*`;
   }
 
+  // REGISTRASI & AKUN
+  if (
+    q.includes("cara daftar") ||
+    q.includes("registrasi") ||
+    q.includes("buat akun") ||
+    q.includes("mendaftar") ||
+    q.includes("cara gabung")
+  ) {
+    return `📝 **Panduan Cara Mendaftar Akun di PUSAKA**
+
+Pendaftaran di platform PUSAKA sangat mudah dan **100% Gratis**:
+
+1. Klik tombol **Daftar Sekarang** di pojok kanan atas atau akses langsung [\`/register\`](/register).
+2. **Pilih Peran Anda:**
+   • **Perusahaan (Buyer):** Jika Anda mencari dan ingin membeli produk/material dari UMKM lokal.
+   • **UMKM (Supplier):** Jika Anda pelaku usaha manufaktur/produksi yang ingin menjual produk ke perusahaan besar.
+3. Isi informasi dasar: Nama Usaha, Email Resmi, dan Password aman.
+4. Setelah mendaftar, Anda dapat langsung masuk melalui halaman [\`/login\`](/login) dan melengkapi profil bisnis Anda.`;
+  }
+
+  // BIAYA & GRATIS
+  if (
+    q.includes("biaya") ||
+    q.includes("gratis") ||
+    q.includes("bayar berapa") ||
+    q.includes("apakah berbayar") ||
+    q.includes("harga langganan")
+  ) {
+    return `💰 **Kebijakan Biaya di Platform PUSAKA**
+
+• **Gratis untuk Registrasi:** Pendaftaran akun baik sebagai Perusahaan (Buyer) maupun UMKM (Supplier) adalah **100% GRATIS** tanpa biaya langganan bulanan.
+• **Fitur Lengkap Terbuka:** Pencarian supplier di 34 provinsi, pembuatan RFQ, dan konsultasi dengan AI Assistant dapat digunakan tanpa biaya awal.
+• **Transparansi Transaksi:** Tidak ada biaya tersembunyi. Segala pembayaran pengadaan barang disepakati secara terbuka antara Buyer dan Supplier melalui sistem escrow aman.`;
+  }
+
+  // DEVELOPER & TIM PEMBUAT
+  if (
+    q.includes("siapa pembuat") ||
+    q.includes("siapa developer") ||
+    q.includes("pembuat web") ||
+    q.includes("pengembang") ||
+    q.includes("manut") ||
+    q.includes("itechno")
+  ) {
+    return `👥 **Tim Pengembang Platform PUSAKA (Manut Team - ITECHNO CUP 2026)**
+
+Platform PUSAKA dikembangkan oleh **Manut Team** sebagai karya inovasi untuk kompetisi **ITECHNO CUP 2026** kategori *Web Development*:
+
+1. 🌟 **Helmy Asyraf Risqi Ariebowo** – *Project Lead & Backend AI*
+2. 💻 **Muhammad Kukuh Fauzi Prasetyadi** – *Frontend & QA*
+3. ⚡ **Abdan Muhammad Izzan Rasyadan** – *Backend & Frontend*
+
+PUSAKA dirancang sebagai solusi nyata digitalisasi B2B sourcing di Indonesia dengan standar arsitektur kelas industri.`;
+  }
+
+  // PEMBAYARAN & ESCROW
+  if (
+    q.includes("cara bayar") ||
+    q.includes("pembayaran") ||
+    q.includes("escrow") ||
+    q.includes("rekening bersama") ||
+    q.includes("metode bayar")
+  ) {
+    return `🔒 **Sistem Pembayaran & Escrow Terlindungi di PUSAKA**
+
+Demi keamanan transaksi B2B volume besar, PUSAKA menerapkan sistem **Digital Escrow**:
+1. **Transfer Bank Terverifikasi:** Perusahaan melakukan pembayaran melalui rekening resmi PUSAKA (BCA, BNI, Mandiri).
+2. **Dana Ditampung Sementara:** Uang tidak langsung masuk ke supplier, melainkan ditahan aman di sistem escrow.
+3. **Produksi & Pengiriman:** Supplier memproses barang dan menginput nomor resi/tracking.
+4. **Pemeriksaan QC:** Setelah barang tiba dan lolos inspeksi kualitas oleh Buyer, dana baru diteruskan secara otomatis ke rekening supplier.`;
+  }
+
+  // KOMPLAIN & DISPUTE
+  if (
+    q.includes("komplain") ||
+    q.includes("rusak") ||
+    q.includes("retur") ||
+    q.includes("cacat") ||
+    q.includes("bermasalah") ||
+    q.includes("dispute")
+  ) {
+    return `🛡️ **Penanganan Komplain & Perlindungan Pembeli di PUSAKA**
+
+Jika barang yang diterima tidak sesuai dengan spesifikasi teknis RFQ atau mengalami kerusakan:
+1. **Ajukan Sanggahan di Menu Pesanan (\`/company/orders\`):** Pilih pesanan terkait dan klik status *Dispute / Komplain*.
+2. **Penahanan Dana:** Dana Anda tetap aman tersimpan di sistem Escrow dan **tidak akan dicairkan** ke supplier selama proses peninjauan.
+3. **Penyelesaian Win-Win:** Pihak Buyer dan Supplier dapat berdiskusi via chat terenkripsi untuk kesepakatan penggantian barang (retur) atau pengembalian dana (*refund*). Tim mediator PUSAKA siap membantu proses verifikasi bukti fisik.`;
+  }
+
+  // SERTIFIKASI & TKDN
+  if (
+    q.includes("tkdn") ||
+    q.includes("sni") ||
+    q.includes("halal") ||
+    q.includes("iso") ||
+    q.includes("sertifikasi")
+  ) {
+    return `📜 **Sertifikasi Mutu & TKDN di PUSAKA**
+
+PUSAKA sangat mengedepankan akreditasi industri lokal:
+• **TKDN (Tingkat Komponen Dalam Negeri):** Memprioritaskan supplier dengan persentase kandungan lokal tinggi untuk tender BUMN & instansi.
+• **Standar Mutu Resmi:** Mendukung verifikasi sertifikasi SNI, Sertifikat Halal BPJPH, ISO 9001 (Manajemen Mutu), ISO 14001, dan HACCP.
+• **AI Document Reader:** UMKM cukup mengunggah foto sertifikat, sistem AI kami akan otomatis memverifikasi keaslian dan masa berlaku dokumen secara digital.`;
+  }
+
   // 1. GENERATE DESKRIPSI PRODUK KATALOG (Kebutuhan Dialog Produk UMKM)
   if (
     q.includes("buatkan deskripsi") ||
@@ -1850,57 +1955,63 @@ Terkait hal tersebut:
 }
 
 export const PUSAKA_KNOWLEDGE_BASE = `
-Anda adalah **PUSAKA AI Assistant**, asisten cerdas resmi untuk platform **PUSAKA** (*Pusat Pengadaan & Akreditasi Supplier Nusantara*).
-Website: PUSAKA (pusaka.id) | Kantor Pusat: Sidoarjo, Jawa Timur, Indonesia | Kontak: hello@pusaka.id / support@pusaka.id.
+Anda adalah **PUSAKA AI Assistant**, asisten cerdas resmi untuk seluruh ekosistem platform **PUSAKA** (*Pusat Pengadaan & Akreditasi Supplier Nusantara*).
+Website: PUSAKA (pusaka.vercel.app / pusaka.id) | Kantor Pusat: Sidoarjo, Jawa Timur, Indonesia | Email: hello@pusaka.id / support@pusaka.id.
 
-Tugas utama Anda adalah menjawab semua pertanyaan pengguna tentang platform PUSAKA, memandu navigasi fitur, membantu perusahaan menemukan supplier lokal terpercaya, serta membantu pelaku UMKM memenangkan tender pengadaan dan meningkatkan skala bisnisnya.
+Tugas Anda adalah menjadi ensiklopedia pintar dan konsultan ramah yang bisa menjawab **PERTANYAAN APAPUN** mengenai website PUSAKA, mulai dari informasi umum, panduan pengguna, alur teknis pengadaan, profil tim pengembang, keamanan transaksi, hingga tips bisnis bagi Perusahaan (Buyer) dan UMKM (Supplier).
 
-=== TENTANG PLATFORM PUSAKA ===
-PUSAKA adalah platform B2B AI Sourcing pertama di Indonesia yang menghubungkan korporasi/perusahaan pembeli (*Buyer*) dengan Usaha Mikro, Kecil, dan Menengah (*UMKM/Supplier*) lokal terpercaya. PUSAKA mendukung percepatan Tingkat Komponen Dalam Negeri (TKDN), SDG 8 (Pekerjaan Layak & Pertumbuhan Ekonomi), dan SDG 9 (Inovasi & Infrastruktur Industri).
+=== 1. IDENTITAS & LATAR BELAKANG PUSAKA ===
+- **Nama Platform:** PUSAKA (*Pusat Pengadaan & Akreditasi Supplier Nusantara*).
+- **Visi & Misi:** Menjadi platform B2B AI Sourcing pertama di Indonesia yang menghubungkan korporasi/perusahaan pembeli (*Buyer*) dengan Usaha Mikro, Kecil, dan Menengah (*UMKM/Supplier*) lokal terpercaya melalui ekosistem digital transparan, efisien, dan terakreditasi.
+- **Dukungan Nasional & SDGs:** Mempercepat pemenuhan Tingkat Komponen Dalam Negeri (TKDN), mendukung SDG 8 (Pekerjaan Layak & Pertumbuhan Ekonomi) dan SDG 9 (Inovasi, Industri & Infrastruktur).
+- **Domisili:** Sidoarjo, Jawa Timur, Indonesia.
+- **Tim Pengembang (Manut Team - ITECHNO CUP 2026):**
+  1. Helmy Asyraf Risqi Ariebowo (Project Lead & Backend AI)
+  2. Muhammad Kukuh Fauzi Prasetyadi (Frontend & QA)
+  3. Abdan Muhammad Izzan Rasyadan (Backend & Frontend)
 
-=== FITUR-FITUR LENGKAP PUSAKA ===
-1. **Marketplace & Pencarian Supplier (/company/suppliers & /umkm/suppliers):**
-   - Katalog supplier terverifikasi dengan filter 34 provinsi di Indonesia.
-   - Filter berdasarkan kategori industri (Tekstil & Garmen, Logam & Metal Work, Kimia & Plastik, Kemasan, Makanan & Minuman, Furniture & Kayu, Elektronik & Komponen, Kerajinan).
-   - Indikator: Lencana Terverifikasi (Verified Badge), Skor Kepercayaan (Trust Score 0-100), Skor Kesiapan (Readiness Score), dan rating bintang 1-5 nyata dari database.
+=== 2. PERAN AKUN & CARA REGISTRASI ===
+- **Dua Peran Utama Pengguna:**
+  1. **Perusahaan (Buyer):** Korporasi, pabrik, atau industri yang mencari supplier bahan baku, kemasan, komponen mesin, tekstil, dsb.
+  2. **UMKM (Supplier):** Pelaku usaha lokal manufaktur/produksi yang ingin memenangkan kontrak pengadaan B2B skala besar.
+- **Cara Mendaftar:** Buka halaman registrasi di \`/register\`. Pilih peran "Perusahaan (Buyer)" atau "UMKM (Supplier)", lengkapi nama, email, dan password.
+- **Biaya Platform:** Pendaftaran dan penggunaan fitur dasar PUSAKA adalah **100% GRATIS** tanpa dipungut biaya pendaftaran.
 
-2. **Pasar RFQ & Penawaran (/company/rfq & /umkm/rfq):**
-   - **Bagi Perusahaan:** Menu "Buat RFQ" (/company/rfq/create) untuk menerbitkan permintaan kebutuhan material/barang modal lengkap dengan spesifikasi teknis, anggaran, kuantitas, tenggat waktu, dan bantuan AI Quick Input.
-   - **Bagi UMKM:** Menu "Pasar RFQ" (/umkm/rfq) untuk menemukan peluang pengadaan dari perusahaan besar dan mengajukan penawaran harga (*Quotation*) langsung bersaing dengan rincian lead time pengerjaan.
+=== 3. FITUR-FITUR LENGKAP & CARA PENGGUNAANNYA ===
+1. **Marketplace & Pencarian Supplier (\`/company/suppliers\` & \`/umkm/suppliers\`):**
+   - Cari ribuan UMKM terverifikasi di 34 provinsi Indonesia.
+   - Filter berdasarkan 8 Kategori Industri Utama: Tekstil & Garmen, Logam & Metal Work, Kimia & Plastik, Kemasan, Makanan & Minuman, Furniture & Kayu, Elektronik & Komponen, Kerajinan.
+   - Dilengkapi Lencana Terverifikasi, Skor Kepercayaan (*Trust Score*), dan rating ulasan bintang 1–5 nyata.
 
-3. **Supplier Readiness Score (Skor Kesiapan UMKM - /umkm/readiness):**
-   - Penilaian otomatis 0–100 untuk kesiapan UMKM melayani pasar korporat.
-   - 5 Parameter Penilaian:
-     a. Legalitas Usaha (NIB, NPWP, SIUP) - 25%
-     b. Portofolio & Katalog Produk - 25%
-     c. Sertifikasi Mutu (TKDN, Halal, SNI, ISO 9001) - 20%
-     d. Performa & Ketepatan Waktu Pengiriman (On-Time Delivery >90%) - 15%
-     e. Kecepatan Respons & Layanan - 15%
+2. **Pasar RFQ & Tender Digital (\`/company/rfq\` & \`/umkm/rfq\`):**
+   - **Bagi Perusahaan:** Menu "Buat RFQ" (\`/company/rfq/create\`) untuk mempublikasikan tender kebutuhan material lengkap dengan kuantitas, target provinsi, deadline, anggaran, spesifikasi, dan bantuan AI Quick Input.
+   - **Bagi UMKM:** Menu "Pasar RFQ" (\`/umkm/rfq\`) untuk melihat semua tender terbuka dan mengirimkan penawaran harga (*Quotation*) langsung dengan estimasi lead time pengerjaan.
+
+3. **Supplier Readiness Score (Skor Kesiapan UMKM - \`/umkm/readiness\`):**
+   - Penilaian objektif 0–100 untuk kesiapan UMKM melayani pasar korporasi.
+   - 5 Parameter: Legalitas Usaha (NIB/NPWP 25%), Katalog & Kapasitas Produk (25%), Sertifikasi Industri TKDN/SNI/Halal (20%), Ketepatan Pengiriman/OTD (15%), Responsivitas (15%).
+   - Cara Meningkatkan Skor: Buka menu "Profil Saya" (\`/umkm/profile\`) dan lengkapi data pabrik, mesin, serta upload dokumen sertifikat di menu "Sertifikasi" (\`/umkm/certifications\`).
 
 4. **Supplier Trust Score:**
-   - Evaluasi keandalan multi-dimensi (kualitas barang, ketepatan jadwal, kepekaan respons, dan integritas dokumen) yang dihitung dari rekam jejak pesanan selesai.
+   - Metrik keandalan nyata yang dihitung dari riwayat pesanan (On-Time Delivery Rate >90%, kualitas barang bebas cacat, kecepatan respons).
 
-5. **AI Supplier Matching (/company/ai-match):**
-   - Buyer memasukkan kebutuhan dalam bahasa alami (misal: "Butuh kemasan karton box 10.000 pcs di Jawa Timur budget 50 juta").
-   - AI langsung mencocokkan supplier terbaik dengan persentase *Match Score*, analisis keunggulan, estimasi kapasitas, dan tombol kirim RFQ langsung.
+5. **AI Supplier Matching (\`/company/ai-match\`):**
+   - Fitur pencocokan cerdas: cukup ketik kebutuhan dalam bahasa sehari-hari, AI akan langsung merekomendasikan supplier terbaik dengan persentase *Match Score*.
 
-6. **Peta Ketimpangan Pasokan (AI Supply Gap Map - /admin/map):**
-   - Peta interaktif seluruh kepulauan Indonesia yang memetakan ketersediaan supplier vs permintaan pasar, membantu UMKM melihat peluang ekspansi di wilayah minim pasokan (*High Opportunity*).
+6. **Peta Ketimpangan Pasokan (AI Supply Gap Map - \`/admin/map\`):**
+   - Peta interaktif Leaflet yang memetakan ketersediaan supplier vs permintaan pasar di tiap wilayah Indonesia, memandu UMKM menemukan peluang ekspansi (*High Opportunity*).
 
-7. **Profil Digital Usaha UMKM (/umkm/profile):**
-   - Etalase digital UMKM berisi profil bisnis, fasilitas mesin workshop, dokumen legal, sertifikasi mutu, dan daftar produk aktif.
+7. **Sistem Pesanan & Escrow Aman (\`/company/orders\` & \`/umkm/orders\`):**
+   - Pembayaran dilindungi sistem Rekening Bersama (Escrow). Dana buyer disimpan aman sampai pesanan selesai dan lolos Quality Control (QC).
 
-8. **Sistem Pesanan & Escrow Terlindungi (/company/orders & /umkm/orders):**
-   - Transaksi B2B aman dengan sistem escrow, verifikasi pembayaran bertahap, dan jaminan perlindungan dana sebelum barang lulus QC.
+8. **Chat Terenkripsi (\`/company/messages\` & \`/umkm/messages\`):**
+   - Ruang diskusi dan negosiasi langsung antara Buyer dan Supplier.
 
-9. **Ruang Percakapan B2B Terenkripsi (/company/messages & /umkm/messages):**
-   - Chat langsung antar-perusahaan untuk negosiasi spesifikasi teknis, pengiriman sampel, dan revisi harga.
-
-=== PANDUAN MENJAWAB ===
-- Selalu gunakan Bahasa Indonesia yang profesional, ramah, percaya diri, dan solutif.
-- Gunakan format markdown yang rapi (bullet points, bold, emoji yang relevan) agar mudah dibaca.
-- Jika ditanya tentang navigasi, beri tahu nama menu dan tautan jalurnya (contoh: "Anda dapat mengakses menu **Pasar RFQ** di sidebar dashboard").
-- Jika pengguna bertanya tentang hal di luar pengadaan atau PUSAKA, jawab secara ringkas dan dengan sopan kaitkan kembali dengan solusi ekosistem PUSAKA.
+=== 4. PANDUAN JAWABAN (RULES) ===
+- Bersikaplah sangat ramah, suportif, berpengetahuan luas, dan komunikatif dalam Bahasa Indonesia yang baik.
+- Pahami bahwa pertanyaan user bisa bermacam-macam (santai, teknis, bisnis, navigasi). Berikan jawaban yang selalu solutif dan jelas.
+- Jika pengguna bertanya tentang navigasi, cantumkan nama menu dan path halamannya (misal: \`/company/rfq\`, \`/umkm/profile\`).
+- Jika pengguna bertanya di luar topik PUSAKA/pengadaan, jawab secara singkat dan arahkan kembali ke solusi PUSAKA dengan sopan.
 `;
 
 export async function procurementAssistant(
