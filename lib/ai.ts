@@ -1454,27 +1454,57 @@ export function generateOfflineProcurementResponse(
 
   // 0. PERTANYAAN TENTANG PUSAKA & FITUR PLATFORM
   if (
+    q.includes("web apa") ||
+    q.includes("website apa") ||
+    q.includes("ini web") ||
+    q.includes("ini website") ||
+    q.includes("aplikasi apa") ||
+    q.includes("platform apa") ||
+    q.includes("ini apa") ||
+    q.includes("apa ini") ||
+    q.includes("tentang web") ||
+    q.includes("tentang aplikasi") ||
+    q.includes("fungsi web") ||
+    q.includes("kegunaan web") ||
+    q.includes("tujuan web") ||
     q.includes("apa itu pusaka") ||
     q.includes("tentang pusaka") ||
     q.includes("apa itu platform") ||
     q.includes("fitur apa saja") ||
     q.includes("fitur pusaka") ||
-    q.includes("keunggulan pusaka")
+    q.includes("keunggulan pusaka") ||
+    q.includes("pusaka itu apa") ||
+    q === "pusaka" ||
+    q === "web" ||
+    q === "website"
   ) {
-    return `🤝 **Tentang Platform PUSAKA (Pusat Pengadaan & Akreditasi Supplier Nusantara)**
+    return `🤝 **Selamat datang di PUSAKA (Pusat Pengadaan & Akreditasi Supplier Nusantara)!**
 
-PUSAKA adalah platform B2B AI Sourcing pertama di Indonesia yang menghubungkan korporasi/perusahaan buyer dengan UMKM lokal terpercaya melalui ekosistem digital transparan, efisien, dan terakreditasi.
+**PUSAKA** adalah platform B2B AI Sourcing pertama di Indonesia yang menghubungkan korporasi/perusahaan buyer dengan Usaha Mikro, Kecil, dan Menengah (*UMKM/Supplier*) lokal terpercaya melalui ekosistem digital transparan, efisien, dan terakreditasi.
 
-✨ **Fitur-Fitur Utama PUSAKA:**
-1. 🔍 **Marketplace & Smart Supplier Search:** Pencarian ribuan UMKM di 34 provinsi dengan filter kapasitas, sertifikasi, dan skor kesiapan.
-2. 📝 **Pasar RFQ & Quotations:** Pembuatan tender pengadaan digital terstruktur dan penawaran langsung dari UMKM.
-3. 🎯 **Supplier Readiness Score (0–100):** Evaluasi kesiapan legalitas (NIB, NPWP), mesin, sertifikasi (TKDN, SNI, Halal), dan kapasitas pabrik.
-4. 🛡️ **Supplier Trust Score:** Metrik keandalan berbasis rekam jejak nyata (On-Time Delivery, rating, kualitas).
-5. ✨ **AI Supplier Matching:** Rekomendasi otomatis supplier terbaik berdasarkan teks kebutuhan buyer.
-6. 🗺️ **AI Supply Gap Map:** Peta interaktif peluang pasar dan sebaran pasokan industri di Indonesia.
-7. 💬 **Chat Terenkripsi & Digital Escrow:** Komunikasi dan jaminan transaksi bisnis yang aman.
+🌐 **Apa Saja yang Bisa Anda Lakukan di Website Ini?**
 
-*PUSAKA berpusat di Sidoarjo, Jawa Timur, dan berdedikasi memajukan industri lokal dan produk dalam negeri.*`;
+1. 🔍 **Marketplace & Cari Supplier UMKM Terpercaya**
+   Akses ribuan UMKM di 34 provinsi dengan filter kapasitas mesin, sertifikasi (TKDN, SNI, Halal, ISO), serta indikator *Trust Score* dan *Readiness Score*.
+
+2. 📝 **Pasar RFQ (Tender Pengadaan Digital)**
+   • **Untuk Perusahaan:** Buat permintaan kebutuhan barang/material (*Request for Quotation*) lengkap dengan spesifikasi teknis dan budget.
+   • **Untuk UMKM:** Temukan peluang tender dari perusahaan besar dan ajukan penawaran harga (*Quotation*) langsung bersaing secara online.
+
+3. 🎯 **Supplier Readiness Score (Skor Kesiapan 0–100)**
+   Sistem AI menilai kelayakan operasional UMKM secara objektif (legalitas NIB/NPWP, mesin workshop, dan sertifikasi mutu) untuk siap bermitra dengan korporasi.
+
+4. 🤖 **AI Supplier Matching & PUSAKA AI Assistant**
+   Ketik kebutuhan Anda dalam bahasa alami, AI akan otomatis mencocokkan supplier terbaik dan mendampingi konsultasi pengadaan Anda 24/7.
+
+5. 🗺️ **Peta Ketimpangan Pasokan (AI Supply Gap Map)**
+   Peta interaktif sebaran industri di Indonesia untuk melihat daerah mana yang sedang minim pasokan (*high opportunity*) bagi ekspansi pasar UMKM.
+
+6. 🔒 **Transaksi & Escrow B2B Terlindungi**
+   Keamanan pembayaran bisnis terjamin melalui sistem rekening bersama (escrow) dan percakapan terenkripsi.
+
+---
+💡 *Apakah Anda ingin mencari supplier tertentu, ingin mendaftarkan UMKM Anda, atau ingin tahu cara membuat RFQ? Silakan tanyakan langsung kepada saya!*`;
   }
 
   if (
