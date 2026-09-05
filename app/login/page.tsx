@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -65,14 +65,14 @@ export default function LoginPage() {
           }
         }
 
-        const targetUrl = callbackUrl || (
+        const cleanCallback = callbackUrl && !callbackUrl.includes("/login") ? callbackUrl : "";
+        const targetUrl = cleanCallback || (
           role === "ADMIN" ? "/admin/dashboard" :
           role === "UMKM" ? "/umkm/dashboard" :
           "/company/dashboard"
         );
 
-        router.push(targetUrl);
-        router.refresh();
+        window.location.href = targetUrl;
         return;
       } else {
         toast.error("Terjadi kesalahan saat login");

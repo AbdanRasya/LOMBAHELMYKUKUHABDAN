@@ -15,7 +15,7 @@ const AUTH_PATHS = [
   "/verify-email",
 ];
 
-const SECRET = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "pusaka-super-secret-auth-key-32-chars-long";
+const SECRET = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "dev-secret-change-in-production-32-chars-min";
 
 function buildCsp(isDev: boolean, isApi: boolean): string {
   if (isApi) {
@@ -86,7 +86,18 @@ export async function middleware(req: NextRequest) {
   const { nextUrl } = req;
   const pathname = nextUrl.pathname;
 
-  const token = await getToken({ req, secret: SECRET });
+  // Support both HTTP (localhost) and HTTPS (__Secure- prefix on Vercel production)
+  const hasSecureCookie = req.cookies.has("__Secure-authjs.session-token") || req.cookies.has("__Secure-next-auth.session-token");
+  const isHttps = nextUrl.protocol === "https:" || req.headers.get("x-forwarded-proto") === "https" || !isDev;
+
+  let token = null;
+  if (hasSecureCookie || isHttps) {
+    token = await getToken({ req, secret: SECRET, secureCookie: true });
+  }
+  if (!token) {
+    token = await getToken({ req, secret: SECRET, secureCookie: false });
+  }
+
   const isLoggedIn = !!token;
   const userRole = (token?.role as "ADMIN" | "UMKM" | "COMPANY") || undefined;
 

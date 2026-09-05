@@ -33,6 +33,8 @@ type SessionUserWithRole = {
 };
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
+  secret: process.env.AUTH_SECRET || "dev-secret-change-in-production-32-chars-min",
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
   pages: {
