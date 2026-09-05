@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { Send, Loader2, Bot, User, Sparkles, RefreshCw } from "lucide-react";
@@ -24,17 +24,19 @@ export default function AssistantPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Halo! Saya adalah AI Procurement Assistant SourceHub. Saya siap membantu Anda dalam proses pengadaan — mulai dari mencari supplier, membandingkan penawaran, hingga strategi negosiasi. Apa yang bisa saya bantu hari ini?",
+      content: "Halo! Saya adalah AI Procurement Assistant PUSAKA. Saya siap membantu Anda dalam proses pengadaan â€” mulai dari mencari supplier, membandingkan penawaran, hingga strategi negosiasi. Apa yang bisa saya bantu hari ini?",
       timestamp: new Date(),
     },
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
   }, [messages]);
 
 function getClientFallbackResponse(input: string): string {
@@ -42,57 +44,57 @@ function getClientFallbackResponse(input: string): string {
 
   // 1. STARTER: Biji / bahan baku plastik di Jawa Barat
   if (q.includes("plastik") || (q.includes("supplier") && q.includes("jawa barat"))) {
-    return `🔍 **Hasil Rekomendasi Supplier UMKM Terverifikasi SourceHub**
+    return `ðŸ” **Hasil Rekomendasi Supplier UMKM Terverifikasi PUSAKA**
 
 Sistem mendeteksi kebutuhan Anda:
-• **Kategori:** Kimia & Plastik
-• **Wilayah:** Jawa Barat
-• **Estimasi Kebutuhan:** 10 ton / bulan
+â€¢ **Kategori:** Kimia & Plastik
+â€¢ **Wilayah:** Jawa Barat
+â€¢ **Estimasi Kebutuhan:** 10 ton / bulan
 
 Berikut supplier UMKM dengan tingkat kecocokan (*Match Score*) tertinggi:
 
 **1. UD Plastik Jaya Berkah**
-📍 Lokasi: Bekasi, Jawa Barat | 🏷️ Kategori: Kimia & Plastik
-🎯 **Match Score:** 88%
-⚡ Kapasitas: 80.000 kg/bulan (memenuhi kebutuhan 10 ton/bulan)
-⭐ Rating: 3.9/5.0 (On-Time Delivery: 78%)
-📜 Sertifikasi: NIB Terverifikasi & Izin Usaha Industri
-⏱️ Lead Time: ~10 hari | Estimasi Harga: Rp 15.000/kg
-💬 *Spesialisasi: Pabrik resin dan barang plastik injection molding untuk kebutuhan industri B2B di wilayah Jabodetabek dan Jawa Barat.*
+ðŸ“ Lokasi: Bekasi, Jawa Barat | ðŸ·ï¸ Kategori: Kimia & Plastik
+ðŸŽ¯ **Match Score:** 88%
+âš¡ Kapasitas: 80.000 kg/bulan (memenuhi kebutuhan 10 ton/bulan)
+â­ Rating: 3.9/5.0 (On-Time Delivery: 78%)
+ðŸ“œ Sertifikasi: NIB Terverifikasi & Izin Usaha Industri
+â±ï¸ Lead Time: ~10 hari | Estimasi Harga: Rp 15.000/kg
+ðŸ’¬ *Spesialisasi: Pabrik resin dan barang plastik injection molding untuk kebutuhan industri B2B di wilayah Jabodetabek dan Jawa Barat.*
 
-💡 **Langkah Selanjutnya:**
+ðŸ’¡ **Langkah Selanjutnya:**
 Anda dapat langsung membuka menu **Buat RFQ** untuk mengirimkan permintaan penawaran harga resmi kepada supplier di atas secara langsung.`;
   }
 
   // 2. STARTER: Perbandingan 3 supplier tekstil terbaik
   if (q.includes("banding") || q.includes("tekstil") || q.includes("3 supplier") || q.includes("komparasi")) {
-    return `📊 **Analisis Komparasi 3 Supplier Terbaik (Kategori: Tekstil & Garmen)**
+    return `ðŸ“Š **Analisis Komparasi 3 Supplier Terbaik (Kategori: Tekstil & Garmen)**
 
-Berikut perbandingan mendalam berdasarkan metrik kapasitas, performa pengiriman, dan legalitas di SourceHub:
+Berikut perbandingan mendalam berdasarkan metrik kapasitas, performa pengiriman, dan legalitas di PUSAKA:
 
 **1. CV Sumber Tekstil Bandung** (Bandung, Jawa Barat)
-• **Kapasitas Produksi:** 25.000 pcs/bulan
-• **On-Time Delivery (OTD):** 96% | **Rating:** ⭐ 4.8/5.0
-• **Sertifikasi Mutu:** SNI, OEKO-TEX
-• **Estimasi Lead Time:** 14 hari kerja
-• **Keunggulan:** Spesialis seragam kerja kantor, pabrik, dan wearpack bersertifikasi SNI dengan 45 penjahit mesin otomatis.
+â€¢ **Kapasitas Produksi:** 25.000 pcs/bulan
+â€¢ **On-Time Delivery (OTD):** 96% | **Rating:** â­ 4.8/5.0
+â€¢ **Sertifikasi Mutu:** SNI, OEKO-TEX
+â€¢ **Estimasi Lead Time:** 14 hari kerja
+â€¢ **Keunggulan:** Spesialis seragam kerja kantor, pabrik, dan wearpack bersertifikasi SNI dengan 45 penjahit mesin otomatis.
 
 **2. Konveksi Textile Mandiri Bandung** (Bandung, Jawa Barat)
-• **Kapasitas Produksi:** 20.000 pcs/bulan
-• **On-Time Delivery (OTD):** 90% | **Rating:** ⭐ 4.5/5.0
-• **Sertifikasi Mutu:** SNI
-• **Estimasi Lead Time:** 21 hari kerja
-• **Keunggulan:** Konveksi seragam drill premium, polo shirt, dan sablon/bordir komputer.
+â€¢ **Kapasitas Produksi:** 20.000 pcs/bulan
+â€¢ **On-Time Delivery (OTD):** 90% | **Rating:** â­ 4.5/5.0
+â€¢ **Sertifikasi Mutu:** SNI
+â€¢ **Estimasi Lead Time:** 21 hari kerja
+â€¢ **Keunggulan:** Konveksi seragam drill premium, polo shirt, dan sablon/bordir komputer.
 
 **3. Sentra Garmen Nusantara Solo** (Surakarta, Jawa Tengah)
-• **Kapasitas Produksi:** 18.000 pcs/bulan
-• **On-Time Delivery (OTD):** 93% | **Rating:** ⭐ 4.6/5.0
-• **Sertifikasi Mutu:** SNI, NIB
-• **Estimasi Lead Time:** 18 hari kerja
-• **Keunggulan:** Pabrik garmen skala menengah, harga sangat kompetitif untuk pengadaan seragam instansi dan ritel.
+â€¢ **Kapasitas Produksi:** 18.000 pcs/bulan
+â€¢ **On-Time Delivery (OTD):** 93% | **Rating:** â­ 4.6/5.0
+â€¢ **Sertifikasi Mutu:** SNI, NIB
+â€¢ **Estimasi Lead Time:** 18 hari kerja
+â€¢ **Keunggulan:** Pabrik garmen skala menengah, harga sangat kompetitif untuk pengadaan seragam instansi dan ritel.
 
-💡 **Rekomendasi Strategis SourceHub:**
-1. **Pilihan Utama Volume & Kepatuhan:** **CV Sumber Tekstil Bandung** paling unggul dalam konsistensi rating (⭐ 4.8) dan ketepatan waktu (96% OTD).
+ðŸ’¡ **Rekomendasi Strategis PUSAKA:**
+1. **Pilihan Utama Volume & Kepatuhan:** **CV Sumber Tekstil Bandung** paling unggul dalam konsistensi rating (â­ 4.8) dan ketepatan waktu (96% OTD).
 2. **Pilihan Alternatif Cepat:** **Konveksi Textile Mandiri Bandung** cocok untuk pesanan yang membutuhkan kapasitas produksi masif.
 3. **Pilihan Efisiensi Biaya:** **Sentra Garmen Nusantara Solo** menawarkan estimasi harga yang sangat kompetitif.
 
@@ -101,68 +103,68 @@ Berikut perbandingan mendalam berdasarkan metrik kapasitas, performa pengiriman,
 
   // 3. STARTER: Risiko pemilihan supplier baru
   if (q.includes("risiko") || q.includes("risk") || q.includes("memilih supplier") || q.includes("kriteria")) {
-    return `🛡️ **5 Risiko Utama Saat Memilih Supplier Baru & Cara Memitigasinya di SourceHub**
+    return `ðŸ›¡ï¸ **5 Risiko Utama Saat Memilih Supplier Baru & Cara Memitigasinya di PUSAKA**
 
 Sebagai profesional procurement, berikut faktor risiko kritis yang wajib dipertimbangkan sebelum menerbitkan Purchase Order (PO):
 
 1. **Risiko Keterlambatan Pengiriman (Lead Time Breach)**
-   • *Dampak:* Gangguan pada jadwal perakitan atau stok kehabisan di gudang Anda.
-   • *Mitigasi SourceHub:* Periksa skor **On-Time Delivery Rate (OTDR)** supplier pada profilnya. Terapkan jadwal pengiriman bertahap (*batch delivery*) dan cantumkan klausul denda keterlambatan pada PKS.
+   â€¢ *Dampak:* Gangguan pada jadwal perakitan atau stok kehabisan di gudang Anda.
+   â€¢ *Mitigasi PUSAKA:* Periksa skor **On-Time Delivery Rate (OTDR)** supplier pada profilnya. Terapkan jadwal pengiriman bertahap (*batch delivery*) dan cantumkan klausul denda keterlambatan pada PKS.
 
 2. **Risiko Inkonsistensi Kualitas (Defect Rate Tinggi)**
-   • *Dampak:* Biaya retur barang, komplain dari pembeli akhir, dan waktu terbuang.
-   • *Mitigasi SourceHub:* Wajibkan pengiriman *Pre-Production Sample* (sampel awal) sebelum produksi massal. Pastikan toleransi spesifikasi teknis (toleransi dimensi/bahan) tertulis jelas pada RFQ.
+   â€¢ *Dampak:* Biaya retur barang, komplain dari pembeli akhir, dan waktu terbuang.
+   â€¢ *Mitigasi PUSAKA:* Wajibkan pengiriman *Pre-Production Sample* (sampel awal) sebelum produksi massal. Pastikan toleransi spesifikasi teknis (toleransi dimensi/bahan) tertulis jelas pada RFQ.
 
 3. **Risiko Legalitas & Sertifikasi Palsu**
-   • *Dampak:* Masalah hukum pada saat audit perusahaan, sertifikasi halal/SNI gugur.
-   • *Mitigasi SourceHub:* Periksa badge **Terverifikasi** pada profil UMKM. SourceHub menggunakan verifikasi dokumen legalitas (NIB, NPWP, SNI, Halal) untuk memastikan keabsahan supplier.
+   â€¢ *Dampak:* Masalah hukum pada saat audit perusahaan, sertifikasi halal/SNI gugur.
+   â€¢ *Mitigasi PUSAKA:* Periksa badge **Terverifikasi** pada profil UMKM. PUSAKA menggunakan verifikasi dokumen legalitas (NIB, NPWP, SNI, Halal) untuk memastikan keabsahan supplier.
 
 4. **Risiko Ketergantungan Tunggal (*Single Sourcing*)**
-   • *Dampak:* Jika mesin workshop supplier rusak atau terjadi musibah, pengadaan Anda langsung terhenti.
-   • *Mitigasi SourceHub:* Alokasikan pesanan dengan skema 70/30 (70% ke supplier utama, 30% ke supplier cadangan) untuk material kritis.
+   â€¢ *Dampak:* Jika mesin workshop supplier rusak atau terjadi musibah, pengadaan Anda langsung terhenti.
+   â€¢ *Mitigasi PUSAKA:* Alokasikan pesanan dengan skema 70/30 (70% ke supplier utama, 30% ke supplier cadangan) untuk material kritis.
 
 5. **Risiko Finansial & Arus Kas**
-   • *Dampak:* Supplier kehabisan modal kerja di tengah proses pengerjaan.
-   • *Mitigasi SourceHub:* Terapkan termin pembayaran *milestone* yang adil (misalnya 30% uang muka, 40% saat barang lulus uji QC pabrik, 30% setelah tiba di gudang).`;
+   â€¢ *Dampak:* Supplier kehabisan modal kerja di tengah proses pengerjaan.
+   â€¢ *Mitigasi PUSAKA:* Terapkan termin pembayaran *milestone* yang adil (misalnya 30% uang muka, 40% saat barang lulus uji QC pabrik, 30% setelah tiba di gudang).`;
   }
 
   // 4. STARTER: Negosiasi harga dengan UMKM
   if (q.includes("negosiasi") || q.includes("nego") || q.includes("tawar") || q.includes("harga yang baik") || q.includes("diskon")) {
-    return `🤝 **Strategi Negosiasi Harga Win-Win dengan Supplier UMKM**
+    return `ðŸ¤ **Strategi Negosiasi Harga Win-Win dengan Supplier UMKM**
 
 Negosiasi dengan UMKM berbeda dengan korporasi besar karena mereka sangat sensitif terhadap *cash flow* dan kepastian order. Berikut 4 taktik terbukti efektif:
 
 1. **Tawarkan Komitmen Volume Jangka Panjang (*Blanket Order*)**
-   • Daripada menawar pesanan 500 pcs sekaligus, janjikan kontrak tahunan misalnya 6.000 pcs yang dikirim secara bertahap 500 pcs per bulan.
-   • UMKM bersedia memberikan diskon 5%–15% untuk kepastian utilisasi mesin mereka selama beberapa bulan ke depan.
+   â€¢ Daripada menawar pesanan 500 pcs sekaligus, janjikan kontrak tahunan misalnya 6.000 pcs yang dikirim secara bertahap 500 pcs per bulan.
+   â€¢ UMKM bersedia memberikan diskon 5%â€“15% untuk kepastian utilisasi mesin mereka selama beberapa bulan ke depan.
 
 2. **Percepat Termin Pembayaran (*Cash Flow Advantage*)**
-   • Standar korporat sering menuntut tempo pembayaran 60–90 hari (TOP). Hal ini sangat memberatkan modal kerja UMKM.
-   • Tawarkan pembayaran lebih cepat (misal tempo 14 hari atau pembayaran tunai 3 hari setelah lolos QC). Sebagian besar UMKM akan dengan senang hati memotong harga pokok penjualan demi perputaran kas cepat.
+   â€¢ Standar korporat sering menuntut tempo pembayaran 60â€“90 hari (TOP). Hal ini sangat memberatkan modal kerja UMKM.
+   â€¢ Tawarkan pembayaran lebih cepat (misal tempo 14 hari atau pembayaran tunai 3 hari setelah lolos QC). Sebagian besar UMKM akan dengan senang hati memotong harga pokok penjualan demi perputaran kas cepat.
 
 3. **Bantu Standarisasi Bahan Baku & Kemasan**
-   • Diskusikan apakah kemasan luar dapat disederhanakan tanpa mengurangi perlindungan barang.
-   • Terkadang biaya tinggi timbul akibat spesifikasi kemasan custom yang mahal bagi UMKM skala menengah.
+   â€¢ Diskusikan apakah kemasan luar dapat disederhanakan tanpa mengurangi perlindungan barang.
+   â€¢ Terkadang biaya tinggi timbul akibat spesifikasi kemasan custom yang mahal bagi UMKM skala menengah.
 
 4. **Jalankan *Trial Batch* (Pesanan Uji Coba)**
-   • Mulai dengan pesanan percontohan volume kecil pada harga normal. Tunjukkan bahwa perusahaan Anda adalah mitra profesional yang membayar tepat waktu. Setelah hubungan saling percaya terbangun, ajukan revisi harga untuk pesanan reguler skala penuh.`;
+   â€¢ Mulai dengan pesanan percontohan volume kecil pada harga normal. Tunjukkan bahwa perusahaan Anda adalah mitra profesional yang membayar tepat waktu. Setelah hubungan saling percaya terbangun, ajukan revisi harga untuk pesanan reguler skala penuh.`;
   }
 
   // 5. Privasi & Syarat Ketentuan
   if (q.includes("syarat") || q.includes("ketentuan") || q.includes("terms") || q.includes("privasi") || q.includes("privacy") || q.includes("keamanan")) {
-    return `🔒 **Kebijakan Keamanan Data, Privasi & Syarat Layanan SourceHub**
+    return `ðŸ”’ **Kebijakan Keamanan Data, Privasi & Syarat Layanan PUSAKA**
 
-SourceHub mengedepankan standar keamanan dan tata kelola hukum pengadaan B2B:
-• **Kepatuhan UU PDP (UU No. 27/2022):** Seluruh data identitas, NIB, NPWP, dan nomor rekening bisnis dienkripsi menggunakan standar TLS 1.3 dan penyimpanan terisolasi.
-• **Kerahasiaan Desain & Harga:** Spesifikasi teknik rahasia (CAD/blueprint) dan lembar penawaran (Quotation) hanya dapat diakses oleh pihak yang bertransaksi secara sah.
-• **Dokumen Legal Lengkap:**
+PUSAKA mengedepankan standar keamanan dan tata kelola hukum pengadaan B2B:
+â€¢ **Kepatuhan UU PDP (UU No. 27/2022):** Seluruh data identitas, NIB, NPWP, dan nomor rekening bisnis dienkripsi menggunakan standar TLS 1.3 dan penyimpanan terisolasi.
+â€¢ **Kerahasiaan Desain & Harga:** Spesifikasi teknik rahasia (CAD/blueprint) dan lembar penawaran (Quotation) hanya dapat diakses oleh pihak yang bertransaksi secara sah.
+â€¢ **Dokumen Legal Lengkap:**
   - Syarat & Ketentuan: \`/terms\`
   - Kebijakan Privasi: \`/privacy\``;
   }
 
   // 6. Alur RFQ
   if (q.includes("buat rfq") || q.includes("cara kerja") || q.includes("alur") || q.includes("cara pesan")) {
-    return `📝 **Panduan 4 Langkah Pengadaan Cepat Melalui SourceHub**
+    return `ðŸ“ **Panduan 4 Langkah Pengadaan Cepat Melalui PUSAKA**
 
 1. **Buat Permintaan Pengadaan (RFQ)** di menu Buat RFQ.
 2. **Pencocokan AI Otomatis (*AI Supplier Matching*)** mencocokkan supplier terdekat dan terverifikasi.
@@ -172,34 +174,34 @@ SourceHub mengedepankan standar keamanan dan tata kelola hukum pengadaan B2B:
 
   // 7. General Supplier Search
   if (q.includes("supplier") || q.includes("butuh") || q.includes("cari") || q.includes("logam") || q.includes("kemasan") || q.includes("kayu") || q.includes("makanan") || q.includes("elektronik")) {
-    return `🔍 **Rekomendasi Supplier Terverifikasi di SourceHub**
+    return `ðŸ” **Rekomendasi Supplier Terverifikasi di PUSAKA**
 
-Berdasarkan pencarian Anda, SourceHub memiliki database UMKM lokal terverifikasi di berbagai kategori:
-• **Logam & Permesinan:** Bengkel Bubut CNC Karya Logam (Bandung) & UD Maju Bersama Steel (Jakarta).
-• **Kemasan & Karton:** UD Berkah Kemasan Mandiri (Semarang) & CV Kemasan Lestari (Semarang).
-• **Tekstil & Seragam:** CV Sumber Tekstil (Bandung) & Konveksi Mandiri (Bandung).
-• **Bahan Pangan & Rempah:** Koperasi Tani Agro Bumi (Bogor & Medan).
-• **Furnitur & Palet Kayu:** Sentra Kayu Mebel Jepara Asri (Jepara).
-• **Elektronik & Panel:** UD Panel & Kabel Elektro Mandiri (Surabaya/Sidoarjo).
+Berdasarkan pencarian Anda, PUSAKA memiliki database UMKM lokal terverifikasi di berbagai kategori:
+â€¢ **Logam & Permesinan:** Bengkel Bubut CNC Karya Logam (Bandung) & UD Maju Bersama Steel (Jakarta).
+â€¢ **Kemasan & Karton:** UD Berkah Kemasan Mandiri (Semarang) & CV Kemasan Lestari (Semarang).
+â€¢ **Tekstil & Seragam:** CV Sumber Tekstil (Bandung) & Konveksi Mandiri (Bandung).
+â€¢ **Bahan Pangan & Rempah:** Koperasi Tani Agro Bumi (Bogor & Medan).
+â€¢ **Furnitur & Palet Kayu:** Sentra Kayu Mebel Jepara Asri (Jepara).
+â€¢ **Elektronik & Panel:** UD Panel & Kabel Elektro Mandiri (Surabaya/Sidoarjo).
 
-💡 Silakan buka menu **Marketplace Supplier** atau **Buat RFQ** untuk mendapatkan penawaran harga langsung dari mitra UMKM di atas!`;
+ðŸ’¡ Silakan buka menu **Marketplace Supplier** atau **Buat RFQ** untuk mendapatkan penawaran harga langsung dari mitra UMKM di atas!`;
   }
 
   // 8. Greetings
   if (q.startsWith("halo") || q.startsWith("hai") || q.startsWith("hi") || q.startsWith("pagi") || q.startsWith("siang") || q.startsWith("sore") || q.startsWith("malam")) {
-    return `Halo! 👋 Saya adalah **AI Procurement Assistant SourceHub**.
+    return `Halo! ðŸ‘‹ Saya adalah **AI Procurement Assistant PUSAKA**.
 
 Saya siap mendampingi proses pengadaan bisnis B2B Anda:
-1. 🔍 **Mencari Supplier:** *Misal: "Saya butuh supplier bahan baku plastik dengan kapasitas 10 ton/bulan di Jawa Barat"*
-2. 📊 **Membandingkan Supplier:** *Misal: "Bantu saya membandingkan 3 supplier tekstil terbaik"*
-3. 🛡️ **Manajemen Risiko:** *Misal: "Apa risiko yang perlu dipertimbangkan saat memilih supplier baru?"*
-4. 🤝 **Strategi Negosiasi:** *Misal: "Bagaimana cara bernegosiasi harga yang baik dengan supplier UMKM?"*
+1. ðŸ” **Mencari Supplier:** *Misal: "Saya butuh supplier bahan baku plastik dengan kapasitas 10 ton/bulan di Jawa Barat"*
+2. ðŸ“Š **Membandingkan Supplier:** *Misal: "Bantu saya membandingkan 3 supplier tekstil terbaik"*
+3. ðŸ›¡ï¸ **Manajemen Risiko:** *Misal: "Apa risiko yang perlu dipertimbangkan saat memilih supplier baru?"*
+4. ðŸ¤ **Strategi Negosiasi:** *Misal: "Bagaimana cara bernegosiasi harga yang baik dengan supplier UMKM?"*
 
 Ada kebutuhan barang atau proyek apa yang sedang Anda rencanakan?`;
   }
 
   // 9. Default Fallback
-  return `Terima kasih atas pertanyaan Anda. Terkait kebutuhan pengadaan di platform SourceHub:
+  return `Terima kasih atas pertanyaan Anda. Terkait kebutuhan pengadaan di platform PUSAKA:
 Anda dapat menanyakan rekomendasi supplier UMKM spesifik, perbandingan penawaran, strategi mitigasi risiko, atau panduan pembuatan RFQ. Silakan tanyakan kategori produk atau lokasi yang Anda butuhkan!`;
 }
 
@@ -279,7 +281,7 @@ Anda dapat menanyakan rekomendasi supplier UMKM spesifik, perbandingan penawaran
             <h1 className="font-bold text-neutral-900">AI Procurement Assistant</h1>
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs text-neutral-500">Online • Siap membantu</span>
+              <span className="text-xs text-neutral-500">Online â€¢ Siap membantu</span>
             </div>
           </div>
           <Button
@@ -300,7 +302,7 @@ Anda dapat menanyakan rekomendasi supplier UMKM spesifik, perbandingan penawaran
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-neutral-50">
+      <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-6 space-y-4 bg-neutral-50">
         {messages.map((msg, i) => (
           <div
             key={i}
@@ -322,28 +324,30 @@ Anda dapat menanyakan rekomendasi supplier UMKM spesifik, perbandingan penawaran
             </div>
             <div
               className={cn(
-                "max-w-[75%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm",
-                msg.role === "assistant"
-                  ? "bg-white text-neutral-800 rounded-tl-none border border-neutral-200"
-                  : "bg-blue-600 text-white rounded-tr-none"
+                "max-w-[80%] rounded-2xl px-4 py-3 shadow-sm",
+                msg.role === "user"
+                  ? "bg-blue-600 text-white rounded-tr-none"
+                  : "bg-white border border-neutral-200 text-neutral-800 rounded-tl-none"
               )}
             >
-              <p className="whitespace-pre-wrap">{msg.content}</p>
+              <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
               <p
                 className={cn(
-                  "text-[10px] mt-2",
-                  msg.role === "assistant" ? "text-neutral-400" : "text-blue-200"
+                  "text-[10px] mt-1.5",
+                  msg.role === "user" ? "text-blue-100" : "text-neutral-400"
                 )}
               >
-                {msg.timestamp.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}
+                {new Date(msg.timestamp).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </p>
             </div>
           </div>
         ))}
-
         {isLoading && (
-          <div className="flex gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center flex-shrink-0">
+          <div className="flex gap-3 items-center">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center flex-shrink-0 shadow-sm">
               <Bot className="w-4 h-4 text-white" />
             </div>
             <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 border border-neutral-200 shadow-sm">
@@ -354,13 +358,12 @@ Anda dapat menanyakan rekomendasi supplier UMKM spesifik, perbandingan penawaran
             </div>
           </div>
         )}
-        <div ref={bottomRef} />
       </div>
 
       {/* Starters (show only at beginning) */}
       {messages.length === 1 && (
         <div className="px-6 py-3 bg-neutral-50 border-t border-neutral-200">
-          <p className="text-xs text-neutral-500 mb-2">💡 Coba tanyakan:</p>
+          <p className="text-xs text-neutral-500 mb-2">ðŸ’¡ Coba tanyakan:</p>
           <div className="flex flex-wrap gap-2">
             {starters.map((s, i) => (
               <button

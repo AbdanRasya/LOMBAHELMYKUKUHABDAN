@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,10 +14,11 @@ import { User, Lock, Bell, Eye, ArrowRight, Loader2, Globe, Clock, DollarSign, S
 import Link from "next/link";
 
 export default function UMKMSettingsPage() {
+  const { data: session } = useSession();
   const [saving, setSaving] = useState(false);
   const [preferences, setPreferences] = useState({
-    ownerName: "Kukuh Rahmadi",
-    email: "umkm@sourcehub.id",
+    ownerName: "",
+    email: "",
     language: "id",
     timezone: "WIB",
     currency: "IDR",
@@ -24,6 +26,17 @@ export default function UMKMSettingsPage() {
     visibility: "public",
     paymentMethod: "bca",
   });
+
+  useEffect(() => {
+    if (session?.user) {
+      const user = session.user;
+      setPreferences((prev) => ({
+        ...prev,
+        ownerName: prev.ownerName || user.name || "",
+        email: user.email || prev.email || "",
+      }));
+    }
+  }, [session]);
 
   const updatePref = (field: string, val: string | null) => {
     setPreferences((prev) => ({ ...prev, [field]: val || "" }));

@@ -87,31 +87,45 @@ export async function POST(request: NextRequest) {
     if (!body.price || isNaN(parseFloat(body.price)))
       return NextResponse.json({ error: "Harga penawaran wajib diisi angka yang valid" }, { status: 400 });
 
-    const quotation = await db.quotation.create({
-      data: {
+    let quotation;
+    if (body.rfqId.startsWith("demo-rfq-")) {
+      quotation = {
+        id: `quotation-${Date.now()}`,
         rfqId: body.rfqId,
         umkmId: umkm.id,
         price: parseFloat(body.price),
         leadTimeDays: body.leadTimeDays ? parseInt(body.leadTimeDays) : null,
         notes: body.notes || null,
         status: "PENDING",
-      },
-    });
+        createdAt: new Date().toISOString(),
+      };
+    } else {
+      quotation = await db.quotation.create({
+        data: {
+          rfqId: body.rfqId,
+          umkmId: umkm.id,
+          price: parseFloat(body.price),
+          leadTimeDays: body.leadTimeDays ? parseInt(body.leadTimeDays) : null,
+          notes: body.notes || null,
+          status: "PENDING",
+        },
+      });
 
-    const rfq = await db.rFQ.findUnique({ where: { id: body.rfqId }, include: { companyProfile: true } });
-    if (rfq?.companyProfile?.userId) {
-      try {
-        await db.notification.create({
-          data: {
-            userId: rfq.companyProfile.userId,
-            type: "QUOTATION_RECEIVED",
-            title: "Penawaran Baru Diterima! 🎉",
-            body: `UMKM ${umkm.businessName} telah mengirim penawaran senilai Rp ${parseFloat(body.price).toLocaleString('id-ID')} untuk RFQ "${rfq.title}"`,
-            link: `/company/rfq/${rfq.id}`,
-          },
-        });
-      } catch (notifErr) {
-        console.error("[api/quotations POST] Notification failed (non-fatal):", notifErr);
+      const rfq = await db.rFQ.findUnique({ where: { id: body.rfqId }, include: { companyProfile: true } });
+      if (rfq?.companyProfile?.userId) {
+        try {
+          await db.notification.create({
+            data: {
+              userId: rfq.companyProfile.userId,
+              type: "QUOTATION_RECEIVED",
+              title: "Penawaran Baru Diterima! 🎉",
+              body: `UMKM ${umkm.businessName} telah mengirim penawaran senilai Rp ${parseFloat(body.price).toLocaleString('id-ID')} untuk RFQ "${rfq.title}"`,
+              link: `/company/rfq/${rfq.id}`,
+            },
+          });
+        } catch (notifErr) {
+          console.error("[api/quotations POST] Notification failed (non-fatal):", notifErr);
+        }
       }
     }
 

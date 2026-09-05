@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = process.env.GEMINI_API_KEY
@@ -326,7 +326,7 @@ export function cariSupplier(kebutuhan: KebutuhanTersusun, topN = 5, umkmList: a
         match_score: Math.round(skor * 10) / 10,
         skor_match: skor > 1 ? skor / 100 : skor,
         alasan: alasan.join(" "),
-        kecocokan: kecocokanArr.length ? kecocokanArr.slice(0, 3).map(a => `✓ ${a.replace(/\.$/, "")}`) : [`✓ Kategori ${u.kategori_utama || u.kategori || "sesuai"}`],
+        kecocokan: kecocokanArr.length ? kecocokanArr.slice(0, 3).map(a => `âœ“ ${a.replace(/\.$/, "")}`) : [`âœ“ Kategori ${u.kategori_utama || u.kategori || "sesuai"}`],
       });
     }
   }
@@ -391,10 +391,10 @@ export function hitungReadiness(row: any): ReadinessHasil {
     catatan.push(`Lengkapi sertifikasi (prioritas: ${sertifBelum[0]}) untuk naikkan kepercayaan buyer industri.`);
   }
   if (komponen.rating < 15) {
-    catatan.push("Tingkatkan kualitas & komunikasi pada proyek berjalan — rating historis masih di bawah rata-rata.");
+    catatan.push("Tingkatkan kualitas & komunikasi pada proyek berjalan â€” rating historis masih di bawah rata-rata.");
   }
   if (komponen.ketepatan_waktu < 14) {
-    catatan.push(`Perbaiki manajemen lead time — tingkat ketepatan waktu saat ini ${otdr.toFixed(0)}%.`);
+    catatan.push(`Perbaiki manajemen lead time â€” tingkat ketepatan waktu saat ini ${otdr.toFixed(0)}%.`);
   }
   if (komponen.pengalaman < 8) {
     catatan.push(`Perbanyak portofolio proyek B2B untuk membangun rekam jejak (baru ${jmlProyek} proyek selesai).`);
@@ -403,14 +403,14 @@ export function hitungReadiness(row: any): ReadinessHasil {
     catatan.push("Pertimbangkan menambah kapasitas SDM/produksi jika target pasar adalah industri skala menengah-besar.");
   }
   if (catatan.length === 0) {
-    catatan.push("Profil sudah kuat di semua aspek — pertahankan kualitas & konsistensi layanan.");
+    catatan.push("Profil sudah kuat di semua aspek â€” pertahankan kualitas & konsistensi layanan.");
   }
 
   let level: string;
-  if (total >= 80) level = "Siap — pemasok industri menengah-besar";
-  else if (total >= 60) level = "Cukup Siap — cocok untuk proyek skala menengah";
-  else if (total >= 40) level = "Perlu Peningkatan — mulai dari proyek skala kecil";
-  else level = "Belum Siap — lengkapi profil dasar dahulu";
+  if (total >= 80) level = "Siap â€” pemasok industri menengah-besar";
+  else if (total >= 60) level = "Cukup Siap â€” cocok untuk proyek skala menengah";
+  else if (total >= 40) level = "Perlu Peningkatan â€” mulai dari proyek skala kecil";
+  else level = "Belum Siap â€” lengkapi profil dasar dahulu";
 
   return {
     umkm_id: row.umkm_id || row.id,
@@ -677,10 +677,10 @@ export function getDemandByCategoryRegion(topN = 10, rfqList: any[] = DEMO_RFQ):
 // ============================================================
 
 function labelPeluang(jumlahUmkm: number, gapRatio: number): string {
-  if (jumlahUmkm === 0) return "Peluang Sangat Tinggi — belum ada supplier sama sekali";
-  if (gapRatio >= 2) return "Peluang Tinggi — permintaan jauh melebihi supplier tersedia";
-  if (gapRatio >= 1) return "Peluang Sedang — permintaan sedikit lebih banyak dari supplier";
-  return "Sudah Terpenuhi — supplier cukup untuk permintaan saat ini";
+  if (jumlahUmkm === 0) return "Peluang Sangat Tinggi â€” belum ada supplier sama sekali";
+  if (gapRatio >= 2) return "Peluang Tinggi â€” permintaan jauh melebihi supplier tersedia";
+  if (gapRatio >= 1) return "Peluang Sedang â€” permintaan sedikit lebih banyak dari supplier";
+  return "Sudah Terpenuhi â€” supplier cukup untuk permintaan saat ini";
 }
 
 export interface SupplyGapItem {
@@ -757,7 +757,7 @@ export function hitungRisiko(umkmId: string, umkmList: any[] = DEMO_UMKM, transL
       risk_score: null,
       data_terbatas: true,
       kategori_risiko: "Data belum cukup",
-      alasan: "Belum ada histori transaksi — perlakukan sebagai supplier baru, minta sample/PO kecil dulu.",
+      alasan: "Belum ada histori transaksi â€” perlakukan sebagai supplier baru, minta sample/PO kecil dulu.",
     };
   }
 
@@ -796,7 +796,7 @@ export function hitungRisiko(umkmId: string, umkmList: any[] = DEMO_UMKM, transL
     if (maxQty > kapasitas) {
       capacityFlag = true;
       alasanArr.push(
-        `Kapasitas produksi (${kapasitas.toLocaleString("id-ID")} ${row.satuan_produksi || "unit"}/bulan) pernah lebih kecil dari volume pesanan yang diterima (${maxQty.toLocaleString("id-ID")}) — indikasi risiko overcommit.`,
+        `Kapasitas produksi (${kapasitas.toLocaleString("id-ID")} ${row.satuan_produksi || "unit"}/bulan) pernah lebih kecil dari volume pesanan yang diterima (${maxQty.toLocaleString("id-ID")}) â€” indikasi risiko overcommit.`,
       );
     }
   }
@@ -813,7 +813,7 @@ export function hitungRisiko(umkmId: string, umkmList: any[] = DEMO_UMKM, transL
   const kategori = riskScoreRounded < 30 ? "Rendah" : riskScoreRounded < 60 ? "Sedang" : "Tinggi";
   const dataTerbatas = len < MIN_TRANSAKSI_UNTUK_YAKIN;
   if (dataTerbatas) {
-    alasanArr.push(`Baru ${len} transaksi historis — skor ini indikatif, belum sepenuhnya representatif.`);
+    alasanArr.push(`Baru ${len} transaksi historis â€” skor ini indikatif, belum sepenuhnya representatif.`);
   }
   if (alasanArr.length === 0) {
     alasanArr.push("Tidak ada indikator risiko signifikan dari histori transaksi.");
@@ -1258,7 +1258,7 @@ export async function matchSuppliers(
 
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const prompt = `
-Anda adalah sistem AI untuk platform pengadaan B2B Indonesia bernama SourceHub.
+Anda adalah sistem AI untuk platform pengadaan B2B Indonesia bernama PUSAKA.
 Tugas Anda adalah mencocokkan supplier (UMKM) dengan permintaan pengadaan (RFQ) perusahaan.
 
 RFQ:
@@ -1559,20 +1559,20 @@ export function generateOfflineProcurementResponse(
       }
     }
 
-    let compText = `📊 **Analisis Komparasi 3 Supplier Terbaik (Kategori: ${targetKat})**\n\n`;
-    compText += `Berikut perbandingan mendalam berdasarkan metrik kapasitas, performa pengiriman, dan legalitas di SourceHub:\n\n`;
+    let compText = `ðŸ“Š **Analisis Komparasi 3 Supplier Terbaik (Kategori: ${targetKat})**\n\n`;
+    compText += `Berikut perbandingan mendalam berdasarkan metrik kapasitas, performa pengiriman, dan legalitas di PUSAKA:\n\n`;
 
     topList.forEach((s, idx) => {
       compText += `**${idx + 1}. ${s.nama_umkm}** (${s.kota}, ${s.provinsi})\n`;
-      compText += `• **Kapasitas Produksi:** ${s.kapasitas_produksi_bulanan.toLocaleString("id-ID")} ${s.satuan_produksi}/bulan\n`;
-      compText += `• **On-Time Delivery (OTD):** ${s.on_time_delivery_rate_persen}% | **Rating:** ⭐ ${s.rating_rata_1_5}/5.0\n`;
-      compText += `• **Sertifikasi Mutu:** ${s.sertifikasi || "SNI / NIB Standar"}\n`;
-      compText += `• **Estimasi Lead Time:** ${s.lead_time_hari} hari kerja\n`;
-      compText += `• **Keunggulan:** ${s.deskripsi_singkat}\n\n`;
+      compText += `â€¢ **Kapasitas Produksi:** ${s.kapasitas_produksi_bulanan.toLocaleString("id-ID")} ${s.satuan_produksi}/bulan\n`;
+      compText += `â€¢ **On-Time Delivery (OTD):** ${s.on_time_delivery_rate_persen}% | **Rating:** â­ ${s.rating_rata_1_5}/5.0\n`;
+      compText += `â€¢ **Sertifikasi Mutu:** ${s.sertifikasi || "SNI / NIB Standar"}\n`;
+      compText += `â€¢ **Estimasi Lead Time:** ${s.lead_time_hari} hari kerja\n`;
+      compText += `â€¢ **Keunggulan:** ${s.deskripsi_singkat}\n\n`;
     });
 
-    compText += `💡 **Rekomendasi Strategis SourceHub:**\n`;
-    compText += `1. **Pilihan Utama Volume & Kepatuhan:** **${topList[0]?.nama_umkm}** paling unggul dalam konsistensi rating (⭐ ${topList[0]?.rating_rata_1_5}) dan ketepatan waktu (${topList[0]?.on_time_delivery_rate_persen}% OTD).\n`;
+    compText += `ðŸ’¡ **Rekomendasi Strategis PUSAKA:**\n`;
+    compText += `1. **Pilihan Utama Volume & Kepatuhan:** **${topList[0]?.nama_umkm}** paling unggul dalam konsistensi rating (â­ ${topList[0]?.rating_rata_1_5}) dan ketepatan waktu (${topList[0]?.on_time_delivery_rate_persen}% OTD).\n`;
     compText += `2. **Pilihan Alternatif Cepat:** **${topList[1]?.nama_umkm}** cocok untuk pesanan yang membutuhkan kapasitas produksi masif.\n`;
     if (topList[2]) {
       compText += `3. **Pilihan Efisiensi Biaya:** **${topList[2]?.nama_umkm}** menawarkan estimasi harga yang sangat kompetitif.\n`;
@@ -1591,29 +1591,29 @@ export function generateOfflineProcurementResponse(
     q.includes("hati-hati") ||
     q.includes("mitigasi")
   ) {
-    return `🛡️ **5 Risiko Utama Saat Memilih Supplier Baru & Cara Memitigasinya di SourceHub**
+    return `ðŸ›¡ï¸ **5 Risiko Utama Saat Memilih Supplier Baru & Cara Memitigasinya di PUSAKA**
 
 Sebagai profesional procurement, berikut faktor risiko kritis yang wajib dipertimbangkan sebelum menerbitkan Purchase Order (PO):
 
 1. **Risiko Keterlambatan Pengiriman (Lead Time Breach)**
-   • *Dampak:* Gangguan pada jadwal perakitan atau stok kehabisan di gudang Anda.
-   • *Mitigasi SourceHub:* Periksa skor **On-Time Delivery Rate (OTDR)** supplier pada profilnya. Terapkan jadwal pengiriman bertahap (*batch delivery*) dan cantumkan klausul denda keterlambatan pada PKS.
+   â€¢ *Dampak:* Gangguan pada jadwal perakitan atau stok kehabisan di gudang Anda.
+   â€¢ *Mitigasi PUSAKA:* Periksa skor **On-Time Delivery Rate (OTDR)** supplier pada profilnya. Terapkan jadwal pengiriman bertahap (*batch delivery*) dan cantumkan klausul denda keterlambatan pada PKS.
 
 2. **Risiko Inkonsistensi Kualitas (Defect Rate Tinggi)**
-   • *Dampak:* Biaya retur barang, komplain dari pembeli akhir, dan waktu terbuang.
-   • *Mitigasi SourceHub:* Wajibkan pengiriman *Pre-Production Sample* (sampel awal) sebelum produksi massal. Pastikan toleransi spesifikasi teknis (toleransi dimensi/bahan) tertulis jelas pada RFQ.
+   â€¢ *Dampak:* Biaya retur barang, komplain dari pembeli akhir, dan waktu terbuang.
+   â€¢ *Mitigasi PUSAKA:* Wajibkan pengiriman *Pre-Production Sample* (sampel awal) sebelum produksi massal. Pastikan toleransi spesifikasi teknis (toleransi dimensi/bahan) tertulis jelas pada RFQ.
 
 3. **Risiko Legalitas & Sertifikasi Palsu**
-   • *Dampak:* Masalah hukum pada saat audit perusahaan, sertifikasi halal/SNI gugur.
-   • *Mitigasi SourceHub:* Periksa badge **Terverifikasi** pada profil UMKM. SourceHub menggunakan verifikasi dokumen legalitas (NIB, NPWP, SNI, Halal) untuk memastikan keabsahan supplier.
+   â€¢ *Dampak:* Masalah hukum pada saat audit perusahaan, sertifikasi halal/SNI gugur.
+   â€¢ *Mitigasi PUSAKA:* Periksa badge **Terverifikasi** pada profil UMKM. PUSAKA menggunakan verifikasi dokumen legalitas (NIB, NPWP, SNI, Halal) untuk memastikan keabsahan supplier.
 
 4. **Risiko Ketergantungan Tunggal (*Single Sourcing*)**
-   • *Dampak:* Jika mesin workshop supplier rusak atau terjadi musibah, pengadaan Anda langsung terhenti.
-   • *Mitigasi SourceHub:* Alokasikan pesanan dengan skema 70/30 (70% ke supplier utama, 30% ke supplier cadangan) untuk material kritis.
+   â€¢ *Dampak:* Jika mesin workshop supplier rusak atau terjadi musibah, pengadaan Anda langsung terhenti.
+   â€¢ *Mitigasi PUSAKA:* Alokasikan pesanan dengan skema 70/30 (70% ke supplier utama, 30% ke supplier cadangan) untuk material kritis.
 
 5. **Risiko Finansial & Arus Kas**
-   • *Dampak:* Supplier kehabisan modal kerja di tengah proses pengerjaan.
-   • *Mitigasi SourceHub:* Terapkan termin pembayaran *milestone* yang adil (misalnya 30% uang muka, 40% saat barang lulus uji QC pabrik, 30% setelah tiba di gudang).`;
+   â€¢ *Dampak:* Supplier kehabisan modal kerja di tengah proses pengerjaan.
+   â€¢ *Mitigasi PUSAKA:* Terapkan termin pembayaran *milestone* yang adil (misalnya 30% uang muka, 40% saat barang lulus uji QC pabrik, 30% setelah tiba di gudang).`;
   }
 
   // 4. STRATEGI NEGOSIASI HARGA B2B (Top Starters: "Bagaimana cara bernegosiasi harga yang baik dengan supplier UMKM?")
@@ -1624,24 +1624,24 @@ Sebagai profesional procurement, berikut faktor risiko kritis yang wajib diperti
     q.includes("harga yang baik") ||
     q.includes("diskon")
   ) {
-    return `🤝 **Strategi Negosiasi Harga Win-Win dengan Supplier UMKM**
+    return `ðŸ¤ **Strategi Negosiasi Harga Win-Win dengan Supplier UMKM**
 
 Negosiasi dengan UMKM berbeda dengan korporasi besar karena mereka sangat sensitif terhadap *cash flow* dan kepastian order. Berikut 4 taktik terbukti efektif:
 
 1. **Tawarkan Komitmen Volume Jangka Panjang (*Blanket Order*)**
-   • Daripada menawar pesanan 500 pcs sekaligus, janjikan kontrak tahunan misalnya 6.000 pcs yang dikirim secara bertahap 500 pcs per bulan.
-   • UMKM bersedia memberikan diskon 5%–15% untuk kepastian utilisasi mesin mereka selama beberapa bulan ke depan.
+   â€¢ Daripada menawar pesanan 500 pcs sekaligus, janjikan kontrak tahunan misalnya 6.000 pcs yang dikirim secara bertahap 500 pcs per bulan.
+   â€¢ UMKM bersedia memberikan diskon 5%â€“15% untuk kepastian utilisasi mesin mereka selama beberapa bulan ke depan.
 
 2. **Percepat Termin Pembayaran (*Cash Flow Advantage*)**
-   • Standar korporat sering menuntut tempo pembayaran 60–90 hari (TOP). Hal ini sangat memberatkan modal kerja UMKM.
-   • Tawarkan pembayaran lebih cepat (misal tempo 14 hari atau pembayaran tunai 3 hari setelah lolos QC). Sebagian besar UMKM akan dengan senang hati memotong harga pokok penjualan demi perputaran kas cepat.
+   â€¢ Standar korporat sering menuntut tempo pembayaran 60â€“90 hari (TOP). Hal ini sangat memberatkan modal kerja UMKM.
+   â€¢ Tawarkan pembayaran lebih cepat (misal tempo 14 hari atau pembayaran tunai 3 hari setelah lolos QC). Sebagian besar UMKM akan dengan senang hati memotong harga pokok penjualan demi perputaran kas cepat.
 
 3. **Bantu Standarisasi Bahan Baku & Kemasan**
-   • Diskusikan apakah kemasan luar dapat disederhanakan tanpa mengurangi perlindungan barang.
-   • Terkadang biaya tinggi timbul akibat spesifikasi kemasan custom yang mahal bagi UMKM skala menengah.
+   â€¢ Diskusikan apakah kemasan luar dapat disederhanakan tanpa mengurangi perlindungan barang.
+   â€¢ Terkadang biaya tinggi timbul akibat spesifikasi kemasan custom yang mahal bagi UMKM skala menengah.
 
 4. **Jalankan *Trial Batch* (Pesanan Uji Coba)**
-   • Mulai dengan pesanan percontohan volume kecil pada harga normal. Tunjukkan bahwa perusahaan Anda adalah mitra profesional yang membayar tepat waktu. Setelah hubungan saling percaya terbangun, ajukan revisi harga untuk pesanan reguler skala penuh.`;
+   â€¢ Mulai dengan pesanan percontohan volume kecil pada harga normal. Tunjukkan bahwa perusahaan Anda adalah mitra profesional yang membayar tepat waktu. Setelah hubungan saling percaya terbangun, ajukan revisi harga untuk pesanan reguler skala penuh.`;
   }
 
   // 5. SYARAT & KETENTUAN SERTA PRIVASI & KEAMANAN DATA
@@ -1655,19 +1655,19 @@ Negosiasi dengan UMKM berbeda dengan korporasi besar karena mereka sangat sensit
     q.includes("aman") ||
     q.includes("uu pdp")
   ) {
-    return `🔒 **Kebijakan Keamanan Data, Privasi & Syarat Layanan SourceHub**
+    return `ðŸ”’ **Kebijakan Keamanan Data, Privasi & Syarat Layanan PUSAKA**
 
-SourceHub mengedepankan standar keamanan dan tata kelola hukum pengadaan B2B:
+PUSAKA mengedepankan standar keamanan dan tata kelola hukum pengadaan B2B:
 
-• **Kepatuhan UU PDP (UU No. 27/2022):** Seluruh data identitas, NIB, NPWP, dan nomor rekening bisnis dienkripsi menggunakan standar TLS 1.3 dan penyimpanan terisolasi.
-• **Kerahasiaan Desain & Harga:** Spesifikasi teknik rahasia (CAD/blueprint) dan lembar penawaran (Quotation) hanya dapat diakses oleh pihak yang bertransaksi secara sah.
-• **Bebas Biaya Registrasi:** Akses mendaftar sebagai Perusahaan (Buyer) maupun UMKM (Supplier) tidak dipungut biaya pendaftaran.
-• **Halaman Resmi:** Anda dapat mempelajari detail pasal lengkap pada menu:
+â€¢ **Kepatuhan UU PDP (UU No. 27/2022):** Seluruh data identitas, NIB, NPWP, dan nomor rekening bisnis dienkripsi menggunakan standar TLS 1.3 dan penyimpanan terisolasi.
+â€¢ **Kerahasiaan Desain & Harga:** Spesifikasi teknik rahasia (CAD/blueprint) dan lembar penawaran (Quotation) hanya dapat diakses oleh pihak yang bertransaksi secara sah.
+â€¢ **Bebas Biaya Registrasi:** Akses mendaftar sebagai Perusahaan (Buyer) maupun UMKM (Supplier) tidak dipungut biaya pendaftaran.
+â€¢ **Halaman Resmi:** Anda dapat mempelajari detail pasal lengkap pada menu:
   - **Syarat & Ketentuan:** [\`/terms\`](/terms)
   - **Kebijakan Privasi:** [\`/privacy\`](/privacy)`;
   }
 
-  // 6. CARA MEMBUAT RFQ & ALUR KERJA SOURCEHUB
+  // 6. CARA MEMBUAT RFQ & ALUR KERJA PUSAKA
   if (
     q.includes("cara buat rfq") ||
     q.includes("buat rfq") ||
@@ -1676,20 +1676,20 @@ SourceHub mengedepankan standar keamanan dan tata kelola hukum pengadaan B2B:
     q.includes("cara pesan") ||
     q.includes("gimana cara")
   ) {
-    return `📝 **Panduan 4 Langkah Pengadaan Cepat Melalui SourceHub**
+    return `ðŸ“ **Panduan 4 Langkah Pengadaan Cepat Melalui PUSAKA**
 
 1. **Buat Permintaan Pengadaan (RFQ)**
-   • Masuk ke menu **Buat RFQ** di Dashboard Perusahaan.
-   • Isi rincian barang: spesifikasi, kuantitas, target lokasi provinsi, dan estimasi anggaran (budget).
+   â€¢ Masuk ke menu **Buat RFQ** di Dashboard Perusahaan.
+   â€¢ Isi rincian barang: spesifikasi, kuantitas, target lokasi provinsi, dan estimasi anggaran (budget).
 
 2. **Pencocokan AI Otomatis (*AI Supplier Matching*)**
-   • Sistem SourceHub langsung mencocokkan RFQ Anda dengan supplier UMKM yang memiliki kapasitas mesin, spesialisasi kategori, dan lokasi terdekat.
+   â€¢ Sistem PUSAKA langsung mencocokkan RFQ Anda dengan supplier UMKM yang memiliki kapasitas mesin, spesialisasi kategori, dan lokasi terdekat.
 
 3. **Terima & Bandingkan Penawaran (*Quotations*)**
-   • UMKM yang berminat akan mengirimkan rincian harga, waktu pengerjaan (lead time), dan sampel. Anda dapat langsung menegosiasikan harga via fitur chat resmi.
+   â€¢ UMKM yang berminat akan mengirimkan rincian harga, waktu pengerjaan (lead time), dan sampel. Anda dapat langsung menegosiasikan harga via fitur chat resmi.
 
 4. **Konfirmasi Pesanan (*Purchase Order*)**
-   • Pilih penawaran terbaik, terbitkan PO, dan pantau proses produksi hingga pengiriman barang tiba di lokasi Anda.`;
+   â€¢ Pilih penawaran terbaik, terbitkan PO, dan pantau proses produksi hingga pengiriman barang tiba di lokasi Anda.`;
   }
 
   // 7. PENCARIAN SUPPLIER UMKM SPESIFIK (Contoh: "Saya butuh supplier bahan baku plastik dengan kapasitas 10 ton/bulan di Jawa Barat")
@@ -1698,28 +1698,28 @@ SourceHub mengedepankan standar keamanan dan tata kelola hukum pengadaan B2B:
   const suppliers = matchResult.hasil;
 
   if (suppliers.length > 0 && (detected.kategori || detected.provinsi || q.includes("supplier") || q.includes("butuh") || q.includes("cari"))) {
-    let resp = `🔍 **Hasil Rekomendasi Supplier UMKM Terverifikasi SourceHub**\n\n`;
+    let resp = `ðŸ” **Hasil Rekomendasi Supplier UMKM Terverifikasi PUSAKA**\n\n`;
     resp += `Sistem mendeteksi kebutuhan Anda:\n`;
-    if (detected.kategori) resp += `• **Kategori:** ${detected.kategori}\n`;
-    if (detected.provinsi) resp += `• **Wilayah:** ${detected.provinsi}\n`;
-    if (detected.kuantitas && detected.satuan) resp += `• **Estimasi Kebutuhan:** ${detected.kuantitas.toLocaleString("id-ID")} ${detected.satuan}\n`;
+    if (detected.kategori) resp += `â€¢ **Kategori:** ${detected.kategori}\n`;
+    if (detected.provinsi) resp += `â€¢ **Wilayah:** ${detected.provinsi}\n`;
+    if (detected.kuantitas && detected.satuan) resp += `â€¢ **Estimasi Kebutuhan:** ${detected.kuantitas.toLocaleString("id-ID")} ${detected.satuan}\n`;
     resp += `\nBerikut supplier UMKM dengan tingkat kecocokan (*Match Score*) tertinggi:\n\n`;
 
     suppliers.forEach((sup, idx) => {
       const demoData = DEMO_UMKM.find((d) => d.umkm_id === sup.umkm_id);
       resp += `**${idx + 1}. ${sup.nama_umkm}**\n`;
-      resp += `📍 Lokasi: ${sup.provinsi} | 🏷️ Kategori: ${sup.kategori}\n`;
-      resp += `🎯 **Match Score:** ${sup.match_score}%\n`;
+      resp += `ðŸ“ Lokasi: ${sup.provinsi} | ðŸ·ï¸ Kategori: ${sup.kategori}\n`;
+      resp += `ðŸŽ¯ **Match Score:** ${sup.match_score}%\n`;
       if (demoData) {
-        resp += `⚡ Kapasitas: ${demoData.kapasitas_produksi_bulanan.toLocaleString("id-ID")} ${demoData.satuan_produksi}/bulan\n`;
-        resp += `⭐ Rating: ${demoData.rating_rata_1_5}/5.0 (OTD: ${demoData.on_time_delivery_rate_persen}%)\n`;
-        resp += `📜 Sertifikasi: ${demoData.sertifikasi || "SNI / NIB Terverifikasi"}\n`;
-        resp += `⏱️ Lead Time: ~${demoData.lead_time_hari} hari | Estimasi Harga: Rp ${demoData.harga_satuan_estimasi_idr.toLocaleString("id-ID")}/${demoData.satuan_produksi}\n`;
+        resp += `âš¡ Kapasitas: ${demoData.kapasitas_produksi_bulanan.toLocaleString("id-ID")} ${demoData.satuan_produksi}/bulan\n`;
+        resp += `â­ Rating: ${demoData.rating_rata_1_5}/5.0 (OTD: ${demoData.on_time_delivery_rate_persen}%)\n`;
+        resp += `ðŸ“œ Sertifikasi: ${demoData.sertifikasi || "SNI / NIB Terverifikasi"}\n`;
+        resp += `â±ï¸ Lead Time: ~${demoData.lead_time_hari} hari | Estimasi Harga: Rp ${demoData.harga_satuan_estimasi_idr.toLocaleString("id-ID")}/${demoData.satuan_produksi}\n`;
       }
-      resp += `💬 *${sup.alasan}*\n\n`;
+      resp += `ðŸ’¬ *${sup.alasan}*\n\n`;
     });
 
-    resp += `💡 **Langkah Selanjutnya:**\n`;
+    resp += `ðŸ’¡ **Langkah Selanjutnya:**\n`;
     resp += `Anda dapat langsung membuka menu **Buat RFQ** untuk mengirimkan permintaan penawaran harga resmi kepada supplier di atas secara langsung.`;
     return resp;
   }
@@ -1736,20 +1736,20 @@ SourceHub mengedepankan standar keamanan dan tata kelola hukum pengadaan B2B:
     q.includes("siapa kamu") ||
     q.includes("bisa apa")
   ) {
-    return `Halo! 👋 Saya adalah **AI Procurement Assistant SourceHub**.
+    return `Halo! ðŸ‘‹ Saya adalah **AI Procurement Assistant PUSAKA**.
 
 Saya siap mendampingi proses pengadaan bisnis B2B Anda:
-1. 🔍 **Mencari Supplier:** *Misal: "Saya butuh supplier bahan baku plastik dengan kapasitas 10 ton/bulan di Jawa Barat"*
-2. 📊 **Membandingkan Supplier:** *Misal: "Bantu saya membandingkan 3 supplier tekstil terbaik"*
-3. 🛡️ **Manajemen Risiko:** *Misal: "Apa risiko yang perlu dipertimbangkan saat memilih supplier baru?"*
-4. 🤝 **Strategi Negosiasi:** *Misal: "Bagaimana cara bernegosiasi harga yang baik dengan supplier UMKM?"*
-5. 📝 **Bantuan RFQ & Dokumen:** *Panduan pembuatan spesifikasi pengadaan dan syarat legalitas.*
+1. ðŸ” **Mencari Supplier:** *Misal: "Saya butuh supplier bahan baku plastik dengan kapasitas 10 ton/bulan di Jawa Barat"*
+2. ðŸ“Š **Membandingkan Supplier:** *Misal: "Bantu saya membandingkan 3 supplier tekstil terbaik"*
+3. ðŸ›¡ï¸ **Manajemen Risiko:** *Misal: "Apa risiko yang perlu dipertimbangkan saat memilih supplier baru?"*
+4. ðŸ¤ **Strategi Negosiasi:** *Misal: "Bagaimana cara bernegosiasi harga yang baik dengan supplier UMKM?"*
+5. ðŸ“ **Bantuan RFQ & Dokumen:** *Panduan pembuatan spesifikasi pengadaan dan syarat legalitas.*
 
 Ada kebutuhan barang, material, atau jasa manufaktur apa yang sedang Anda cari hari ini?`;
   }
 
   // 9. FALLBACK KONSULTASI PENGADAAN CERDAS
-  return `Terima kasih atas pertanyaan Anda mengenai pengadaan di platform SourceHub.
+  return `Terima kasih atas pertanyaan Anda mengenai pengadaan di platform PUSAKA.
 
 Terkait hal tersebut:
 1. **Pencarian Mitra:** Anda dapat menggunakan kata kunci spesifik seperti kategori barang (tekstil, logam, kemasan, plastik, bumbu pangan), volume kuantitas, dan provinsi target agar saya dapat mencarikan UMKM lokal terverifikasi yang cocok.
@@ -1768,7 +1768,7 @@ export async function procurementAssistant(
     try {
       const model = genAI.getGenerativeModel({
         model: "gemini-1.5-flash",
-        systemInstruction: `Anda adalah asisten pengadaan AI untuk platform SourceHub, platform B2B yang menghubungkan perusahaan Indonesia dengan UMKM lokal. 
+        systemInstruction: `Anda adalah asisten pengadaan AI untuk platform PUSAKA, platform B2B yang menghubungkan perusahaan Indonesia dengan UMKM lokal. 
         Anda membantu perusahaan menemukan supplier yang tepat, memahami proses pengadaan, membandingkan penawaran, dan membuat keputusan pengadaan yang cerdas.
         Selalu jawab dalam Bahasa Indonesia yang profesional namun ramah.
         ${context ? `Konteks tambahan: ${context}` : ""}`,
@@ -1788,7 +1788,7 @@ export async function procurementAssistant(
         return text;
       }
     } catch (apiError) {
-      console.warn("Gemini API call failed, falling back to SourceHub Offline AI Assistant:", apiError);
+      console.warn("Gemini API call failed, falling back to PUSAKA Offline AI Assistant:", apiError);
     }
   }
 

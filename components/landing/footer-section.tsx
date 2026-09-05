@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Sparkles, Mail, Phone, MapPin, Globe, Share2, MessageSquare } from "lucide-react";
 
 const footerLinks = {
@@ -29,27 +29,30 @@ export function FooterSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
           {/* Brand */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg gradient-brand flex items-center justify-center shadow-md">
-                <Sparkles className="w-4 h-4 text-white" />
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl overflow-hidden border border-blue-400/30 bg-white p-1 shadow-md">
+                <img src="/pusaka-icon.png" alt="PUSAKA Logo" className="w-full h-full object-contain rounded-lg" />
               </div>
-              <span className="text-xl font-bold text-white">SourceHub</span>
+              <div className="flex flex-col">
+                <span className="text-xl font-extrabold text-white tracking-tight leading-none">PUSAKA</span>
+                <span className="text-[10px] font-medium text-blue-400 mt-0.5">Pusat Pengadaan &amp; Akreditasi Supplier Nusantara</span>
+              </div>
             </div>
-            <p className="text-sm leading-relaxed max-w-xs">
-              Platform AI-powered B2B yang menghubungkan perusahaan Indonesia dengan UMKM lokal terpercaya.
+            <p className="text-sm leading-relaxed max-w-xs text-neutral-300">
+              Platform B2B berbasis AI pertama di Indonesia yang menghubungkan korporasi dengan UMKM lokal terpercaya melalui akreditasi transparan.
             </p>
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-emerald-400" />
-                <span>Jakarta, Indonesia</span>
+                <span>Sidoarjo, Jawa Timur, Indonesia</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-emerald-400" />
-                <span>hello@sourcehub.id</span>
+                <span>hello@pusaka.id</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-emerald-400" />
-                <span>+62 21 1234 5678</span>
+                <span>+62 31 894 5678</span>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -107,10 +110,10 @@ export function FooterSection() {
         {/* Bottom */}
         <div className="pt-8 border-t border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm">
-            © 2025 SourceHub. Hak cipta dilindungi undang-undang.
+            Â© 2025 PUSAKA. Hak cipta dilindungi undang-undang.
           </p>
           <div className="flex items-center gap-2 text-sm">
-            <span>Dibuat dengan ❤️ untuk UMKM Indonesia</span>
+            <span>Dibuat dengan â¤ï¸ untuk UMKM Indonesia</span>
           </div>
         </div>
       </div>

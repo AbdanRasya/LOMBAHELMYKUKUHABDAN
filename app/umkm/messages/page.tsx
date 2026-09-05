@@ -65,7 +65,7 @@ export default function UMKMMessagesPage() {
           const formatted = list.map((c: ConversationApiItem) => ({
             id: c.id,
             partnerId: c.otherUser?.id || "",
-            partnerName: c.otherUser?.companyName || "Unknown Company",
+            partnerName: c.otherUser?.companyName || c.otherUser?.businessName || "Mitra Perusahaan",
             lastMessage: c.messages?.[0]?.content || "",
             lastMessageAt: c.lastMessageAt || c.createdAt || "",
             unreadCount: 0

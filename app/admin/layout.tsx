@@ -44,7 +44,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           <div className="h-8 w-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white">
             <Sparkles className="h-4 w-4" />
           </div>
-          <span className="text-slate-800">SourceHub</span>
+          <span className="text-slate-800">PUSAKA</span>
           <span className="ml-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">Admin</span>
         </Link>
       </div>
@@ -114,7 +114,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div className="h-8 w-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white">
               <Sparkles className="h-4 w-4" />
             </div>
-            <span>SourceHub</span>
+            <span>PUSAKA</span>
             <span className="ml-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">Admin</span>
           </Link>
           <Sheet>

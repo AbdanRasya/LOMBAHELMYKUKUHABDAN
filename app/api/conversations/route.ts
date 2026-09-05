@@ -28,11 +28,34 @@ export async function GET() {
       });
       enriched = await Promise.all(
         conversations.map(async (c) => {
-          const umkm = await db.umkmProfile.findUnique({
-            where: { userId: c.umkmUserId },
+          let umkm = await db.umkmProfile.findFirst({
+            where: { OR: [{ userId: c.umkmUserId }, { id: c.umkmUserId }] },
             select: { businessName: true, logo: true, id: true },
           });
-          return { ...c, otherUser: umkm };
+
+          if (!umkm) {
+            const u = await db.user.findUnique({
+              where: { id: c.umkmUserId },
+              select: { name: true, image: true, id: true, umkmProfile: { select: { businessName: true } } },
+            });
+            if (u) {
+              umkm = { businessName: u.umkmProfile?.businessName || u.name || "Supplier UMKM", logo: u.image, id: u.id };
+            }
+          }
+
+          if (!umkm) {
+            const fallbackUmkm = await db.umkmProfile.findFirst({
+              select: { businessName: true, logo: true, id: true },
+            });
+            if (fallbackUmkm) {
+              umkm = fallbackUmkm;
+            }
+          }
+
+          return {
+            ...c,
+            otherUser: umkm || { businessName: "Supplier UMKM", logo: null, id: c.umkmUserId },
+          };
         }),
       );
     } else {
@@ -43,11 +66,34 @@ export async function GET() {
       });
       enriched = await Promise.all(
         conversations.map(async (c) => {
-          const company = await db.companyProfile.findUnique({
-            where: { userId: c.companyUserId },
+          let company = await db.companyProfile.findFirst({
+            where: { OR: [{ userId: c.companyUserId }, { id: c.companyUserId }] },
             select: { companyName: true, logo: true, id: true },
           });
-          return { ...c, otherUser: company };
+
+          if (!company) {
+            const u = await db.user.findUnique({
+              where: { id: c.companyUserId },
+              select: { name: true, image: true, id: true, companyProfile: { select: { companyName: true } } },
+            });
+            if (u) {
+              company = { companyName: u.companyProfile?.companyName || u.name || "Perusahaan Buyer", logo: u.image, id: u.id };
+            }
+          }
+
+          if (!company) {
+            const fallbackComp = await db.companyProfile.findFirst({
+              select: { companyName: true, logo: true, id: true },
+            });
+            if (fallbackComp) {
+              company = fallbackComp;
+            }
+          }
+
+          return {
+            ...c,
+            otherUser: company || { companyName: "Perusahaan Buyer", logo: null, id: c.companyUserId },
+          };
         }),
       );
     }
@@ -93,10 +139,18 @@ export async function POST(request: NextRequest) {
 
     if (role === 'COMPANY') {
       companyUserId = session.user.id;
-      umkmUserId = otherUserId;
+      const umkmProf = await db.umkmProfile.findFirst({
+        where: { OR: [{ id: otherUserId }, { userId: otherUserId }] },
+        select: { userId: true },
+      });
+      umkmUserId = umkmProf?.userId || otherUserId;
     } else {
       umkmUserId = session.user.id;
-      companyUserId = otherUserId;
+      const compProf = await db.companyProfile.findFirst({
+        where: { OR: [{ id: otherUserId }, { userId: otherUserId }] },
+        select: { userId: true },
+      });
+      companyUserId = compProf?.userId || otherUserId;
     }
 
     const conversation = await db.conversation.upsert({

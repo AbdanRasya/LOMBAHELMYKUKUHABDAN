@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+﻿import { PrismaClient } from "@prisma/client";
 import { neonConfig } from "@neondatabase/serverless";
 import { PrismaNeon } from "@prisma/adapter-neon";
 import ws from "ws";
@@ -72,7 +72,7 @@ type PrismaClientAdapterOpts = {
 type PrismaClientCtor = new (opts: PrismaClientAdapterOpts) => PrismaClient;
 
 function makeDbError(reason: string): Error {
-  return new Error("[SourceHub] Database tidak tersedia: " + reason);
+  return new Error("[PUSAKA] Database tidak tersedia: " + reason);
 }
 
 function createPrismaClient() {
@@ -83,7 +83,7 @@ function createPrismaClient() {
 
     const errorTx = {
       provider: "postgres" as const,
-      adapterName: "@sourcehub/error-adapter",
+      adapterName: "@PUSAKA/error-adapter",
       queryRaw: (): Promise<SqlResultSet> => Promise.reject(makeDbError(reason)),
       executeRaw: (): Promise<number> => Promise.reject(makeDbError(reason)),
       commit: (): Promise<void> => Promise.reject(makeDbError(reason)),
@@ -92,10 +92,10 @@ function createPrismaClient() {
 
     const errorAdapter = {
       provider: "postgres" as const,
-      adapterName: "@sourcehub/error-adapter",
+      adapterName: "@PUSAKA/error-adapter",
       connect: async () => ({
         provider: "postgres" as const,
-        adapterName: "@sourcehub/error-adapter",
+        adapterName: "@PUSAKA/error-adapter",
         queryRaw: (): Promise<SqlResultSet> => Promise.reject(makeDbError(reason)),
         executeRaw: (): Promise<number> => Promise.reject(makeDbError(reason)),
         executeScript: (): Promise<void> => Promise.reject(makeDbError(reason)),

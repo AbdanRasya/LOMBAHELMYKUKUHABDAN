@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Badge } from "@/components/ui/badge";
 import { Globe } from "lucide-react";
@@ -63,7 +63,7 @@ export function SDGSection() {
               Berkelanjutan
             </h2>
             <p className="text-neutral-600 leading-relaxed mb-6">
-              SourceHub tidak hanya membangun bisnis — kami membangun ekosistem yang inklusif dan 
+              PUSAKA tidak hanya membangun bisnis â€” kami membangun ekosistem yang inklusif dan 
               berkelanjutan. Setiap transaksi di platform kami berkontribusi langsung pada pencapaian 
               SDGs yang ditetapkan PBB.
             </p>

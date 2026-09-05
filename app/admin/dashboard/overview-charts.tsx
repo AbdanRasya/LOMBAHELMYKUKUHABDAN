@@ -1,4 +1,6 @@
 "use client";
+
+import { useEffect, useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const data = [
@@ -11,6 +13,16 @@ const data = [
 ];
 
 export default function AdminOverviewCharts() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return <div className="h-[230px] w-full bg-slate-50 animate-pulse rounded-xl" />;
+  }
+
   return (
     <ResponsiveContainer width="100%" height={230}>
       <BarChart data={data}>

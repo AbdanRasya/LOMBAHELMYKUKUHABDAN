@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
@@ -107,9 +107,9 @@ const ORDER_STEPS = [
 
 // Bank transfer info (simulated)
 const BANK_ACCOUNTS = [
-  { bank: "BCA", logo: "🏦", norek: "1234567890", atas: "PT SourceHub Indonesia" },
-  { bank: "BNI", logo: "🏦", norek: "9876543210", atas: "PT SourceHub Indonesia" },
-  { bank: "Mandiri", logo: "🏦", norek: "1122334455", atas: "PT SourceHub Indonesia" },
+  { bank: "BCA", logo: "ðŸ¦", norek: "1234567890", atas: "PT PUSAKA Indonesia" },
+  { bank: "BNI", logo: "ðŸ¦", norek: "9876543210", atas: "PT PUSAKA Indonesia" },
+  { bank: "Mandiri", logo: "ðŸ¦", norek: "1122334455", atas: "PT PUSAKA Indonesia" },
 ];
 
 // Payment Modal
@@ -215,7 +215,7 @@ function PaymentModal({
             </p>
             {step === "transfer" && (
               <p style={{ color: "#fcd34d", fontSize: "0.7rem", marginTop: "0.125rem" }}>
-                ⚠ Nominal unik sudah ditambahkan untuk verifikasi otomatis
+                âš  Nominal unik sudah ditambahkan untuk verifikasi otomatis
               </p>
             )}
           </div>
@@ -237,15 +237,15 @@ function PaymentModal({
                   Pilih Metode Pembayaran
                 </h3>
                 <p style={{ fontSize: "0.75rem", color: "#64748b" }}>
-                  Platform B2B SourceHub menggunakan transfer bank untuk keamanan transaksi bisnis
+                  Platform B2B PUSAKA menggunakan transfer bank untuk keamanan transaksi bisnis
                 </p>
               </div>
 
               <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: "0.75rem", padding: "0.75rem", fontSize: "0.75rem", color: "#14532d", display: "flex", gap: "0.5rem" }}>
                 <CheckCircle style={{ width: "1rem", height: "1rem", color: "#16a34a", flexShrink: 0, marginTop: "0.125rem" }} />
                 <div>
-                  <strong>Transfer Bank — Aman untuk B2B</strong>
-                  <p style={{ marginTop: "0.125rem", color: "#166534" }}>Cocok untuk transaksi bisnis besar. Dana dilindungi sistem escrow SourceHub.</p>
+                  <strong>Transfer Bank â€” Aman untuk B2B</strong>
+                  <p style={{ marginTop: "0.125rem", color: "#166534" }}>Cocok untuk transaksi bisnis besar. Dana dilindungi sistem escrow PUSAKA.</p>
                 </div>
               </div>
 
@@ -283,7 +283,7 @@ function PaymentModal({
               </div>
 
               <div style={{ background: "#f8fafc", borderRadius: "0.75rem", padding: "0.75rem", fontSize: "0.7rem", color: "#64748b" }}>
-                <p style={{ fontWeight: 600, color: "#475569", marginBottom: "0.25rem" }}>📋 Order #{order.id.slice(0, 8).toUpperCase()}</p>
+                <p style={{ fontWeight: 600, color: "#475569", marginBottom: "0.25rem" }}>ðŸ“‹ Order #{order.id.slice(0, 8).toUpperCase()}</p>
                 <p>{order.rfq?.title || "Pesanan B2B"}</p>
                 <p>Supplier: {order.umkm?.businessName || "-"}</p>
               </div>
@@ -295,7 +295,7 @@ function PaymentModal({
             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 <button type="button" onClick={() => setStep("choose")} style={{ background: "none", border: "none", color: "#3b82f6", cursor: "pointer", fontSize: "0.8rem", padding: 0 }}>
-                  ← Kembali
+                  â† Kembali
                 </button>
               </div>
 
@@ -366,7 +366,7 @@ function PaymentModal({
                 onClick={() => setStep("confirm")}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-11 font-semibold"
               >
-                Saya Sudah Transfer → Upload Bukti
+                Saya Sudah Transfer â†’ Upload Bukti
               </Button>
             </div>
           )}
@@ -376,13 +376,13 @@ function PaymentModal({
             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 <button type="button" onClick={() => setStep("transfer")} style={{ background: "none", border: "none", color: "#3b82f6", cursor: "pointer", fontSize: "0.8rem", padding: 0 }}>
-                  ← Kembali
+                  â† Kembali
                 </button>
               </div>
 
               <div>
                 <h3 style={{ fontWeight: 700, fontSize: "1rem", color: "#0f172a" }}>Upload Bukti Transfer</h3>
-                <p style={{ fontSize: "0.75rem", color: "#64748b", marginTop: "0.125rem" }}>Tim SourceHub akan memverifikasi dalam 1x10 menit</p>
+                <p style={{ fontSize: "0.75rem", color: "#64748b", marginTop: "0.125rem" }}>Tim PUSAKA akan memverifikasi dalam 1x10 menit</p>
               </div>
 
               {/* Summary */}
@@ -428,13 +428,13 @@ function PaymentModal({
                 <Upload style={{ width: "2rem", height: "2rem", color: fileName ? "#16a34a" : "#94a3b8" }} />
                 {fileName ? (
                   <>
-                    <p style={{ fontWeight: 600, color: "#16a34a", fontSize: "0.85rem" }}>✓ {fileName}</p>
+                    <p style={{ fontWeight: 600, color: "#16a34a", fontSize: "0.85rem" }}>âœ“ {fileName}</p>
                     <p style={{ fontSize: "0.7rem", color: "#4ade80" }}>Klik untuk ganti file</p>
                   </>
                 ) : (
                   <>
                     <p style={{ fontWeight: 600, color: "#475569", fontSize: "0.85rem" }}>Klik untuk upload bukti transfer</p>
-                    <p style={{ fontSize: "0.7rem", color: "#94a3b8" }}>Format: JPG, PNG, atau PDF • Maks 5 MB</p>
+                    <p style={{ fontSize: "0.7rem", color: "#94a3b8" }}>Format: JPG, PNG, atau PDF â€¢ Maks 5 MB</p>
                   </>
                 )}
               </label>
@@ -456,14 +456,14 @@ function PaymentModal({
                 <CheckCircle style={{ width: "2.5rem", height: "2.5rem", color: "#16a34a" }} />
               </div>
               <div>
-                <h3 style={{ fontWeight: 700, fontSize: "1.25rem", color: "#0f172a" }}>Pembayaran Dikonfirmasi! 🎉</h3>
+                <h3 style={{ fontWeight: 700, fontSize: "1.25rem", color: "#0f172a" }}>Pembayaran Dikonfirmasi! ðŸŽ‰</h3>
                 <p style={{ fontSize: "0.8rem", color: "#64748b", marginTop: "0.5rem" }}>
                   Bukti transfer Anda sedang diverifikasi. Supplier akan segera memulai produksi.
                 </p>
               </div>
               <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: "0.75rem", padding: "0.875rem", width: "100%", fontSize: "0.8rem", color: "#166534" }}>
-                <p>✅ Email konfirmasi telah dikirim ke akun Anda</p>
-                <p style={{ marginTop: "0.25rem" }}>✅ Supplier mendapat notifikasi untuk memulai produksi</p>
+                <p>âœ… Email konfirmasi telah dikirim ke akun Anda</p>
+                <p style={{ marginTop: "0.25rem" }}>âœ… Supplier mendapat notifikasi untuk memulai produksi</p>
               </div>
             </div>
           )}
@@ -574,7 +574,7 @@ function ReviewModal({
                       transition: "color 0.15s",
                     }}
                   >
-                    ★
+                    â˜…
                   </span>
                 </button>
               ))}
@@ -606,7 +606,7 @@ function ReviewModal({
           </div>
 
           <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", padding: "0.75rem", borderRadius: "0.75rem", fontSize: "0.75rem", color: "#166534" }}>
-            ⭐ Ulasan Anda akan disimpan ke database &amp; ditampilkan secara transparan di profil supplier dan kisah sukses platform.
+            â­ Ulasan Anda akan disimpan ke database &amp; ditampilkan secara transparan di profil supplier dan kisah sukses platform.
           </div>
 
           <Button
@@ -742,7 +742,7 @@ export default function CompanyOrdersPage() {
                       <span className="font-mono font-medium text-slate-900">
                         #{order.id.slice(0, 8).toUpperCase()}
                       </span>
-                      <span className="text-sm text-slate-500">•</span>
+                      <span className="text-sm text-slate-500">â€¢</span>
                       <span className="text-sm text-slate-500">
                         {format(new Date(order.createdAt), "dd MMM yyyy")}
                       </span>
@@ -757,7 +757,7 @@ export default function CompanyOrdersPage() {
                     )}
                     {order.trackingInfo && (
                       <p className="text-xs text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100 font-medium inline-block w-fit mt-1">
-                        📦 No. Resi / Pengiriman: <span className="font-mono font-bold">{order.trackingInfo}</span>
+                        ðŸ“¦ No. Resi / Pengiriman: <span className="font-mono font-bold">{order.trackingInfo}</span>
                       </p>
                     )}
                     <div className="text-2xl font-bold text-slate-900 mt-1">
@@ -862,7 +862,7 @@ export default function CompanyOrdersPage() {
                           variant="outline"
                           className="border-emerald-300 text-emerald-700 hover:bg-emerald-50 rounded-xl text-sm"
                         >
-                          ⭐ Beri Rating &amp; Ulasan
+                          â­ Beri Rating &amp; Ulasan
                         </Button>
                       </div>
                     )}

@@ -14,26 +14,26 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "SourceHub – Platform Pengadaan B2B Indonesia",
-    template: "%s | SourceHub",
+    default: "PUSAKA – Pusat Pengadaan & Akreditasi Supplier Nusantara",
+    template: "%s | PUSAKA",
   },
   description:
-    "Platform AI-powered B2B yang menghubungkan perusahaan Indonesia dengan UMKM lokal terpercaya. Temukan supplier terbaik dengan teknologi AI.",
-  keywords: ["B2B", "UMKM", "supplier", "pengadaan", "procurement", "Indonesia", "SourceHub"],
-  authors: [{ name: "SourceHub Team" }],
-  creator: "SourceHub",
+    "Platform AI-powered B2B pertama di Indonesia yang menghubungkan perusahaan dengan UMKM lokal terpercaya melalui Pusat Pengadaan & Akreditasi Supplier Nusantara.",
+  keywords: ["B2B", "UMKM", "supplier", "pengadaan", "procurement", "Indonesia", "PUSAKA"],
+  authors: [{ name: "PUSAKA Team" }],
+  creator: "PUSAKA",
   openGraph: {
     type: "website",
     locale: "id_ID",
     url: process.env.NEXT_PUBLIC_APP_URL,
-    title: "SourceHub – Platform Pengadaan B2B Indonesia",
-    description: "Platform AI-powered B2B yang menghubungkan perusahaan Indonesia dengan UMKM lokal terpercaya.",
-    siteName: "SourceHub",
+    title: "PUSAKA – Pusat Pengadaan & Akreditasi Supplier Nusantara",
+    description: "Platform AI-powered B2B pertama di Indonesia yang menghubungkan perusahaan dengan UMKM lokal terpercaya.",
+    siteName: "PUSAKA",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SourceHub – Platform Pengadaan B2B Indonesia",
-    description: "Platform AI-powered B2B yang menghubungkan perusahaan Indonesia dengan UMKM lokal terpercaya.",
+    title: "PUSAKA – Pusat Pengadaan & Akreditasi Supplier Nusantara",
+    description: "Platform AI-powered B2B pertama di Indonesia yang menghubungkan perusahaan dengan UMKM lokal terpercaya.",
   },
 };
 

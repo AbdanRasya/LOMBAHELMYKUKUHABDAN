@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
@@ -7,15 +7,15 @@ import { cn } from "@/lib/utils";
 
 const faqs = [
   {
-    q: "Apa perbedaan SourceHub dengan marketplace B2B biasa?",
-    a: "SourceHub bukan marketplace e-commerce. Kami adalah platform digital procurement yang fokus pada proses pengadaan B2B jangka panjang. Fitur AI Matching kami merekomendasikan supplier berdasarkan kebutuhan spesifik, bukan sekadar daftar produk. Kami juga menyediakan RFQ management, supplier verification, dan analytics — fitur yang tidak ada di marketplace biasa.",
+    q: "Apa perbedaan PUSAKA dengan marketplace B2B biasa?",
+    a: "PUSAKA bukan marketplace e-commerce. Kami adalah platform digital procurement yang fokus pada proses pengadaan B2B jangka panjang. Fitur AI Matching kami merekomendasikan supplier berdasarkan kebutuhan spesifik, bukan sekadar daftar produk. Kami juga menyediakan RFQ management, supplier verification, dan analytics â€” fitur yang tidak ada di marketplace biasa.",
   },
   {
-    q: "Bagaimana proses verifikasi supplier di SourceHub?",
+    q: "Bagaimana proses verifikasi supplier di PUSAKA?",
     a: "Setiap UMKM melewati proses verifikasi berlapis: (1) Verifikasi dokumen legal (NIB, NPWP, SIUP), (2) Review profil bisnis oleh tim kami, (3) Verifikasi sertifikasi oleh administrator. Supplier terverifikasi mendapat badge khusus dan diprioritaskan dalam hasil pencarian. Trust Score kami juga dihitung otomatis berdasarkan performa historis.",
   },
   {
-    q: "Apakah SourceHub gratis untuk UMKM?",
+    q: "Apakah PUSAKA gratis untuk UMKM?",
     a: "UMKM dapat mendaftar dan membuat profil dasar secara gratis. Fitur premium seperti prioritas tampilan di pencarian, akses ke RFQ eksklusif, dan laporan analytics mendalam tersedia dalam paket berbayar. Perusahaan juga dapat memulai dengan paket gratis untuk mencoba platform.",
   },
   {

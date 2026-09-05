@@ -35,6 +35,7 @@ type CompanyAnalyticsData = {
 export default function CompanyAnalyticsPage() {
   const [data, setData] = useState<CompanyAnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   const fetchAnalytics = async () => {
     setLoading(true);
@@ -52,6 +53,7 @@ export default function CompanyAnalyticsPage() {
   };
 
   useEffect(() => {
+    setIsMounted(true);
     fetchAnalytics();
   }, []);
 
@@ -59,7 +61,7 @@ export default function CompanyAnalyticsPage() {
   const statColors = ["text-blue-600", "text-emerald-600", "text-indigo-600", "text-orange-600"];
   const statBgs = ["bg-blue-50", "bg-emerald-50", "bg-indigo-50", "bg-orange-50"];
 
-  if (loading) {
+  if (!isMounted || loading) {
     return (
       <div className="flex flex-col items-center justify-center py-32 space-y-3">
         <Loader2 className="h-9 w-9 animate-spin text-blue-600" />
@@ -115,7 +117,7 @@ export default function CompanyAnalyticsPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {data?.stats.map((s, idx) => {
+        {(data?.stats || []).map((s, idx) => {
           const Icon = statIcons[idx % statIcons.length];
           const color = statColors[idx % statColors.length];
           const bg = statBgs[idx % statBgs.length];
@@ -214,7 +216,7 @@ export default function CompanyAnalyticsPage() {
                     }
                     labelLine={false}
                   >
-                    {data?.statusData.map((_, i) => (
+                    {(data?.statusData || []).map((_, i) => (
                       <Cell key={i} fill={COLORS[i % COLORS.length]} />
                     ))}
                   </Pie>

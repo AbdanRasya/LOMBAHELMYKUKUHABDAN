@@ -79,6 +79,7 @@ export async function PATCH(request: NextRequest) {
       create: {
         userId: session.user.id,
         businessName: scalarData.businessName || session.user.name || "Mitra UMKM",
+        verificationStatus: "APPROVED",
         ...scalarData,
       },
       update: scalarData,

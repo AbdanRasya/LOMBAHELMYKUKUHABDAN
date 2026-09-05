@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -44,21 +44,36 @@ export default function LoginPage() {
       if (res?.error) {
         toast.error("Email atau password salah");
       } else if (res?.ok) {
-        toast.success("Login berhasil! Selamat datang kembali.");
-        const session = await getSession();
-        const role = (session?.user as any)?.role || "COMPANY";
+        toast.success("Login berhasil! Mengalihkan...");
+
+        // Fetch real effective role from server endpoint
+        let role = "COMPANY";
+        try {
+          const meRes = await fetch("/api/auth/me");
+          if (meRes.ok) {
+            const meData = await meRes.json();
+            if (meData?.user?.role) {
+              role = meData.user.role;
+            }
+          }
+        } catch {}
+
+        if (role === "COMPANY") {
+          const session = await getSession();
+          if ((session?.user as any)?.role) {
+            role = (session?.user as any).role;
+          }
+        }
+
         const targetUrl = callbackUrl || (
           role === "ADMIN" ? "/admin/dashboard" :
           role === "UMKM" ? "/umkm/dashboard" :
           "/company/dashboard"
         );
 
-        setLoginSuccess({
-          name: session?.user?.name || data.email,
-          email: session?.user?.email || data.email,
-          role,
-          redirectUrl: targetUrl,
-        });
+        router.push(targetUrl);
+        router.refresh();
+        return;
       } else {
         toast.error("Terjadi kesalahan saat login");
       }
@@ -85,7 +100,7 @@ export default function LoginPage() {
             {loginSuccess ? "Login Berhasil!" : "Selamat Datang Kembali"}
           </h1>
           <p className="text-slate-500 mt-1 text-sm">
-            {loginSuccess ? "Anda telah terautentikasi di sistem SourceHub" : "Masuk ke akun SourceHub Anda"}
+            {loginSuccess ? "Anda telah terautentikasi di sistem PUSAKA" : "Masuk ke akun PUSAKA Anda"}
           </p>
         </div>
 
@@ -98,7 +113,7 @@ export default function LoginPage() {
 
             <div className="space-y-1">
               <h3 className="text-lg font-bold text-slate-900">
-                {loginSuccess.name || "Pengguna SourceHub"}
+                {loginSuccess.name || "Pengguna PUSAKA"}
               </h3>
               <p className="text-xs text-slate-500 font-mono">{loginSuccess.email}</p>
               <span className="inline-block mt-2 px-3 py-1 bg-emerald-50 text-emerald-700 font-semibold text-xs rounded-full border border-emerald-200">

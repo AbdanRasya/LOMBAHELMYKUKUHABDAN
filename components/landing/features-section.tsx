@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { 
   Brain, 
@@ -91,7 +91,7 @@ export function FeaturesSection() {
             <span className="gradient-text">Pengadaan Cerdas</span>
           </h2>
           <p className="mt-4 text-lg text-neutral-600 max-w-2xl mx-auto">
-            Dari pencarian supplier hingga finalisasi kontrak, SourceHub hadir di setiap tahap proses pengadaan Anda.
+            Dari pencarian supplier hingga finalisasi kontrak, PUSAKA hadir di setiap tahap proses pengadaan Anda.
           </p>
         </div>
 

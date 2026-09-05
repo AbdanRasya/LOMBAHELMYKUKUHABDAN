@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Sparkles, Plus, Loader2, Package } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { Sparkles, Plus, Loader2, Package, UploadCloud, Image as ImageIcon, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,11 +33,47 @@ export default function AddProductDialog({ trigger }: AddProductDialogProps = {}
   const [leadTimeDays, setLeadTimeDays] = useState("7");
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
-  const [imageUrl, setImageUrl] = useState("/supplier-packaging.jpg");
-  
+  const [imageUrl, setImageUrl] = useState("");
+  const [uploadingImage, setUploadingImage] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Ukuran file terlalu besar (maksimal 5MB)");
+      return;
+    }
+
+    setUploadingImage(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("type", "product");
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setImageUrl(data.url);
+        toast.success("Foto produk berhasil diunggah dari perangkat!");
+      } else {
+        toast.error(data.error || "Gagal mengunggah foto");
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      toast.error("Terjadi kesalahan saat mengunggah foto");
+    } finally {
+      setUploadingImage(false);
+    }
+  };
 
   const handleGenerateAIDescription = async () => {
     if (!name) {
@@ -173,35 +209,67 @@ export default function AddProductDialog({ trigger }: AddProductDialogProps = {}
               </div>
             </div>
 
-            {/* Photo / Image URL */}
+            {/* Device Photo Upload & Image Preview */}
             <div>
               <Label className="text-xs font-semibold text-slate-700">Foto / Gambar Produk B2B</Label>
-              <Input
-                placeholder="Misal: /supplier-packaging.jpg atau URL Gambar"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                className="h-10 rounded-xl mt-1 text-sm"
+              
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileUpload}
+                className="hidden"
               />
-              <div className="mt-2 flex items-center gap-1.5 flex-wrap">
-                <span className="text-[11px] text-slate-400 font-medium">Pilih Foto Sampel:</span>
-                {[
-                  { label: "📦 Kemasan Kraft", url: "/supplier-packaging.jpg" },
-                  { label: "🧵 Tekstil Tenun", url: "/supplier-textile.jpg" },
-                  { label: "🌿 Rempah & Agro", url: "/supplier-agro.jpg" },
-                ].map((preset) => (
-                  <button
-                    key={preset.label}
+
+              <div className="mt-1.5 flex flex-col sm:flex-row gap-3 items-center">
+                {imageUrl ? (
+                  <div className="relative w-24 h-24 rounded-xl border border-slate-200 overflow-hidden bg-slate-50 shrink-0 group">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={imageUrl} alt="Preview Produk" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => setImageUrl("")}
+                      className="absolute top-1 right-1 bg-black/60 hover:bg-red-600 text-white rounded-full p-1 transition-colors"
+                      title="Hapus foto"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-24 h-24 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 flex flex-col items-center justify-center text-slate-400 shrink-0">
+                    <ImageIcon className="w-6 h-6 mb-1 text-slate-300" />
+                    <span className="text-[10px]">Belum ada foto</span>
+                  </div>
+                )}
+
+                <div className="flex-1 space-y-2 w-full">
+                  <Button
                     type="button"
-                    onClick={() => setImageUrl(preset.url)}
-                    className={`text-[11px] px-2.5 py-1 rounded-lg border transition-colors ${
-                      imageUrl === preset.url
-                        ? "bg-emerald-100 text-emerald-800 border-emerald-300 font-semibold"
-                        : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
-                    }`}
+                    variant="outline"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingImage}
+                    className="w-full h-10 rounded-xl text-xs gap-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50 font-medium"
                   >
-                    {preset.label}
-                  </button>
-                ))}
+                    {uploadingImage ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
+                        Mengunggah Foto...
+                      </>
+                    ) : (
+                      <>
+                        <UploadCloud className="w-4 h-4 text-emerald-600" />
+                        📁 Upload Foto dari Perangkat (Device)
+                      </>
+                    )}
+                  </Button>
+
+                  <Input
+                    placeholder="Atau masukkan URL gambar..."
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    className="h-9 rounded-xl text-xs"
+                  />
+                </div>
               </div>
             </div>
 

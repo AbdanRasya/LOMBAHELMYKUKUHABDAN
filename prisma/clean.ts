@@ -57,7 +57,7 @@ async function main() {
   await prisma.user.create({
     data: {
       email: "admin@sourcehub.id",
-      name: "Super Admin SourceHub",
+      name: "Super Admin PUSAKA",
       password: adminPassword,
       role: Role.ADMIN,
       emailVerified: new Date(),

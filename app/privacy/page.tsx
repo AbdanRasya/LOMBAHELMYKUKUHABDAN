@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Metadata } from "next";
 import { 
   ShieldCheck, 
@@ -18,8 +18,8 @@ import { FooterSection } from "@/components/landing/footer-section";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Kebijakan Privasi | SourceHub",
-  description: "Kebijakan privasi dan perlindungan data pribadi pengguna platform B2B SourceHub sesuai UU Perlindungan Data Pribadi (UU PDP).",
+  title: "Kebijakan Privasi | PUSAKA",
+  description: "Kebijakan privasi dan perlindungan data pribadi pengguna platform B2B PUSAKA sesuai UU Perlindungan Data Pribadi (UU PDP).",
 };
 
 export default function PrivacyPage() {
@@ -54,7 +54,7 @@ export default function PrivacyPage() {
               </div>
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
-              Kebijakan Privasi SourceHub
+              Kebijakan Privasi PUSAKA
             </h1>
             <p className="text-slate-500 mt-3 text-base sm:text-lg leading-relaxed">
               Komitmen kami dalam melindungi privasi, data perusahaan, serta kerahasiaan dokumen usaha Anda sesuai Undang-Undang Perlindungan Data Pribadi (UU PDP No. 27/2022).
@@ -75,7 +75,7 @@ export default function PrivacyPage() {
             <div className="space-y-1">
               <p className="font-semibold text-emerald-900">Jaminan Keamanan & Kerahasiaan Data Bisnis</p>
               <p className="text-emerald-800 leading-relaxed">
-                SourceHub <strong>tidak pernah menjual</strong> data pribadi, data RFQ rahasia, maupun dokumen sertifikasi Anda kepada pihak pengiklan luar. Data Anda dienkripsi dan hanya diproses untuk keperluan pencocokan B2B, verifikasi keaslian profil usaha, dan transaksi resmi di platform.
+                PUSAKA <strong>tidak pernah menjual</strong> data pribadi, data RFQ rahasia, maupun dokumen sertifikasi Anda kepada pihak pengiklan luar. Data Anda dienkripsi dan hanya diproses untuk keperluan pencocokan B2B, verifikasi keaslian profil usaha, dan transaksi resmi di platform.
               </p>
             </div>
           </div>
@@ -90,7 +90,7 @@ export default function PrivacyPage() {
                 <h2 className="text-xl font-bold">1. Pendahuluan & Prinsip Privasi</h2>
               </div>
               <p className="text-sm sm:text-base">
-                Kebijakan Privasi ini menjelaskan bagaimana <strong>SourceHub Indonesia</strong> (&ldquo;Kami&rdquo;) mengumpulkan, menyimpan, mengolah, dan melindungi informasi pribadi dan data usaha saat Anda menggunakan platform kami. Kami memegang teguh prinsip transparansi, batasan tujuan pemrosesan, akurasi data, serta keamanan berstandar industri tinggi.
+                Kebijakan Privasi ini menjelaskan bagaimana <strong>PUSAKA Indonesia</strong> (&ldquo;Kami&rdquo;) mengumpulkan, menyimpan, mengolah, dan melindungi informasi pribadi dan data usaha saat Anda menggunakan platform kami. Kami memegang teguh prinsip transparansi, batasan tujuan pemrosesan, akurasi data, serta keamanan berstandar industri tinggi.
               </p>
             </section>
 
@@ -164,7 +164,7 @@ export default function PrivacyPage() {
                 4.1. <strong>Profil Publik Marketplace:</strong> Nama usaha UMKM, kategori produk, lokasi kota/provinsi, badge sertifikasi terverifikasi, dan skor kesiapan ditampilkan secara transparan kepada calon pembeli korporasi.
               </p>
               <p className="text-sm sm:text-base">
-                4.2. <strong>Data Privat:</strong> Rincian NPWP pribadi, laporan keuangan internal, dan percakapan negosiasi RFQ hanya dapat diakses oleh pihak yang terlibat langsung dalam transaksi dan admin verifikator SourceHub.
+                4.2. <strong>Data Privat:</strong> Rincian NPWP pribadi, laporan keuangan internal, dan percakapan negosiasi RFQ hanya dapat diakses oleh pihak yang terlibat langsung dalam transaksi dan admin verifikator PUSAKA.
               </p>
               <p className="text-sm sm:text-base">
                 4.3. <strong>Pihak Penegak Hukum:</strong> Kami hanya akan membuka data jika diwajibkan oleh putusan pengadilan atau peraturan perundang-undangan Republik Indonesia yang sah.
@@ -217,7 +217,7 @@ export default function PrivacyPage() {
                 <h2 className="text-xl font-bold">7. Penggunaan Cookie & Sesi</h2>
               </div>
               <p className="text-sm sm:text-base">
-                SourceHub menggunakan cookie sesi (HTTP-only JWT cookies) semata-mata untuk menjaga sesi login aktif dan token keamanan CSRF. Kami tidak menggunakan cookie pelacak pihak ketiga (third-party tracking cookies) untuk tujuan periklanan komersial.
+                PUSAKA menggunakan cookie sesi (HTTP-only JWT cookies) semata-mata untuk menjaga sesi login aktif dan token keamanan CSRF. Kami tidak menggunakan cookie pelacak pihak ketiga (third-party tracking cookies) untuk tujuan periklanan komersial.
               </p>
             </section>
 
@@ -230,12 +230,12 @@ export default function PrivacyPage() {
                 <h2 className="text-xl font-bold">8. Kontak Petugas Perlindungan Data (DPO)</h2>
               </div>
               <p className="text-sm sm:text-base">
-                Apabila Anda memiliki pertanyaan, permohonan eksekusi hak data, atau kekhawatiran terkait perlindungan data pribadi di SourceHub, silakan hubungi tim Data Protection Officer (DPO) kami:
+                Apabila Anda memiliki pertanyaan, permohonan eksekusi hak data, atau kekhawatiran terkait perlindungan data pribadi di PUSAKA, silakan hubungi tim Data Protection Officer (DPO) kami:
               </p>
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm space-y-1">
-                <p><strong>Email Tim Privasi:</strong> privacy@sourcehub.id</p>
-                <p><strong>Dukungan Teknis:</strong> support@sourcehub.id</p>
-                <p><strong>Layanan Pengaduan:</strong> Gedung Inovasi Digital Lt. 4, Jakarta, Indonesia</p>
+                <p><strong>Email Tim Privasi:</strong> privacy@pusaka.id</p>
+                <p><strong>Dukungan Teknis:</strong> support@pusaka.id</p>
+                <p><strong>Layanan Pengaduan:</strong> Wisma PUSAKA Nusantara Lt. 4, Sidoarjo, Jawa Timur, Indonesia</p>
               </div>
             </section>
 
@@ -245,7 +245,7 @@ export default function PrivacyPage() {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
             <div className="flex items-center gap-2 text-sm text-slate-600">
               <Sparkles className="w-5 h-5 text-emerald-600 shrink-0" />
-              <span>Data usaha Anda aman dan terlindungi bersama ekosistem SourceHub.</span>
+              <span>Data usaha Anda aman dan terlindungi bersama ekosistem PUSAKA.</span>
             </div>
             <div className="flex items-center gap-3 w-full sm:w-auto">
               <Link href="/terms" className="w-full sm:w-auto">

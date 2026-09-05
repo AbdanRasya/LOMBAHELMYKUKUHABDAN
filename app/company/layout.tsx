@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -23,8 +23,10 @@ import {
   Cpu,
   BotMessageSquare,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { signOut } from "next-auth/react";
+import { FloatingAiButton } from "@/components/ai/floating-ai-button";
 
 const navItems = [
   { name: "Dashboard", href: "/company/dashboard", icon: LayoutDashboard },
@@ -51,6 +53,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
   React.useEffect(() => {
     const fetchUnread = async () => {
+      if (typeof document !== "undefined" && document.hidden) return;
       try {
         const [notifRes, msgRes] = await Promise.all([
           fetch("/api/notifications"),
@@ -68,18 +71,21 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       } catch {}
     };
     fetchUnread();
-    const interval = setInterval(fetchUnread, 10000);
+    const interval = setInterval(fetchUnread, 15000);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="flex h-full flex-col bg-white border-r border-slate-200">
       {/* Header */}
-      <div className="flex h-16 shrink-0 items-center gap-2 px-6 border-b border-slate-200">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white">
-          <Boxes className="h-4 w-4" />
+      <div className="flex h-16 shrink-0 items-center gap-2.5 px-6 border-b border-slate-200">
+        <div className="h-8 w-8 rounded-lg overflow-hidden border border-emerald-200 shadow-sm bg-white shrink-0">
+          <img src="/pusaka-logo.jpg" alt="PUSAKA Logo" className="h-full w-full object-cover" />
         </div>
-        <span className="text-lg font-bold text-slate-800">SourceHub</span>
+        <div className="flex flex-col">
+          <span className="text-base font-extrabold text-slate-900 tracking-tight leading-none">PUSAKA</span>
+          <span className="text-[10px] font-semibold text-emerald-600">Perusahaan / Buyer</span>
+        </div>
       </div>
 
       {/* Back to landing */}
@@ -173,7 +179,7 @@ export default function CompanyLayout({ children }: { children: React.ReactNode 
         <div className="flex h-16 shrink-0 items-center border-b border-slate-200 bg-white px-4 shadow-sm md:hidden">
           <div className="ml-12 flex items-center gap-2 font-bold text-emerald-600">
             <Boxes className="h-5 w-5" />
-            SourceHub
+            PUSAKA
           </div>
         </div>
 
@@ -182,6 +188,7 @@ export default function CompanyLayout({ children }: { children: React.ReactNode 
             {children}
           </div>
         </main>
+        <FloatingAiButton />
       </div>
     </div>
   );

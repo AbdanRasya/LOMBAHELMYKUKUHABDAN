@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { verifyEmailAction } from '@/actions/auth';
@@ -31,7 +31,7 @@ export default function VerifyEmailPage() {
         {/* Logo */}
         <div className="flex items-center justify-center gap-2 mb-8">
           <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center"><Sparkles className="w-4 h-4 text-white" /></div>
-          <span className="text-xl font-bold text-slate-800">SourceHub</span>
+          <span className="text-xl font-bold text-slate-800">PUSAKA</span>
         </div>
         
         {status === 'loading' && (

@@ -10,13 +10,52 @@ function formatRp(n: number) {
   return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(n);
 }
 
+const DEMO_RFQS = [
+  {
+    id: "demo-rfq-1",
+    title: "Pengadaan Bahan Kain Katun Combed 30s untuk Seragam Industri",
+    companyProfile: { companyName: "PT Bumi Tekstil Nusantara", city: "Bandung" },
+    category: { name: "Tekstil & Garmen" },
+    quantity: 10000,
+    unit: "meter",
+    deadline: new Date(Date.now() + 14 * 86400000),
+    budgetMax: 350000000,
+    targetUmkmId: null,
+    _count: { quotations: 4 },
+  },
+  {
+    id: "demo-rfq-2",
+    title: "Kemasan Standup Pouch Kraft & Foil Food-Grade 250g",
+    companyProfile: { companyName: "PT Foodindo Utama", city: "Jakarta Selatan" },
+    category: { name: "Kemasan & Packaging" },
+    quantity: 50000,
+    unit: "pcs",
+    deadline: new Date(Date.now() + 10 * 86400000),
+    budgetMax: 85000000,
+    targetUmkmId: null,
+    _count: { quotations: 6 },
+  },
+  {
+    id: "demo-rfq-3",
+    title: "Pasokan Bahan Baku Ekstrak Jahe Merah & Temulawak Organik",
+    companyProfile: { companyName: "PT Jamu Herbal Indonesia", city: "Semarang" },
+    category: { name: "Makanan & Minuman" },
+    quantity: 500,
+    unit: "kg",
+    deadline: new Date(Date.now() + 21 * 86400000),
+    budgetMax: 60000000,
+    targetUmkmId: null,
+    _count: { quotations: 2 },
+  },
+];
+
 export default async function UmkmRfqFeedPage() {
   const session = await auth();
   const umkm = session?.user?.id
-    ? await db.umkmProfile.findUnique({ where: { userId: session.user.id } })
+    ? await db.umkmProfile.findUnique({ where: { userId: session.user.id } }).catch(() => null)
     : null;
 
-  const rfqs = await db.rFQ.findMany({
+  let dbRfqs = await db.rFQ.findMany({
     where: {
       status: "OPEN",
       deletedAt: null,
@@ -31,7 +70,9 @@ export default async function UmkmRfqFeedPage() {
       _count: { select: { quotations: true } },
     },
     orderBy: { createdAt: "desc" },
-  });
+  }).catch(() => []);
+
+  const rfqs = dbRfqs.length > 0 ? dbRfqs : DEMO_RFQS;
 
   const directRfqsCount = rfqs.filter((r) => r.targetUmkmId !== null).length;
   const globalRfqsCount = rfqs.filter((r) => r.targetUmkmId === null).length;

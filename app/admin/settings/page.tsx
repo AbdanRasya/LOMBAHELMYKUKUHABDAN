@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -51,21 +51,21 @@ export default function AdminSettingsPage() {
           <Card className="border border-slate-200/80 shadow-sm rounded-2xl overflow-hidden bg-white">
             <CardHeader className="bg-slate-50/50 border-b border-slate-100 p-6">
               <CardTitle className="text-base font-bold text-slate-900">Pengaturan Umum Platform</CardTitle>
-              <CardDescription className="text-xs text-slate-500">Identitas dan parameter publik aplikasi SourceHub</CardDescription>
+              <CardDescription className="text-xs text-slate-500">Identitas dan parameter publik aplikasi PUSAKA</CardDescription>
             </CardHeader>
             <CardContent className="p-6 space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-xs font-medium text-slate-700">Nama Aplikasi</Label>
-                  <Input defaultValue="SourceHub" className="h-11 rounded-xl" />
+                  <Input defaultValue="PUSAKA" className="h-11 rounded-xl" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-xs font-medium text-slate-700">Domain Utama</Label>
-                  <Input defaultValue="https://sourcehub.id" className="h-11 rounded-xl" />
+                  <Input defaultValue="https://pusaka.id" className="h-11 rounded-xl" />
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <Label className="text-xs font-medium text-slate-700">Email Bantuan & Support</Label>
-                  <Input defaultValue="support@sourcehub.id" className="h-11 rounded-xl max-w-md" />
+                  <Input defaultValue="support@pusaka.id" className="h-11 rounded-xl max-w-md" />
                 </div>
               </div>
 

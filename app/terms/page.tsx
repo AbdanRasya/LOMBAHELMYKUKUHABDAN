@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Metadata } from "next";
 import { 
   FileText, 
@@ -18,8 +18,8 @@ import { FooterSection } from "@/components/landing/footer-section";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Syarat & Ketentuan | SourceHub",
-  description: "Syarat dan ketentuan penggunaan platform B2B AI Sourcing SourceHub untuk Perusahaan dan UMKM di Indonesia.",
+  title: "Syarat & Ketentuan | PUSAKA",
+  description: "Syarat dan ketentuan penggunaan platform B2B PUSAKA (Pusat Pengadaan & Akreditasi Supplier Nusantara) untuk Perusahaan dan UMKM di Indonesia.",
 };
 
 export default function TermsPage() {
@@ -57,7 +57,7 @@ export default function TermsPage() {
               Syarat & Ketentuan Penggunaan
             </h1>
             <p className="text-slate-500 mt-3 text-base sm:text-lg leading-relaxed">
-              Selamat datang di <strong>SourceHub</strong>. Dokumen ini mengatur hak, kewajiban, dan tanggung jawab Anda sebagai pengguna platform B2B AI Sourcing kami.
+              Selamat datang di <strong>PUSAKA</strong>. Dokumen ini mengatur hak, kewajiban, dan tanggung jawab Anda sebagai pengguna platform B2B AI Sourcing kami.
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-6 pt-6 border-t border-slate-100 text-xs sm:text-sm text-slate-500">
               <div className="flex items-center gap-1.5">
@@ -75,7 +75,7 @@ export default function TermsPage() {
             <div className="space-y-1">
               <p className="font-semibold text-emerald-900">Ringkasan Utama untuk Pengguna</p>
               <p className="text-emerald-800 leading-relaxed">
-                Dengan mendaftar sebagai <strong>Perusahaan (Buyer)</strong> atau <strong>UMKM (Supplier)</strong>, Anda menyetujui integritas data yang diunggah, mematuhi etika pengadaan B2B yang adil, serta memberi hak terbatas bagi sistem AI SourceHub untuk memproses profil dan dokumen demi keperluan pencocokan bisnis.
+                Dengan mendaftar sebagai <strong>Perusahaan (Buyer)</strong> atau <strong>UMKM (Supplier)</strong>, Anda menyetujui integritas data yang diunggah, mematuhi etika pengadaan B2B yang adil, serta memberi hak terbatas bagi sistem AI PUSAKA untuk memproses profil dan dokumen demi keperluan pencocokan bisnis.
               </p>
             </div>
           </div>
@@ -90,10 +90,10 @@ export default function TermsPage() {
                 <h2 className="text-xl font-bold">1. Ketentuan Umum & Penerimaan Syarat</h2>
               </div>
               <p className="text-sm sm:text-base">
-                1.1. Layanan ini diselenggarakan oleh <strong>SourceHub Indonesia</strong> (&ldquo;Kami&rdquo;), sebuah platform digital yang mempertemukan badan usaha perusahaan korporasi/pembeli (&ldquo;Buyer&rdquo;) dengan pelaku Usaha Mikro, Kecil, dan Menengah (&ldquo;UMKM/Supplier&rdquo;).
+                1.1. Layanan ini diselenggarakan oleh <strong>PUSAKA Indonesia</strong> (&ldquo;Kami&rdquo;), sebuah platform digital yang mempertemukan badan usaha perusahaan korporasi/pembeli (&ldquo;Buyer&rdquo;) dengan pelaku Usaha Mikro, Kecil, dan Menengah (&ldquo;UMKM/Supplier&rdquo;).
               </p>
               <p className="text-sm sm:text-base">
-                1.2. Dengan mengakses, membuat akun, atau menggunakan layanan SourceHub, Anda menyatakan bahwa Anda telah membaca, memahami, dan setuju untuk terikat oleh Syarat dan Ketentuan ini. Jika Anda tidak menyetujui salah satu klausul di dalamnya, mohon untuk tidak melanjutkan pendaftaran.
+                1.2. Dengan mengakses, membuat akun, atau menggunakan layanan PUSAKA, Anda menyatakan bahwa Anda telah membaca, memahami, dan setuju untuk terikat oleh Syarat dan Ketentuan ini. Jika Anda tidak menyetujui salah satu klausul di dalamnya, mohon untuk tidak melanjutkan pendaftaran.
               </p>
               <p className="text-sm sm:text-base">
                 1.3. Jika Anda bertindak atas nama badan hukum, perusahaan, atau persekutuan perdata (PT, CV, UD, Koperasi), Anda menjamin bahwa Anda memiliki wewenang hukum yang sah untuk mewakili dan mengikat badan usaha tersebut.
@@ -151,7 +151,7 @@ export default function TermsPage() {
                 <h2 className="text-xl font-bold">4. Fitur AI Matching & Skor Kesiapan (Readiness Score)</h2>
               </div>
               <p className="text-sm sm:text-base">
-                4.1. SourceHub memanfaatkan model kecerdasan buatan (Google Gemini AI) untuk membantu menghitung <em>Supplier Readiness Score</em>, rekomendasi kesesuaian RFQ, serta pembacaan dokumen sertifikasi (OCR).
+                4.1. PUSAKA memanfaatkan model kecerdasan buatan (Google Gemini AI) untuk membantu menghitung <em>Supplier Readiness Score</em>, rekomendasi kesesuaian RFQ, serta pembacaan dokumen sertifikasi (OCR).
               </p>
               <p className="text-sm sm:text-base">
                 4.2. Rekomendasi AI disediakan sebagai alat bantu penunjang keputusan (decision support system). Keputusan akhir penunjukan kontrak pengadaan, kesepakatan harga, dan penerimaan hasil pekerjaan sepenuhnya berada di bawah pertimbangan masing-masing pihak yang bertransaksi.
@@ -167,7 +167,7 @@ export default function TermsPage() {
                 <h2 className="text-xl font-bold">5. Transaksi, Pembayaran & Tanggung Jawab Kontrak</h2>
               </div>
               <p className="text-sm sm:text-base">
-                5.1. SourceHub bertindak sebagai platform penghubung (facilitator & marketplace). Perjanjian jual beli, perjanjian kerja sama (PKS), purchase order (PO), serta ketentuan termin pembayaran disepakati secara langsung antara Buyer dan Supplier.
+                5.1. PUSAKA bertindak sebagai platform penghubung (facilitator & marketplace). Perjanjian jual beli, perjanjian kerja sama (PKS), purchase order (PO), serta ketentuan termin pembayaran disepakati secara langsung antara Buyer dan Supplier.
               </p>
               <p className="text-sm sm:text-base">
                 5.2. Para pihak wajib mematuhi standar mutu, pengiriman tepat waktu, serta penyelesaian garansi produk sesuai dengan spesifikasi yang telah disepakati dalam penawaran.
@@ -199,7 +199,7 @@ export default function TermsPage() {
                 <h2 className="text-xl font-bold">7. Larangan & Penangguhan Akun</h2>
               </div>
               <p className="text-sm sm:text-base">
-                SourceHub berhak melakukan penangguhan sementara atau penutupan permanen akun pengguna apabila ditemukan:
+                PUSAKA berhak melakukan penangguhan sementara atau penutupan permanen akun pengguna apabila ditemukan:
               </p>
               <ul className="list-disc list-inside space-y-1 pl-2 text-sm sm:text-base text-slate-600">
                 <li>Pemalsuan dokumen legalitas usaha (NIB, NPWP, sertifikat SNI, Halal, atau BPOM palsu).</li>
@@ -221,9 +221,9 @@ export default function TermsPage() {
                 Apabila Anda memiliki pertanyaan, keluhan, atau memerlukan klarifikasi terkait Syarat dan Ketentuan ini, tim legalitas dan dukungan kami dapat dihubungi melalui:
               </p>
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm space-y-1">
-                <p><strong>Email Tim Legal:</strong> legal@sourcehub.id</p>
-                <p><strong>Pusat Bantuan:</strong> hello@sourcehub.id</p>
-                <p><strong>Alamat Operasional:</strong> Gedung Inovasi Digital Lt. 4, Jakarta, Indonesia</p>
+                <p><strong>Email Tim Legal:</strong> legal@pusaka.id</p>
+                <p><strong>Pusat Bantuan:</strong> hello@pusaka.id</p>
+                <p><strong>Alamat Operasional:</strong> Wisma PUSAKA Nusantara Lt. 4, Sidoarjo, Jawa Timur, Indonesia</p>
               </div>
             </section>
 

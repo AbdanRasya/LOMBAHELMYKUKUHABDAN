@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -78,10 +78,10 @@ export default function RegisterPage() {
             <div className="w-10 h-10 rounded-xl gradient-brand flex items-center justify-center shadow-lg">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
-            <span className="text-2xl font-bold gradient-text">SourceHub</span>
+            <span className="text-2xl font-bold gradient-text">PUSAKA</span>
           </Link>
           <h1 className="text-2xl font-bold text-neutral-900">Buat Akun Baru</h1>
-          <p className="text-neutral-500 mt-1 text-sm">Bergabunglah dengan ribuan pengguna SourceHub</p>
+          <p className="text-neutral-500 mt-1 text-sm">Bergabunglah dengan ribuan pengguna PUSAKA</p>
         </div>
 
         <div className="glass rounded-2xl shadow-xl border border-white/50 p-8">
@@ -201,7 +201,7 @@ export default function RegisterPage() {
                 <Link href="/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-700">
                   Kebijakan Privasi
                 </Link>{" "}
-                SourceHub
+                PUSAKA
               </Label>
             </div>
             {errors.agreeToTerms && <p className="text-xs text-red-500">{errors.agreeToTerms.message}</p>}

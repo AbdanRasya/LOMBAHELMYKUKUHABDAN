@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState, useRef } from "react";
 import { format } from "date-fns";
@@ -71,7 +71,7 @@ export default function CompanyMessagesPage() {
           const formatted = list.map((c: ConversationApiItem) => ({
             id: c.id,
             partnerId: c.otherUser?.id || "",
-            partnerName: c.otherUser?.businessName || "Unknown Supplier",
+            partnerName: c.otherUser?.businessName || c.otherUser?.companyName || "Mitra Supplier",
             lastMessage: c.messages?.[0]?.content || "",
             lastMessageAt: c.lastMessageAt || c.createdAt || "",
             unreadCount: 0
@@ -213,7 +213,7 @@ export default function CompanyMessagesPage() {
                 {/* Encryption Badge */}
                 <div className="hidden sm:flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full text-xs font-semibold border border-emerald-200 shadow-xs">
                   <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>🔒 Chat Terenkripsi B2B</span>
+                  <span>ðŸ”’ Chat Terenkripsi B2B</span>
                 </div>
               </div>
 
@@ -270,7 +270,7 @@ export default function CompanyMessagesPage() {
               <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-sm shadow-slate-200 mb-6 border border-slate-100">
                 <MessageSquare className="w-10 h-10 text-emerald-500" />
               </div>
-              <h3 className="text-xl font-semibold text-slate-800 mb-2">Pesan SourceHub</h3>
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">Pesan PUSAKA</h3>
               <p className="text-slate-500 text-center max-w-sm">
                 Pilih obrolan dari daftar di sebelah kiri untuk mulai mengirim pesan
               </p>

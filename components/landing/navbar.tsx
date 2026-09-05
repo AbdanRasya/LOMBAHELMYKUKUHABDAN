@@ -25,6 +25,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { data: session } = useSession();
+  const [fetchedRole, setFetchedRole] = useState<string | null>(null);
 
   useEffect(() => {
     const handler = () => setIsScrolled(window.scrollY > 40);
@@ -32,7 +33,30 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
-  const userRole = (session?.user as SessionUserWithRole | undefined)?.role;
+  useEffect(() => {
+    if (session?.user) {
+      fetch("/api/auth/me")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.user?.role) {
+            setFetchedRole(data.user.role);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [session]);
+
+  const userRole = fetchedRole || (session?.user as SessionUserWithRole | undefined)?.role;
+  const supplierCatalogUrl = userRole === "UMKM" ? "/umkm/suppliers" : "/company/suppliers";
+
+  const dynamicNavLinks = [
+    { label: "Fitur", href: "#features" },
+    { label: "Marketplace Supplier", href: supplierCatalogUrl },
+    { label: "Pasar RFQ", href: "/umkm/rfq" },
+    { label: "Sukses", href: "#success" },
+    { label: "FAQ", href: "#faq" },
+  ];
+
   const dashboardUrl = session?.user
     ? userRole === "UMKM"
       ? "/umkm/dashboard"
@@ -55,25 +79,28 @@ export function Navbar() {
         >
           <div className="flex items-center justify-between h-13 px-5">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 group shrink-0">
-              <div className="w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center shadow-sm group-hover:shadow-emerald-200 transition-shadow">
-                <Boxes className="w-4 h-4 text-white" />
+            <Link href="/" className="flex items-center gap-2.5 group shrink-0">
+              <div className="w-8 h-8 rounded-lg overflow-hidden border border-blue-200 shadow-sm group-hover:scale-105 transition-transform bg-white flex items-center justify-center p-0.5">
+                <img src="/pusaka-icon.png" alt="PUSAKA Logo" className="w-full h-full object-contain" />
               </div>
-              <span className="text-base font-bold text-slate-800">
-                Source<span className="text-emerald-600">Hub</span>
-              </span>
+              <div className="flex flex-col">
+                <span className="text-base font-extrabold text-slate-900 tracking-tight leading-none">
+                  PUSAKA
+                </span>
+                <span className="text-[9px] font-semibold text-blue-600 tracking-widest uppercase">B2B Platform</span>
+              </div>
             </Link>
 
             {/* Desktop Nav Links */}
             <div className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
+              {dynamicNavLinks.map((link) => (
+                <Link
+                  key={link.label}
                   href={link.href}
                   className="text-sm text-slate-600 hover:text-emerald-600 transition-colors font-medium px-3 py-1.5 rounded-full hover:bg-emerald-50"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
             </div>
 
@@ -126,15 +153,15 @@ export function Navbar() {
           {/* Mobile Menu — expanded below pill */}
           {mobileOpen && (
             <div className="md:hidden border-t border-slate-200/60 mx-2 py-3 space-y-1">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
+              {dynamicNavLinks.map((link) => (
+                <Link
+                  key={link.label}
                   href={link.href}
                   className="block px-4 py-2 rounded-full text-sm font-medium text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors"
                   onClick={() => setMobileOpen(false)}
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
               <div className="flex flex-col gap-2 pt-2 px-2 border-t border-slate-200/60">
                 <Link

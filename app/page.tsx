@@ -11,9 +11,9 @@ import type { Metadata } from "next";
 import { db } from "@/lib/db";
 
 export const metadata: Metadata = {
-  title: "SourceHub – Temukan Supplier Lokal Terpercaya untuk Bisnis Anda",
+  title: "PUSAKA – Pusat Pengadaan & Akreditasi Supplier Nusantara",
   description:
-    "Platform AI-powered B2B pertama di Indonesia yang menghubungkan perusahaan dengan UMKM lokal terpercaya. Pengadaan lebih cerdas, lebih efisien.",
+    "Platform AI-powered B2B pertama di Indonesia yang menghubungkan perusahaan dengan UMKM lokal terpercaya melalui Pusat Pengadaan & Akreditasi Supplier Nusantara.",
 };
 
 export const revalidate = 0;

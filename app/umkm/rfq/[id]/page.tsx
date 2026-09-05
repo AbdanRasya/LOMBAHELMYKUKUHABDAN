@@ -27,22 +27,74 @@ function getDaysLeft(deadline: Date | null): number | null {
   return Math.ceil((deadline.getTime() - now) / 86400000);
 }
 
+const DEMO_RFQ_MAP: Record<string, any> = {
+  "demo-rfq-1": {
+    id: "demo-rfq-1",
+    title: "Pengadaan Bahan Kain Katun Combed 30s untuk Seragam Industri",
+    description: "Kami membutuhkan pasokan bahan kain katun combed 30s berkualitas grade A untuk pembuatan seragam industri skala besar (10,000 meter). Spesifikasi kain harus memenuhi standar tahan luntur, nyaman digunakan, dan jahitan halus.",
+    specifications: "1. Bahan 100% Katun Combed 30s\n2. Lebar kain 72 inch (finish)\n3. Sertifikasi OEKO-TEX diutamakan\n4. Pengiriman bertahap ke Bandung",
+    status: "OPEN",
+    quantity: 10000,
+    unit: "meter",
+    budgetMin: 250000000,
+    budgetMax: 350000000,
+    deadline: new Date(Date.now() + 14 * 86400000),
+    companyProfile: { companyName: "PT Bumi Tekstil Nusantara", city: "Bandung", province: "Jawa Barat" },
+    category: { name: "Tekstil & Garmen" },
+    quotations: [],
+  },
+  "demo-rfq-2": {
+    id: "demo-rfq-2",
+    title: "Kemasan Standup Pouch Kraft & Foil Food-Grade 250g",
+    description: "Dibutuhkan kemasan berstandar food grade (standup pouch kraft ziplock dengan inner aluminium foil) kapasitas 250 gram sebanyak 50,000 pcs untuk produk snack & kopi.",
+    specifications: "1. Bahan Kraft Paper + Foiled Inner\n2. Zipper Lock tahan minyak & kelembapan\n3. Cetak custom 4 warna logo perusahaan",
+    status: "OPEN",
+    quantity: 50000,
+    unit: "pcs",
+    budgetMin: 50000000,
+    budgetMax: 85000000,
+    deadline: new Date(Date.now() + 10 * 86400000),
+    companyProfile: { companyName: "PT Foodindo Utama", city: "Jakarta Selatan", province: "DKI Jakarta" },
+    category: { name: "Kemasan & Packaging" },
+    quotations: [],
+  },
+  "demo-rfq-3": {
+    id: "demo-rfq-3",
+    title: "Pasokan Bahan Baku Ekstrak Jahe Merah & Temulawak Organik",
+    description: "Perusahaan manufaktur herbal membutuhkan pasokan ekstrak jahe merah murni dan temulawak organik bersertifikat BPOM & Halal untuk lini produksi minuman kesehatan.",
+    specifications: "1. Kadar air max 5%\n2. Sertifikat Halal MUI & BPOM\n3. Kemasan drum 25kg vacuum sealed",
+    status: "OPEN",
+    quantity: 500,
+    unit: "kg",
+    budgetMin: 40000000,
+    budgetMax: 60000000,
+    deadline: new Date(Date.now() + 21 * 86400000),
+    companyProfile: { companyName: "PT Jamu Herbal Indonesia", city: "Semarang", province: "Jawa Tengah" },
+    category: { name: "Makanan & Minuman" },
+    quotations: [],
+  },
+};
+
 export default async function UmkmRfqDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const session = await auth();
   
   const umkm = session?.user?.id
-    ? await db.umkmProfile.findUnique({ where: { userId: session.user.id } })
+    ? await db.umkmProfile.findUnique({ where: { userId: session.user.id } }).catch(() => null)
     : null;
 
-  const rfq = await db.rFQ.findUnique({
+  let rfq = await db.rFQ.findUnique({
     where: { id },
     include: {
       category: true,
       companyProfile: true,
       quotations: umkm ? { where: { umkmId: umkm.id } } : { take: 0 },
     },
-  });
+  }).catch(() => null);
+
+  if (!rfq && DEMO_RFQ_MAP[id]) {
+    rfq = DEMO_RFQ_MAP[id];
+  }
 
   if (!rfq) return notFound();
 

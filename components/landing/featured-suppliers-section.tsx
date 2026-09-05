@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { MapPin, Package, ShieldCheck, ArrowRight, Star, Layers, Award } from "lucide-react";
 
 type RealSupplierItem = {
@@ -27,6 +28,9 @@ export function FeaturedSuppliersSection({
   realSuppliers?: RealSupplierItem[];
   counts?: { umkm: number; products: number; rfqs: number };
 }) {
+  const { data: session } = useSession();
+  const userRole = (session?.user as { role?: string } | undefined)?.role;
+  const marketplaceUrl = userRole === "UMKM" ? "/umkm/suppliers" : "/company/suppliers";
   const displaySuppliers = realSuppliers.length > 0 ? realSuppliers : [
     {
       id: "demo-1",
@@ -101,7 +105,7 @@ export function FeaturedSuppliersSection({
               Jelajahi supplier terpercaya dari seluruh Nusantara, dikurasi untuk standar pengadaan bisnis premium.
             </p>
             <Link
-              href="/company/suppliers"
+              href={marketplaceUrl}
               className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-5 py-2.5 text-sm font-medium text-slate-700 hover:border-slate-400 hover:text-slate-900 transition-colors"
             >
               Lihat Semua Supplier <ArrowRight className="h-3.5 w-3.5" />
@@ -121,9 +125,9 @@ export function FeaturedSuppliersSection({
           </div>
         </div>
 
-        {/* Alternating real supplier items */}
+        {/* Alternating real supplier items (Limit to max 3) */}
         <div className="space-y-24">
-          {displaySuppliers.map((s, i) => {
+          {displaySuppliers.slice(0, 3).map((s, i) => {
             const categoryName = s.categories?.[0]?.name || "Manufaktur & Sourcing";
             const location = [s.city, s.province || "Indonesia"].filter(Boolean).join(", ");
             const mainProduct = s.products?.[0];
@@ -236,6 +240,16 @@ export function FeaturedSuppliersSection({
               </div>
             );
           })}
+        </div>
+
+        {/* Bottom CTA to Marketplace */}
+        <div className="mt-16 text-center pt-8 border-t border-slate-100">
+          <Link
+            href={marketplaceUrl}
+            className="inline-flex items-center gap-3 rounded-full bg-emerald-600 px-8 py-4 text-base font-bold text-white shadow-xl shadow-emerald-600/20 hover:bg-emerald-700 hover:scale-105 transition-all"
+          >
+            Lihat Selengkapnya di Marketplace <ArrowRight className="w-5 h-5" />
+          </Link>
         </div>
       </div>
     </section>

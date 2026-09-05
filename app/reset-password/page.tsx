@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { resetPasswordAction } from '@/actions/auth';
@@ -43,7 +43,7 @@ export default function ResetPasswordPage() {
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg border border-slate-100 p-8">
         <div className="flex items-center justify-center gap-2 mb-8">
           <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center"><Sparkles className="w-4 h-4 text-white" /></div>
-          <span className="text-xl font-bold text-slate-800">SourceHub</span>
+          <span className="text-xl font-bold text-slate-800">PUSAKA</span>
         </div>
         {success ? (
           <div className="text-center">

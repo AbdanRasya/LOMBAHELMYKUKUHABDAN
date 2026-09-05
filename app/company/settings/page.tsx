@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,15 +14,27 @@ import { User, Lock, Bell, Loader2, Globe, Clock, DollarSign, Building2, ArrowRi
 import Link from "next/link";
 
 export default function CompanySettingsPage() {
+  const { data: session } = useSession();
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
-    picName: "Budi Santoso",
-    email: "procurement@majubersama.co.id",
+    picName: "",
+    email: "",
     language: "id",
     timezone: "WIB",
     currency: "IDR",
     emailFrequency: "instant",
   });
+
+  useEffect(() => {
+    if (session?.user) {
+      const user = session.user;
+      setFormData((prev) => ({
+        ...prev,
+        picName: prev.picName || user.name || "",
+        email: user.email || prev.email || "",
+      }));
+    }
+  }, [session]);
 
   const updateField = (field: string, val: string | null) => {
     setFormData((prev) => ({ ...prev, [field]: val || "" }));

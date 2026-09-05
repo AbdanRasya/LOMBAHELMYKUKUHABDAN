@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -22,22 +22,27 @@ import {
   TrendingUp,
   PackageCheck,
   Boxes,
+  Store,
+  Sparkles,
 } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { signOut } from 'next-auth/react';
+import { FloatingAiButton } from "@/components/ai/floating-ai-button";
 
 const navItems = [
   { name: 'Dashboard', href: '/umkm/dashboard', icon: LayoutDashboard },
   { name: 'Profil Saya', href: '/umkm/profile', icon: User },
   { name: 'Pasar RFQ', href: '/umkm/rfq', icon: FileSearch },
   { name: 'Peluang Pasar', href: '/umkm/opportunities', icon: TrendingUp },
+  { name: 'Katalog & Kompetitor', href: '/umkm/suppliers', icon: Store },
   { name: 'Penawaran', href: '/umkm/quotations', icon: FileText },
   { name: 'Pesanan', href: '/umkm/orders', icon: ShoppingCart },
   { name: 'Pesan', href: '/umkm/messages', icon: MessageSquare },
-  { name: 'Produk', href: '/umkm/products', icon: Package },
+  { name: 'Produk Saya', href: '/umkm/products', icon: Package },
   { name: 'Sertifikasi', href: '/umkm/certifications', icon: Award },
   { name: 'Analitik', href: '/umkm/analytics', icon: BarChart3 },
   { name: 'Skor Kesiapan', href: '/umkm/readiness', icon: Target },
+  { name: 'Asisten AI', href: '/umkm/assistant', icon: Sparkles },
   { name: 'Notifikasi', href: '/umkm/notifications', icon: Bell },
   { name: 'Pengaturan', href: '/umkm/settings', icon: Settings },
 ];
@@ -50,6 +55,7 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
 
   React.useEffect(() => {
     const fetchUnread = async () => {
+      if (typeof document !== 'undefined' && document.hidden) return;
       try {
         const [notifRes, msgRes] = await Promise.all([
           fetch('/api/notifications'),
@@ -67,16 +73,21 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
       } catch {}
     };
     fetchUnread();
-    const interval = setInterval(fetchUnread, 10000);
+    const interval = setInterval(fetchUnread, 15000);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="flex h-full flex-col bg-white border-r border-slate-200">
       {/* Header */}
-      <div className="flex h-16 shrink-0 items-center gap-2 px-6 border-b border-slate-200">
-        <Boxes className="h-6 w-6 text-emerald-600" />
-        <span className="text-lg font-bold text-emerald-600">SourceHub UMKM</span>
+      <div className="flex h-16 shrink-0 items-center gap-2.5 px-6 border-b border-slate-200">
+        <div className="h-8 w-8 rounded-lg overflow-hidden border border-emerald-200 shadow-sm bg-white shrink-0">
+          <img src="/pusaka-logo.jpg" alt="PUSAKA Logo" className="h-full w-full object-cover" />
+        </div>
+        <div className="flex flex-col">
+          <span className="text-base font-extrabold text-slate-900 tracking-tight leading-none">PUSAKA</span>
+          <span className="text-[10px] font-semibold text-emerald-600">Mitra UMKM</span>
+        </div>
       </div>
 
       {/* Back to landing */}
@@ -151,7 +162,7 @@ export default function UMKMLayout({ children }: { children: React.ReactNode }) 
         <header className="flex h-16 items-center justify-between border-b bg-white px-4 md:hidden">
           <Link href="/umkm/dashboard" className="flex items-center gap-2 font-bold text-emerald-600">
             <Boxes className="h-5 w-5" />
-            <span>SourceHub UMKM</span>
+            <span>PUSAKA UMKM</span>
           </Link>
           <Sheet>
             <SheetTrigger className="md:hidden p-2 border border-slate-200 rounded-lg text-slate-500 hover:bg-slate-50">
@@ -171,6 +182,7 @@ export default function UMKMLayout({ children }: { children: React.ReactNode }) 
             {children}
           </div>
         </main>
+        <FloatingAiButton />
       </div>
     </div>
   );

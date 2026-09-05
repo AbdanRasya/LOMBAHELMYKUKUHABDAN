@@ -8,9 +8,87 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ContactSupplierButton from "@/components/suppliers/contact-supplier-button";
 import DirectQuoteModal from "@/components/suppliers/direct-quote-modal";
 
+const DEMO_SUPPLIERS: Record<string, any> = {
+  "demo-1": {
+    id: "demo-1",
+    userId: "demo-user-1",
+    businessName: "CV Sumber Tekstil Bandung",
+    tagline: "Produsen Kain & Garmen Industri",
+    description: "Pabrik pembuat bahan kain katun, drill, dan garmen berkualitas tinggi dengan kapasitas produksi skala besar.",
+    province: "Jawa Barat",
+    city: "Bandung",
+    readinessScore: 92,
+    verificationStatus: "APPROVED",
+    foundedYear: 2015,
+    employeeCount: 45,
+    phone: "081234567890",
+    email: "info@sumbertekstil.co.id",
+    categories: [{ id: "c1", name: "Tekstil & Garmen" }],
+    products: [
+      { id: "p1", name: "Kain Katun Premium", description: "Katun combed 30s kualitas grade A", unit: "meter", minOrder: 500, leadTimeDays: 7, priceMin: 25000, priceMax: 45000 },
+      { id: "p2", name: "Kain Drill Japan", description: "Bahan seragam kerja tahan lama", unit: "meter", minOrder: 300, leadTimeDays: 5, priceMin: 35000, priceMax: 55000 },
+    ],
+    certifications: [
+      { id: "cert1", name: "ISO 9001:2015", issuer: "SGS Indonesia", number: "ID9001-2023", status: "VERIFIED" },
+      { id: "cert2", name: "Sertifikat OEKO-TEX Standard 100", issuer: "Testex", number: "TEX-100-2024", status: "VERIFIED" },
+    ],
+    trustScore: { overall: 94, deliveryScore: 95, responsivenessScore: 92, qualityScore: 96, certificationScore: 90, portfolioScore: 94 },
+    _count: { products: 2, certifications: 2, projects: 12 },
+  },
+  "demo-2": {
+    id: "demo-2",
+    userId: "demo-user-2",
+    businessName: "CV Nusantara Pack",
+    tagline: "Kemasan Kraft & Aluminium Foil",
+    description: "Produsen kemasan berdiri (standup pouch), karton box, dan aluminium foil untuk industri makanan & FMCG.",
+    province: "Jawa Barat",
+    city: "Bandung",
+    readinessScore: 88,
+    verificationStatus: "APPROVED",
+    foundedYear: 2018,
+    employeeCount: 30,
+    phone: "081987654321",
+    email: "contact@nusantarapack.id",
+    categories: [{ id: "c2", name: "Kemasan" }],
+    products: [
+      { id: "p3", name: "Standup Pouch Aluminium Foil", description: "Food grade dengan ziplock seal tahan bocor", unit: "pcs", minOrder: 1000, leadTimeDays: 10, priceMin: 1200, priceMax: 2500 },
+    ],
+    certifications: [
+      { id: "cert3", name: "Sertifikat Halal MUI", issuer: "LPPOM MUI", number: "ID3211000012345", status: "VERIFIED" },
+    ],
+    trustScore: { overall: 90, deliveryScore: 90, responsivenessScore: 88, qualityScore: 92, certificationScore: 88, portfolioScore: 90 },
+    _count: { products: 1, certifications: 1, projects: 8 },
+  },
+  "demo-3": {
+    id: "demo-3",
+    userId: "demo-user-3",
+    businessName: "PT Rempah Nusantara",
+    tagline: "Bahan Baku Rempah & Herbal Organik",
+    description: "Supplier utama rempah olahan, ekstrak jahe, kunyit, dan tanaman obat bersertifikat BPOM & Halal.",
+    province: "Jawa Timur",
+    city: "Sidoarjo",
+    readinessScore: 95,
+    verificationStatus: "APPROVED",
+    foundedYear: 2012,
+    employeeCount: 80,
+    phone: "081122334455",
+    email: "sales@rempahnusantara.com",
+    categories: [{ id: "c3", name: "Makanan & Minuman" }],
+    products: [
+      { id: "p4", name: "Ekstrak Jahe Merah Bubuk", description: "Ekstrak murni tanpa gula buatan, kelas ekspor", unit: "kg", minOrder: 100, leadTimeDays: 14, priceMin: 85000, priceMax: 120000 },
+    ],
+    certifications: [
+      { id: "cert4", name: "Izin Edar BPOM RI", issuer: "BPOM RI", number: "MD 223113001889", status: "VERIFIED" },
+      { id: "cert5", name: "Sertifikat Halal MUI", issuer: "LPPOM MUI", number: "ID3511000098765", status: "VERIFIED" },
+    ],
+    trustScore: { overall: 96, deliveryScore: 98, responsivenessScore: 94, qualityScore: 98, certificationScore: 96, portfolioScore: 95 },
+    _count: { products: 1, certifications: 2, projects: 25 },
+  },
+};
+
 export default async function SupplierDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const supplier = await db.umkmProfile.findUnique({
+  let supplier = await db.umkmProfile.findUnique({
     where: { id },
     include: {
       products: { where: { isActive: true }, take: 6 },
@@ -19,7 +97,11 @@ export default async function SupplierDetailPage({ params }: { params: Promise<{
       categories: true,
       _count: { select: { products: true, certifications: true, projects: true } },
     },
-  });
+  }).catch(() => null);
+
+  if (!supplier && DEMO_SUPPLIERS[id]) {
+    supplier = DEMO_SUPPLIERS[id];
+  }
 
   if (!supplier) return notFound();
 

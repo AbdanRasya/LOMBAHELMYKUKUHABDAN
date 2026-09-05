@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
-import { Award, FileText, Send, Star, ShieldCheck, Target, ArrowRight } from "lucide-react";
+import { Award, FileText, Send, Star, ShieldCheck, Target, ArrowRight, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -161,6 +161,29 @@ export default async function UmkmDashboardPage() {
               </CardContent>
             </Card>
           )}
+
+          {/* AI Assistant Banner */}
+          <Card className="border-0 bg-gradient-to-br from-emerald-600 to-teal-700 text-white shadow-sm overflow-hidden">
+            <CardContent className="p-5 space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-lg bg-white/10 backdrop-blur-sm text-white">
+                  <Sparkles className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-sm text-white">AI Business Assistant</h4>
+                  <p className="text-[11px] text-emerald-100">Konsultan bisnis & RFQ 24/7</p>
+                </div>
+              </div>
+              <p className="text-xs text-emerald-50/90 leading-relaxed">
+                Tanyakan strategi penawaran harga, peningkatan Readiness Score, hingga pengurusan sertifikasi B2B.
+              </p>
+              <Link href="/umkm/assistant" className="block pt-1">
+                <Button size="sm" className="w-full bg-white text-emerald-800 hover:bg-emerald-50 font-bold text-xs rounded-xl shadow-sm">
+                  Konsultasi AI Sekarang <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
 
           {umkm && umkm.verificationStatus === "PENDING" && (
             <Card className="border-amber-100 bg-amber-50/20 border shadow-sm">

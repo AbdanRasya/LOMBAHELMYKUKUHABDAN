@@ -1,10 +1,13 @@
 <div align="center">
   
-  # 🚀 SourceHub
-  ### Platform AI-Powered B2B Sourcing Pertama di Indonesia yang Menghubungkan Perusahaan dengan UMKM Lokal Terpercaya
+  <img src="public/pusaka-logo.png" alt="PUSAKA Logo" width="220" style="border-radius: 16px; margin-bottom: 12px;" />
+
+  # 🤝 PUSAKA
+  ### Pusat Pengadaan & Akreditasi Supplier Nusantara
+  **Platform AI-Powered B2B Sourcing Pertama di Indonesia yang Menghubungkan Korporasi dengan UMKM Lokal Terpercaya**
   
-  [![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_Site-success?style=for-the-badge)](https://sourcehub.id)
-  [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/manut-team/sourcehub)
+  [![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_Site-success?style=for-the-badge)](https://pusaka.id)
+  [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/manut-team/pusaka)
   [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
   
   **Submission for ITECHNO CUP 2026 - Web Development**
@@ -51,7 +54,7 @@ Di sisi lain, jutaan UMKM lokal Indonesia memiliki produk berkualitas tinggi dan
 
 ### Solusi yang Ditawarkan
 
-**SourceHub** hadir sebagai platform B2B sourcing berbasis kecerdasan buatan (AI) yang menjembatani UMKM lokal dengan perusahaan buyer secara transparan, efisien, dan terstruktur. Melalui SourceHub, perusahaan dapat dengan cepat menemukan supplier terverifikasi, membuat *Request for Quotation* (RFQ), mengelola pesanan, serta menganalisis *Trust Score* supplier.
+**PUSAKA** hadir sebagai platform B2B sourcing berbasis kecerdasan buatan (AI) yang menjembatani UMKM lokal dengan perusahaan buyer secara transparan, efisien, dan terstruktur. Melalui PUSAKA, perusahaan dapat dengan cepat menemukan supplier terverifikasi, membuat *Request for Quotation* (RFQ), mengelola pesanan, serta menganalisis *Trust Score* supplier.
 
 Kecerdasan Buatan (Google Gemini AI) diintegrasikan untuk:
 - Mencocokkan kebutuhan pengadaan perusahaan dengan UMKM secara cerdas (*AI Supplier Matching*).
@@ -95,13 +98,13 @@ Kecerdasan Buatan (Google Gemini AI) diintegrasikan untuk:
 
 ### Live Demo
 
-🔗 **[Kunjungi Website SourceHub](https://sourcehub.id)**
+🔗 **[Kunjungi Website PUSAKA](https://pusaka.id)**
 
 ### Screenshot Aplikasi
 
 <div align="center">
-  <img src="public/hero-preview.png" alt="Homepage SourceHub" width="800"/>
-  <p><em>Homepage - Tampilan utama platform SourceHub</em></p>
+  <img src="public/hero-preview.png" alt="Homepage PUSAKA" width="800"/>
+  <p><em>Homepage - Tampilan utama platform PUSAKA</em></p>
   
   <img src="public/dashboard-preview.png" alt="Dashboard Perusahaan & UMKM" width="800"/>
   <p><em>Dashboard - Panel kontrol pengelolaan RFQ & Penawaran</em></p>
@@ -336,7 +339,7 @@ npm run lint
 
 ```text
 Development: http://localhost:3000/api
-Production:  https://sourcehub.id/api
+Production:  https://pusaka.id/api
 ```
 
 ### Key Endpoints

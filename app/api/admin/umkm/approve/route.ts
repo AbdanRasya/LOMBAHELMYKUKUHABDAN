@@ -27,10 +27,10 @@ export async function POST(request: NextRequest) {
         type: "VERIFICATION_UPDATE",
         title: action === "APPROVE" ? "Profil Anda telah diverifikasi!" : action === "REJECT" ? "Verifikasi ditolak" : "Akun ditangguhkan",
         body: action === "APPROVE"
-          ? "Selamat! Profil bisnis Anda telah diverifikasi oleh admin SourceHub."
+          ? "Selamat! Profil bisnis Anda telah diverifikasi oleh admin PUSAKA."
           : action === "REJECT"
           ? "Maaf, verifikasi profil Anda ditolak. Hubungi admin untuk informasi lebih lanjut."
-          : "Akun Anda telah ditangguhkan. Hubungi admin SourceHub.",
+          : "Akun Anda telah ditangguhkan. Hubungi admin PUSAKA.",
         link: "/umkm/profile",
       },
     });

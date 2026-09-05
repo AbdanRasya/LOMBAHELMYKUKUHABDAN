@@ -21,6 +21,7 @@ const FILL_COLOR = (s: number) => s >= 80 ? '#10b981' : s >= 60 ? '#3b82f6' : s 
 
 export default function ReadinessScore() {
   const [loading, setLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState('');
   const [rincian, setRincian] = useState<{[k: string]: number}>({});
@@ -29,6 +30,7 @@ export default function ReadinessScore() {
   const [rekomendasi, setRekomendasi] = useState<{title: string; desc: string; poin: number}[]>([]);
 
   useEffect(() => {
+    setIsMounted(true);
     (async () => {
       try {
         const res = await fetch('/api/ai/readiness/demo-u2');
@@ -59,7 +61,7 @@ export default function ReadinessScore() {
     fill: FILL_COLOR(score),
   }));
 
-  if (loading) {
+  if (!isMounted || loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">

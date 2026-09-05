@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   LineChart, Line, 
@@ -44,6 +45,24 @@ const provinceData = [
 ];
 
 export default function AdminAnalyticsPage() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return (
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold tracking-tight">Platform Analytics</h1>
+        <div className="grid gap-6 md:grid-cols-2">
+          <div className="h-[300px] bg-slate-100 dark:bg-slate-800 animate-pulse rounded-2xl" />
+          <div className="h-[300px] bg-slate-100 dark:bg-slate-800 animate-pulse rounded-2xl" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold tracking-tight">Platform Analytics</h1>

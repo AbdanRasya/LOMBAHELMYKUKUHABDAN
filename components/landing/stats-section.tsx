@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import { TrendingUp } from "lucide-react";
@@ -82,7 +82,7 @@ export function StatsSection() {
             Angka yang <span className="gradient-text">Berbicara</span>
           </h2>
           <p className="mt-3 text-neutral-600 max-w-xl mx-auto">
-            SourceHub telah membuktikan diri sebagai platform pengadaan B2B yang memberikan dampak nyata bagi ekosistem bisnis Indonesia.
+            PUSAKA telah membuktikan diri sebagai platform pengadaan B2B yang memberikan dampak nyata bagi ekosistem bisnis Indonesia.
           </p>
         </div>
         <div ref={ref} className="grid grid-cols-2 lg:grid-cols-3 gap-5">
