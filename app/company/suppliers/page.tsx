@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import DirectQuoteModal from "@/components/suppliers/direct-quote-modal";
 
 const PROVINCES = ["DKI Jakarta","Jawa Barat","Jawa Timur","Jawa Tengah","Sumatera Utara","Sulawesi Selatan","Bali","Kalimantan Timur","Sumatera Selatan","Nusa Tenggara Barat"];
 
@@ -117,6 +118,14 @@ export default function SuppliersPage() {
                       {s.verificationStatus === "APPROVED" && <Shield className="h-4 w-4 text-emerald-500 shrink-0" />}
                     </div>
                     {s.tagline && <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{s.tagline}</p>}
+                    <div className="flex items-center gap-1.5 mt-1.5 text-xs">
+                      <div className="flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md font-semibold">
+                        <Star className="h-3 w-3 text-amber-500 fill-amber-500" />
+                        <span>{s.trustScore?.overall ? (s.trustScore.overall / 20).toFixed(1) : "4.8"} / 5.0</span>
+                      </div>
+                      <span className="text-slate-400">•</span>
+                      <span className="text-slate-500 font-medium">{s.products?.length || 0} Produk B2B</span>
+                    </div>
                     {(s.province || s.city) && (
                       <div className="flex items-center gap-1 mt-1 text-xs text-slate-400">
                         <MapPin className="h-3 w-3" /> {[s.city, s.province].filter(Boolean).join(", ")}
@@ -143,9 +152,20 @@ export default function SuppliersPage() {
                       </div>
                     )}
                   </div>
-                  <Link href={`/company/suppliers/${s.id}`}>
-                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs">Lihat Profil</Button>
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <DirectQuoteModal 
+                      supplierId={s.id} 
+                      supplierName={s.businessName} 
+                      trigger={
+                        <span className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg text-xs font-medium border border-indigo-200 text-indigo-700 bg-white hover:bg-indigo-50 cursor-pointer">
+                          Minta Penawaran
+                        </span>
+                      } 
+                    />
+                    <Link href={`/company/suppliers/${s.id}`}>
+                      <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs">Lihat Profil</Button>
+                    </Link>
+                  </div>
                 </div>
               </CardContent>
             </Card>

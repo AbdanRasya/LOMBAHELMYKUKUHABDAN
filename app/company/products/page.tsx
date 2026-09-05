@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import DirectQuoteModal from "@/components/suppliers/direct-quote-modal";
 
 const CATEGORIES = [
   "Semua Kategori",
@@ -264,11 +265,21 @@ export default function ProductMarketplacePage() {
                     Lihat Supplier
                   </Button>
                 </Link>
-                <Link href={`/company/rfq/create?product=${encodeURIComponent(p.name)}`} className="flex-1">
-                  <Button className="w-full text-xs rounded-xl h-9 bg-emerald-600 hover:bg-emerald-700 text-white gap-1 font-medium">
-                    Request Quote <ArrowRight className="w-3.5 h-3.5" />
-                  </Button>
-                </Link>
+                <div className="flex-1">
+                  <DirectQuoteModal
+                    supplierId={p.umkmProfile.id}
+                    supplierName={p.umkmProfile.businessName}
+                    initialTitle={`Request Quote: ${p.name}`}
+                    initialQuantity={p.minOrder?.toString() || "100"}
+                    initialUnit={p.unit || "pcs"}
+                    initialDescription={`Halo ${p.umkmProfile.businessName}, kami tertarik untuk memesan produk "${p.name}". Mohon berikan penawaran harga dan estimasi waktu pengiriman.`}
+                    trigger={
+                      <span className="w-full inline-flex items-center justify-center text-xs rounded-xl h-9 bg-emerald-600 hover:bg-emerald-700 text-white gap-1 font-medium cursor-pointer">
+                        Request Quote <ArrowRight className="w-3.5 h-3.5" />
+                      </span>
+                    }
+                  />
+                </div>
               </div>
             </Card>
           ))}

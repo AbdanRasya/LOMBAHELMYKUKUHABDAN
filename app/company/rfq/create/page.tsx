@@ -1,18 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
-import { Sparkles, ArrowRight, ArrowLeft, CheckCircle2, FileText, Calendar, DollarSign, Wand2, Loader2 } from "lucide-react";
+import React, { useState, useEffect, Suspense } from "react";
+import { Sparkles, ArrowRight, ArrowLeft, CheckCircle2, FileText, Calendar, DollarSign, Wand2, Loader2, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
-export default function CreateRfqPage() {
+function CreateRfqForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const targetUmkmIdParam = searchParams.get("targetUmkmId") || searchParams.get("umkmId") || null;
+  const productParam = searchParams.get("product") || null;
+  const umkmNameParam = searchParams.get("umkmName") || null;
+
   const [step, setStep] = useState(1);
   const [aiPrompt, setAiPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -20,16 +26,26 @@ export default function CreateRfqPage() {
 
   // Form State
   const [formData, setFormData] = useState({
-    title: "",
+    title: productParam ? `Request Quote: ${productParam}` : "",
     category: "",
     quantity: "",
     unit: "pcs",
-    description: "",
+    description: productParam ? `Kami tertarik untuk meminta penawaran harga untuk produk "${productParam}".` : "",
     budgetMin: "",
     budgetMax: "",
     deadline: "",
     specifications: ""
   });
+
+  useEffect(() => {
+    if (productParam && !formData.title) {
+      setFormData(prev => ({
+        ...prev,
+        title: `Request Quote: ${productParam}`,
+        description: `Kami tertarik untuk meminta penawaran harga untuk produk "${productParam}".`
+      }));
+    }
+  }, [productParam]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -79,10 +95,15 @@ export default function CreateRfqPage() {
           budgetMax: formData.budgetMax ? parseFloat(formData.budgetMax) : null,
           deadline: formData.deadline || null,
           specifications: formData.specifications || null,
+          targetUmkmId: targetUmkmIdParam || null,
         }),
       });
       if (res.ok) {
-        toast.success("RFQ berhasil dibuat! Supplier akan segera merespons.");
+        if (targetUmkmIdParam) {
+          toast.success("Penawaran direct berhasil dikirim! UMKM target telah mendapatkan notifikasi.");
+        } else {
+          toast.success("RFQ berhasil dibuat! Supplier akan segera merespons.");
+        }
         router.push("/company/rfq");
       } else {
         const err = await res.json();
@@ -98,11 +119,27 @@ export default function CreateRfqPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Buat RFQ Baru</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          {targetUmkmIdParam ? "Kirim Penawaran Direct" : "Buat RFQ Baru"}
+        </h1>
         <p className="text-sm text-slate-500">
-          Isi detail kebutuhan Anda untuk mendapatkan penawaran terbaik dari supplier.
+          {targetUmkmIdParam 
+            ? "Permintaan penawaran ini akan dikirimkan khusus ke UMKM terpilih." 
+            : "Isi detail kebutuhan Anda untuk mendapatkan penawaran terbaik dari supplier."}
         </p>
       </div>
+
+      {targetUmkmIdParam && (
+        <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-4 text-xs text-indigo-900 flex items-center gap-3 shadow-sm">
+          <ShieldAlert className="h-5 w-5 text-indigo-600 shrink-0" />
+          <div>
+            <p className="font-semibold text-sm">Privat & Khusus untuk {umkmNameParam || "UMKM Terpilih"}</p>
+            <p className="mt-0.5 text-indigo-700">
+              RFQ ini akan dikirimkan secara langsung ke notifikasi UMKM tersebut dan **tidak dipublikasikan ke pasar terbuka**.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* AI Quick Input */}
       <Card className="border-indigo-100 bg-indigo-50/50 shadow-sm overflow-hidden relative">
@@ -320,7 +357,7 @@ export default function CreateRfqPage() {
                   {isSubmitting ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Mengirim...</>
                   ) : (
-                    <><CheckCircle2 className="mr-2 h-4 w-4" /> Kirim RFQ</>
+                    <><CheckCircle2 className="mr-2 h-4 w-4" /> {targetUmkmIdParam ? "Kirim Penawaran Direct" : "Kirim RFQ"}</>
                   )}
                 </Button>
               </div>
@@ -329,5 +366,13 @@ export default function CreateRfqPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function CreateRfqPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center py-20"><Loader2 className="h-8 w-8 animate-spin text-blue-600" /></div>}>
+      <CreateRfqForm />
+    </Suspense>
   );
 }

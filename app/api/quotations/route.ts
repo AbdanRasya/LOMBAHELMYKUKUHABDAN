@@ -100,15 +100,19 @@ export async function POST(request: NextRequest) {
 
     const rfq = await db.rFQ.findUnique({ where: { id: body.rfqId }, include: { companyProfile: true } });
     if (rfq?.companyProfile?.userId) {
-      await db.notification.create({
-        data: {
-          userId: rfq.companyProfile.userId,
-          type: "QUOTATION_RECEIVED",
-          title: "Penawaran Baru Diterima! 🎉",
-          body: `UMKM ${umkm.businessName} telah mengirim penawaran senilai Rp ${parseFloat(body.price).toLocaleString('id-ID')} untuk RFQ "${rfq.title}"`,
-          link: `/company/rfq/${rfq.id}`,
-        },
-      });
+      try {
+        await db.notification.create({
+          data: {
+            userId: rfq.companyProfile.userId,
+            type: "QUOTATION_RECEIVED",
+            title: "Penawaran Baru Diterima! 🎉",
+            body: `UMKM ${umkm.businessName} telah mengirim penawaran senilai Rp ${parseFloat(body.price).toLocaleString('id-ID')} untuk RFQ "${rfq.title}"`,
+            link: `/company/rfq/${rfq.id}`,
+          },
+        });
+      } catch (notifErr) {
+        console.error("[api/quotations POST] Notification failed (non-fatal):", notifErr);
+      }
     }
 
     return NextResponse.json({ quotation });

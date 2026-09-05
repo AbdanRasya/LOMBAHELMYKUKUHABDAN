@@ -19,7 +19,9 @@ import {
   ChevronLeft,
   ShoppingCart,
   MessageSquare,
-  Sparkles,
+  TrendingUp,
+  PackageCheck,
+  Boxes,
 } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { signOut } from 'next-auth/react';
@@ -28,7 +30,7 @@ const navItems = [
   { name: 'Dashboard', href: '/umkm/dashboard', icon: LayoutDashboard },
   { name: 'Profil Saya', href: '/umkm/profile', icon: User },
   { name: 'Pasar RFQ', href: '/umkm/rfq', icon: FileSearch },
-  { name: 'Peluang Pasar', href: '/umkm/opportunities', icon: Sparkles },
+  { name: 'Peluang Pasar', href: '/umkm/opportunities', icon: TrendingUp },
   { name: 'Penawaran', href: '/umkm/quotations', icon: FileText },
   { name: 'Pesanan', href: '/umkm/orders', icon: ShoppingCart },
   { name: 'Pesan', href: '/umkm/messages', icon: MessageSquare },
@@ -43,11 +45,37 @@ const navItems = [
 
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
+  const [unreadNotifCount, setUnreadNotifCount] = React.useState(0);
+  const [unreadMsgCount, setUnreadMsgCount] = React.useState(0);
+
+  React.useEffect(() => {
+    const fetchUnread = async () => {
+      try {
+        const [notifRes, msgRes] = await Promise.all([
+          fetch('/api/notifications'),
+          fetch('/api/conversations'),
+        ]);
+        if (notifRes.ok) {
+          const data = await notifRes.json();
+          const unread = (data.notifications || []).filter((n: { read?: boolean }) => !n.read).length;
+          setUnreadNotifCount(unread);
+        }
+        if (msgRes.ok) {
+          const data = await msgRes.json();
+          setUnreadMsgCount(data.unreadCount || 0);
+        }
+      } catch {}
+    };
+    fetchUnread();
+    const interval = setInterval(fetchUnread, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="flex h-full flex-col bg-white border-r border-slate-200">
       {/* Header */}
       <div className="flex h-16 shrink-0 items-center gap-2 px-6 border-b border-slate-200">
-        <Package className="h-6 w-6 text-emerald-600" />
+        <Boxes className="h-6 w-6 text-emerald-600" />
         <span className="text-lg font-bold text-emerald-600">SourceHub UMKM</span>
       </div>
 
@@ -74,12 +102,22 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
                 onClick={onNavigate}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all ${
                   isActive
-                    ? 'bg-emerald-50 text-emerald-700 border-l-2 border-emerald-600'
+                    ? 'bg-emerald-50 text-emerald-700 border-l-2 border-emerald-600 font-semibold'
                     : 'text-slate-500 hover:bg-emerald-50 hover:text-emerald-600'
                 }`}
               >
                 <item.icon className="h-4 w-4 shrink-0" />
-                {item.name}
+                <span className="flex-1">{item.name}</span>
+                {item.name === 'Notifikasi' && unreadNotifCount > 0 && (
+                  <span className="ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white shadow-sm animate-pulse">
+                    {unreadNotifCount}
+                  </span>
+                )}
+                {item.name === 'Pesan' && unreadMsgCount > 0 && (
+                  <span className="ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full bg-emerald-600 px-1.5 text-[10px] font-bold text-white shadow-sm animate-pulse">
+                    {unreadMsgCount}
+                  </span>
+                )}
               </Link>
             );
           })}
@@ -112,7 +150,7 @@ export default function UMKMLayout({ children }: { children: React.ReactNode }) 
         {/* Mobile Header */}
         <header className="flex h-16 items-center justify-between border-b bg-white px-4 md:hidden">
           <Link href="/umkm/dashboard" className="flex items-center gap-2 font-bold text-emerald-600">
-            <Package className="h-5 w-5" />
+            <Boxes className="h-5 w-5" />
             <span>SourceHub UMKM</span>
           </Link>
           <Sheet>

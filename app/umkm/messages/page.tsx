@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { format } from "date-fns";
-import { MessageSquare, Send, Search, ArrowLeft } from "lucide-react";
+import { MessageSquare, Send, Search, ArrowLeft, Lock, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 
@@ -182,24 +182,37 @@ export default function UMKMMessagesPage() {
         <div className={`w-full md:w-2/3 flex flex-col bg-white ${showListOnMobile ? 'hidden md:flex' : 'flex'}`}>
           {activeConv ? (
             <>
-              <div className="h-20 border-b border-slate-100 flex items-center px-6 gap-4 bg-white z-10 shrink-0 shadow-sm">
-                <button 
-                  className="md:hidden p-2 -ml-2 text-slate-500 hover:bg-slate-100 rounded-lg"
-                  onClick={() => setShowListOnMobile(true)}
-                >
-                  <ArrowLeft className="w-5 h-5" />
-                </button>
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold shadow-sm shadow-blue-200">
-                  {(activeConv.partnerName?.charAt(0) || "U").toUpperCase()}
+              <div className="h-20 border-b border-slate-100 flex items-center justify-between px-6 bg-white z-10 shrink-0 shadow-sm">
+                <div className="flex items-center gap-4">
+                  <button 
+                    className="md:hidden p-2 -ml-2 text-slate-500 hover:bg-slate-100 rounded-lg"
+                    onClick={() => setShowListOnMobile(true)}
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                  </button>
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold shadow-sm shadow-blue-200">
+                    {(activeConv.partnerName?.charAt(0) || "U").toUpperCase()}
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900">{activeConv.partnerName}</h3>
+                    <p className="text-xs text-blue-600 font-medium">Pembeli</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-bold text-slate-900">{activeConv.partnerName}</h3>
-                  <p className="text-xs text-blue-600 font-medium">Pembeli</p>
+
+                {/* Encryption Badge */}
+                <div className="hidden sm:flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-xs font-semibold border border-blue-200 shadow-xs">
+                  <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span>🔒 Chat Terenkripsi B2B</span>
                 </div>
               </div>
 
               <div className="flex-1 overflow-y-auto p-6 bg-slate-50/30">
                 <div className="space-y-6">
+                  {/* Encryption Banner */}
+                  <div className="bg-slate-100/90 border border-slate-200 rounded-xl p-3 text-center text-xs text-slate-600 shadow-xs flex items-center justify-center gap-2 max-w-lg mx-auto mb-4">
+                    <Lock className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span>Pesan &amp; dokumen dalam obrolan ini <strong>terenkripsi SSL (256-bit) &amp; rahasia</strong>. Hanya Anda dan {activeConv.partnerName} yang dapat mengaksesnya.</span>
+                  </div>
                   {messages.map((m) => (
                     <div key={m.id} className={`flex ${m.isOwn ? 'justify-end' : 'justify-start'}`}>
                       <div className={`max-w-[75%] rounded-2xl px-5 py-3 shadow-sm ${m.isOwn ? 'bg-blue-600 text-white rounded-tr-sm' : 'bg-white border border-slate-100 text-slate-800 rounded-tl-sm'}`}>

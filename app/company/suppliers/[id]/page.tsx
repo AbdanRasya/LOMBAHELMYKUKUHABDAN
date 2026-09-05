@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ContactSupplierButton from "@/components/suppliers/contact-supplier-button";
+import DirectQuoteModal from "@/components/suppliers/direct-quote-modal";
 
 export default async function SupplierDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -72,9 +73,7 @@ export default async function SupplierDetailPage({ params }: { params: Promise<{
             </div>
             <div className="flex flex-wrap gap-3 mt-4 sm:mt-0">
               <ContactSupplierButton otherUserId={supplier.userId} />
-              <Link href={`/company/rfq/create`}>
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium">Buat RFQ</Button>
-              </Link>
+              <DirectQuoteModal supplierId={supplier.id} supplierName={supplier.businessName} />
             </div>
           </div>
         </CardContent>

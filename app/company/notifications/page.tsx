@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import NotificationsView from "@/components/notifications/notifications-view";
 
-export default async function UMKMNotificationsPage() {
+export default async function CompanyNotificationsPage() {
   const session = await auth();
   const notifications = session?.user?.id
     ? await db.notification.findMany({
@@ -15,7 +15,7 @@ export default async function UMKMNotificationsPage() {
   return (
     <NotificationsView
       initialNotifications={notifications}
-      themeColor="emerald"
+      themeColor="blue"
     />
   );
 }

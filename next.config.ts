@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   compress: true,
   generateEtags: true,
   typedRoutes: false,
+  devIndicators: false,
   async headers() {
     return [
       {

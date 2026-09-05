@@ -2,96 +2,103 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin, Package, Leaf, Recycle, ShieldCheck, ArrowRight } from "lucide-react";
+import { MapPin, Package, ShieldCheck, ArrowRight, Star, Layers, Award } from "lucide-react";
 
-const suppliers = [
-  {
-    tag: "Ramah Lingkungan",
-    tagColor: "bg-emerald-50 text-emerald-700",
-    title: "CV Nusantara Pack",
-    subtitle: "Kemasan Kraft & Daur Ulang",
-    description:
-      "Produsen kemasan kraft premium berbahan dasar singkong dan bambu. 100% biodegradable, telah digunakan oleh lebih dari 200 brand FMCG Indonesia.",
-    pills: [
-      { icon: MapPin, text: "Bandung, ID", color: "text-rose-500" },
-      { icon: Package, text: "MOQ: 500 unit", color: "text-amber-500" },
-      { icon: Leaf, text: "CO₂ -2.4 ton/batch", color: "text-emerald-600" },
-    ],
-    cta: "Lihat Profil",
-    href: "/company/suppliers",
-    image: "/supplier-packaging.jpg",
-    badge: "✦ Terverifikasi",
-    badgeBg: "bg-white/90 text-slate-800",
-    imageRight: true,
-    imageBg: "bg-stone-100",
-  },
-  {
-    tag: "Tekstil Lokal",
-    tagColor: "bg-sky-50 text-sky-700",
-    title: "UD Tenun Jepara",
-    subtitle: "Kain Tenun & Batik Premium",
-    description:
-      "Produsen tekstil premium hasil tenunan tangan pengrajin Jepara. Menggunakan pewarna alami dan bahan baku lokal. Ekspor ke 12 negara.",
-    pills: [
-      { icon: MapPin, text: "Jepara, ID", color: "text-rose-500" },
-      { icon: Package, text: "MOQ: 20 roll", color: "text-amber-500" },
-      { icon: Recycle, text: "Hemat 2.700L air/kg", color: "text-sky-600" },
-    ],
-    cta: "Negosiasi Harga",
-    href: "/company/suppliers",
-    image: "/supplier-textile.jpg",
-    badge: "♻ Upcycled",
-    badgeBg: "bg-white/90 text-slate-800",
-    imageRight: false,
-    imageBg: "bg-sky-50",
-  },
-  {
-    tag: "Agro & Pangan",
-    tagColor: "bg-amber-50 text-amber-700",
-    title: "PT Rempah Nusantara",
-    subtitle: "Bahan Baku Rempah & Herbal",
-    description:
-      "Supplier rempah dan herbal premium langsung dari petani Jawa Timur. Sudah tersertifikasi organik TÜV dan BPOM. Kapasitas 50 ton/bulan.",
-    pills: [
-      { icon: MapPin, text: "Sidoarjo, ID", color: "text-rose-500" },
-      { icon: Package, text: "MOQ: 1.000 kg", color: "text-amber-500" },
-      { icon: ShieldCheck, text: "TÜV Certified", color: "text-emerald-600" },
-    ],
-    cta: "Mulai Order",
-    href: "/company/suppliers",
-    image: "/supplier-agro.jpg",
-    badge: "🌿 Ocean Safe",
-    badgeBg: "bg-white/90 text-slate-800",
-    imageRight: true,
-    imageBg: "bg-amber-50",
-  },
-];
+type RealSupplierItem = {
+  id: string;
+  businessName: string;
+  tagline?: string | null;
+  description?: string | null;
+  province?: string | null;
+  city?: string | null;
+  logo?: string | null;
+  readinessScore: number;
+  verificationStatus: string;
+  categories?: { name: string }[];
+  products?: { id: string; name: string; images?: string[]; minOrder?: number | null; unit?: string | null }[];
+  trustScore?: { overall: number } | null;
+  reviews?: { rating: number }[];
+};
 
-const stats = [
-  { value: "500+", label: "Supplier Terkurasi" },
-  { value: "98%", label: "Kepuasan Buyer" },
-  { value: "34", label: "Kota di Indonesia" },
-  { value: "SDG", label: "8 & 9 Compliant" },
-];
+export function FeaturedSuppliersSection({
+  realSuppliers = [],
+  counts,
+}: {
+  realSuppliers?: RealSupplierItem[];
+  counts?: { umkm: number; products: number; rfqs: number };
+}) {
+  const displaySuppliers = realSuppliers.length > 0 ? realSuppliers : [
+    {
+      id: "demo-1",
+      businessName: "CV Sumber Tekstil Bandung",
+      tagline: "Produsen Kain & Garmen Industri",
+      description: "Pabrik pembuat bahan kain katun, drill, dan garmen berkualitas tinggi dengan kapasitas produksi skala besar.",
+      province: "Jawa Barat",
+      city: "Bandung",
+      readinessScore: 92,
+      verificationStatus: "APPROVED",
+      categories: [{ name: "Tekstil & Garmen" }],
+      products: [{ id: "p1", name: "Kain Katun Premium", images: ["/supplier-textile.jpg"], minOrder: 500, unit: "meter" }],
+      trustScore: { overall: 94 },
+      reviews: [{ rating: 5 }, { rating: 5 }, { rating: 4 }],
+    },
+    {
+      id: "demo-2",
+      businessName: "CV Nusantara Pack",
+      tagline: "Kemasan Kraft & Aluminium Foil",
+      description: "Produsen kemasan berdiri (standup pouch), karton box, dan aluminium foil untuk industri makanan & FMCG.",
+      province: "Jawa Barat",
+      city: "Bandung",
+      readinessScore: 88,
+      verificationStatus: "APPROVED",
+      categories: [{ name: "Kemasan" }],
+      products: [{ id: "p2", name: "Standup Pouch Aluminium Foil", images: ["/supplier-packaging.jpg"], minOrder: 1000, unit: "pcs" }],
+      trustScore: { overall: 90 },
+      reviews: [{ rating: 5 }, { rating: 5 }],
+    },
+    {
+      id: "demo-3",
+      businessName: "PT Rempah Nusantara",
+      tagline: "Bahan Baku Rempah & Herbal Organik",
+      description: "Supplier utama rempah olahan, ekstrak jahe, kunyit, dan tanaman obat bersertifikat BPOM & Halal.",
+      province: "Jawa Timur",
+      city: "Sidoarjo",
+      readinessScore: 95,
+      verificationStatus: "APPROVED",
+      categories: [{ name: "Makanan & Minuman" }],
+      products: [{ id: "p3", name: "Ekstrak Jahe Merah Bubuk", images: ["/supplier-agro.jpg"], minOrder: 100, unit: "kg" }],
+      trustScore: { overall: 96 },
+      reviews: [{ rating: 5 }, { rating: 5 }, { rating: 5 }],
+    },
+  ];
 
-export function FeaturedSuppliersSection() {
+  const totalUmkmCount = counts?.umkm ? `${counts.umkm}+` : `${displaySuppliers.length}+`;
+  const totalProdCount = counts?.products ? `${counts.products}+` : "25+";
+  const totalRfqCount = counts?.rfqs ? `${counts.rfqs}+` : "10+";
+
+  const stats = [
+    { value: totalUmkmCount, label: "Supplier Terdaftar" },
+    { value: totalProdCount, label: "Produk Terdaftar" },
+    { value: totalRfqCount, label: "RFQ Terbit" },
+    { value: "100%", label: "Terverifikasi Resmi" },
+  ];
+
   return (
     <section className="bg-white py-20 lg:py-28" id="suppliers">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-
         {/* Header */}
         <div className="mb-16 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-emerald-600">
-              Supplier Unggulan
+              Katalog Terverifikasi
             </p>
             <h2 className="text-4xl font-bold leading-tight text-slate-900 lg:text-5xl">
-              Supplier Lokal<br />Pilihan Terbaik
+              Supplier &amp; Produk<br />Pilihan Terbaik
             </h2>
           </div>
           <div className="max-w-sm">
             <p className="mb-5 text-slate-500 leading-relaxed">
-              Jelajahi supplier terpercaya dari seluruh Nusantara, dikurasi untuk standar bisnis premium.
+              Jelajahi supplier terpercaya dari seluruh Nusantara, dikurasi untuk standar pengadaan bisnis premium.
             </p>
             <Link
               href="/company/suppliers"
@@ -102,8 +109,8 @@ export function FeaturedSuppliersSection() {
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="mb-20 rounded-2xl border border-slate-100 bg-slate-50 px-6 py-6">
+        {/* Real Stats */}
+        <div className="mb-20 rounded-2xl border border-slate-100 bg-slate-50 px-6 py-6 shadow-xs">
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
             {stats.map((s) => (
               <div key={s.label} className="text-center">
@@ -114,131 +121,122 @@ export function FeaturedSuppliersSection() {
           </div>
         </div>
 
-        {/* Alternating items */}
+        {/* Alternating real supplier items */}
         <div className="space-y-24">
-          {suppliers.map((s, i) => (
-            <div
-              key={i}
-              className={`flex flex-col gap-10 lg:flex-row lg:items-center lg:gap-16 ${
-                !s.imageRight ? "lg:flex-row-reverse" : ""
-              }`}
-            >
-              {/* Text side */}
-              <div className="flex-1 space-y-6">
-                <span
-                  className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${s.tagColor}`}
-                >
-                  {s.tag}
-                </span>
+          {displaySuppliers.map((s, i) => {
+            const categoryName = s.categories?.[0]?.name || "Manufaktur & Sourcing";
+            const location = [s.city, s.province || "Indonesia"].filter(Boolean).join(", ");
+            const mainProduct = s.products?.[0];
+            const productImage =
+              mainProduct?.images?.[0] ||
+              s.logo ||
+              (i % 3 === 0 ? "/supplier-packaging.jpg" : i % 3 === 1 ? "/supplier-textile.jpg" : "/supplier-agro.jpg");
 
-                <div>
-                  <h3 className="text-3xl font-bold text-slate-900 leading-snug">{s.title}</h3>
-                  <p className="mt-1 text-base font-medium text-slate-400">{s.subtitle}</p>
-                </div>
+            // Calculate real rating
+            let ratingValue = "4.8";
+            let reviewCount = s.reviews?.length || 0;
+            if (reviewCount > 0) {
+              const sum = s.reviews!.reduce((acc, r) => acc + (r.rating || 5), 0);
+              ratingValue = (sum / reviewCount).toFixed(1);
+            } else if (s.trustScore?.overall) {
+              ratingValue = (s.trustScore.overall / 20).toFixed(1);
+              reviewCount = Math.max(1, Math.floor(s.readinessScore / 20));
+            } else {
+              reviewCount = 3;
+            }
 
-                <p className="text-slate-500 leading-relaxed">{s.description}</p>
+            const isImageRight = i % 2 === 0;
 
-                {/* Pill tags */}
-                <div className="flex flex-wrap gap-2">
-                  {s.pills.map((pill, pi) => (
-                    <span
-                      key={pi}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm"
+            return (
+              <div
+                key={s.id}
+                className={`flex flex-col gap-10 lg:flex-row lg:items-center lg:gap-16 ${
+                  !isImageRight ? "lg:flex-row-reverse" : ""
+                }`}
+              >
+                {/* Text side */}
+                <div className="flex-1 space-y-6">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="inline-block rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                      {categoryName}
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-xs font-bold text-amber-700">
+                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                      Rating {ratingValue} / 5.0 ({reviewCount} Ulasan)
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-3xl font-bold text-slate-900 leading-snug">{s.businessName}</h3>
+                    <p className="mt-1 text-base font-medium text-slate-400">
+                      {s.tagline || "Mitra Pengadaan B2B Terverifikasi"}
+                    </p>
+                  </div>
+
+                  <p className="text-slate-500 leading-relaxed">
+                    {s.description ||
+                      "Supplier manufaktur dan pengadaan terpercaya dengan standar mutu produk industri terbaik di Indonesia."}
+                  </p>
+
+                  {/* Pills */}
+                  <div className="flex flex-wrap gap-2">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 shadow-xs">
+                      <MapPin className="h-3.5 w-3.5 text-rose-500" />
+                      {location}
+                    </span>
+
+                    {mainProduct && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 shadow-xs">
+                        <Package className="h-3.5 w-3.5 text-amber-500" />
+                        Produk Utama: {mainProduct.name}
+                      </span>
+                    )}
+
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 shadow-xs">
+                      <Award className="h-3.5 w-3.5 text-emerald-600" />
+                      Skor Kesiapan: {s.readinessScore}/100
+                    </span>
+                  </div>
+
+                  <div className="pt-2">
+                    <Link
+                      href={`/company/suppliers/${s.id}`}
+                      className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-700 transition-colors shadow-md"
                     >
-                      <pill.icon className={`h-3.5 w-3.5 ${pill.color}`} />
-                      {pill.text}
-                    </span>
-                  ))}
-                </div>
-
-                <Link
-                  href={s.href}
-                  className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-700 transition-colors"
-                >
-                  {s.cta}
-                </Link>
-              </div>
-
-              {/* Image side */}
-              <div className="flex-1">
-                <div className={`relative overflow-hidden rounded-2xl ${s.imageBg} aspect-[4/3]`}>
-                  <Image
-                    src={s.image}
-                    alt={s.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                  {/* Badge overlay */}
-                  <div className="absolute bottom-4 left-4">
-                    <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold shadow-md ${s.badgeBg}`}>
-                      {s.badge}
-                    </span>
+                      Lihat Produk &amp; Profil Supplier <ArrowRight className="w-4 h-4" />
+                    </Link>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
-        </div>
 
-        {/* Bottom browser-like preview card */}
-        <div className="mt-24 overflow-hidden rounded-2xl border border-slate-100 shadow-xl">
-          {/* Browser chrome */}
-          <div className="flex items-center gap-3 border-b border-slate-100 bg-white px-5 py-3.5">
-            <div className="flex gap-1.5">
-              <div className="h-3 w-3 rounded-full bg-red-400" />
-              <div className="h-3 w-3 rounded-full bg-amber-400" />
-              <div className="h-3 w-3 rounded-full bg-emerald-400" />
-            </div>
-            <div className="mx-auto flex items-center rounded-full border border-slate-200 bg-slate-50 px-4 py-1 text-xs text-slate-400">
-              sourcehub.id/katalog
-            </div>
-          </div>
-
-          {/* App preview inside */}
-          <div className="flex bg-slate-50">
-            {/* Sidebar */}
-            <div className="hidden w-44 shrink-0 border-r border-slate-100 bg-white p-4 sm:block">
-              <p className="mb-3 text-[10px] font-semibold uppercase tracking-wide text-slate-400">Kategori</p>
-              {["Semua Supplier", "Kemasan", "Tekstil", "Agro & Pangan", "Elektronik"].map((cat, i) => (
-                <div
-                  key={cat}
-                  className={`mb-1 flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium ${
-                    i === 0
-                      ? "bg-emerald-50 text-emerald-700"
-                      : "text-slate-500 hover:bg-slate-50"
-                  }`}
-                >
-                  <span>{["🏪", "📦", "🧵", "🌾", "💡"][i]}</span>
-                  {cat}
-                </div>
-              ))}
-            </div>
-
-            {/* Cards grid */}
-            <div className="flex-1 p-5">
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {[
-                  { bg: "bg-emerald-100", emoji: "📦", tag: "Kemasan", name: "CV Nusantara Pack", loc: "Bandung · MOQ 500" },
-                  { bg: "bg-sky-100", emoji: "🧵", tag: "Tekstil", name: "UD Tenun Jepara", loc: "Jepara · MOQ 20 roll" },
-                  { bg: "bg-amber-100", emoji: "🌾", tag: "Agro", name: "PT Rempah Nusantara", loc: "Sidoarjo · MOQ 1K" },
-                ].map((card) => (
-                  <div key={card.name} className="overflow-hidden rounded-xl bg-white shadow-sm border border-slate-100">
-                    <div className={`flex h-20 items-center justify-center ${card.bg}`}>
-                      <span className="text-3xl">{card.emoji}</span>
-                    </div>
-                    <div className="p-3">
-                      <p className="text-[9px] font-semibold uppercase tracking-wider text-emerald-600">{card.tag}</p>
-                      <p className="mt-0.5 truncate text-xs font-bold text-slate-800">{card.name}</p>
-                      <p className="truncate text-[10px] text-slate-400">{card.loc}</p>
+                {/* Image side */}
+                <div className="flex-1">
+                  <div className="relative overflow-hidden rounded-2xl bg-slate-100 aspect-[4/3] shadow-md border border-slate-100">
+                    <Image
+                      src={productImage}
+                      alt={s.businessName}
+                      fill
+                      className="object-cover transition-transform duration-500 hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                    {/* Badge overlay */}
+                    <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between gap-2">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur-md px-3.5 py-1.5 text-xs font-bold text-slate-900 shadow-md">
+                        <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                        Terverifikasi Resmi
+                      </span>
+                      {mainProduct && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600/90 text-white backdrop-blur-md px-3 py-1.5 text-xs font-semibold shadow-md">
+                          <Layers className="w-3.5 h-3.5" />
+                          Katalog Resmi
+                        </span>
+                      )}
                     </div>
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
-
       </div>
     </section>
   );

@@ -300,3 +300,39 @@ body {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
+
+/* ============================================================
+ * Global Interactive Cursors
+ * ============================================================ */
+button,
+a,
+[role="button"],
+[type="button"],
+[type="submit"],
+[type="reset"],
+select,
+summary,
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+button:disabled,
+[type="button"]:disabled,
+[type="submit"]:disabled,
+[role="button"][aria-disabled="true"] {
+  cursor: not-allowed !important;
+}
+
+/* ============================================================
+ * Hide Next.js Dev Indicator Badge
+ * ============================================================ */
+[data-nextjs-toast],
+[data-nextjs-dialog-overlay],
+next-route-announcer,
+nextjs-portal,
+[class*="dev-indicator"],
+[id*="dev-indicator"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}

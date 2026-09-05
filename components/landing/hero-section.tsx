@@ -94,14 +94,16 @@ export function HeroSection() {
             {/* Trust signals */}
             <div className="flex items-center gap-6 pt-2">
               <div className="flex -space-x-2">
-                {[1, 2, 3, 4, 5].map((i) => (
+                {["PT", "CV", "UD", "TB", "FK"].map((initial, i) => (
                   <div
-                    key={i}
-                    className="w-9 h-9 rounded-full border-2 border-white shadow-sm"
+                    key={initial}
+                    className="w-9 h-9 rounded-full border-2 border-white shadow-sm flex items-center justify-center text-white font-bold text-xs"
                     style={{
-                      background: `hsl(${(i * 60) % 360}, 70%, 60%)`,
+                      background: `hsl(${140 + i * 35}, 65%, 42%)`,
                     }}
-                  />
+                  >
+                    {initial}
+                  </div>
                 ))}
               </div>
               <div>

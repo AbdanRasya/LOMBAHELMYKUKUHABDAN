@@ -236,6 +236,7 @@ model UmkmProfile {
   trustScore     TrustScore?
   aiRecommendations AIRecommendation[]
   portfolio      Portfolio[]
+  directRfqs     RFQ[]            @relation("DirectRFQs")
 
   @@index([province, city])
   @@index([readinessScore])
@@ -364,6 +365,7 @@ model Portfolio {
 model RFQ {
   id             String    @id @default(cuid())
   companyId      String
+  targetUmkmId   String?
   title          String
   description    String
   categoryId     String?
@@ -382,12 +384,14 @@ model RFQ {
   deletedAt      DateTime?
 
   companyProfile    CompanyProfile    @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  targetUmkm        UmkmProfile?      @relation("DirectRFQs", fields: [targetUmkmId], references: [id], onDelete: Cascade)
   category          Category?         @relation(fields: [categoryId], references: [id])
   quotations        Quotation[]
   aiRecommendations AIRecommendation[]
   project           Project?
 
   @@index([companyId])
+  @@index([targetUmkmId])
   @@index([status])
   @@index([categoryId])
   @@map("rfqs")

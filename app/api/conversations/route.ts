@@ -19,14 +19,14 @@ export async function GET() {
   const role = sessionUser.role;
 
   try {
-    let conversations;
+    let enriched = [];
     if (role === 'COMPANY') {
-      conversations = await db.conversation.findMany({
+      const conversations = await db.conversation.findMany({
         where: { companyUserId: userId },
         include: { messages: { orderBy: { createdAt: 'desc' }, take: 1 } },
         orderBy: { lastMessageAt: 'desc' },
       });
-      const enriched = await Promise.all(
+      enriched = await Promise.all(
         conversations.map(async (c) => {
           const umkm = await db.umkmProfile.findUnique({
             where: { userId: c.umkmUserId },
@@ -35,14 +35,13 @@ export async function GET() {
           return { ...c, otherUser: umkm };
         }),
       );
-      return NextResponse.json({ conversations: enriched });
     } else {
-      conversations = await db.conversation.findMany({
+      const conversations = await db.conversation.findMany({
         where: { umkmUserId: userId },
         include: { messages: { orderBy: { createdAt: 'desc' }, take: 1 } },
         orderBy: { lastMessageAt: 'desc' },
       });
-      const enriched = await Promise.all(
+      enriched = await Promise.all(
         conversations.map(async (c) => {
           const company = await db.companyProfile.findUnique({
             where: { userId: c.companyUserId },
@@ -51,13 +50,25 @@ export async function GET() {
           return { ...c, otherUser: company };
         }),
       );
-      return NextResponse.json({ conversations: enriched });
     }
+
+    const unreadMessagesCount = await db.message.count({
+      where: {
+        conversation: {
+          OR: [{ companyUserId: userId }, { umkmUserId: userId }],
+        },
+        senderId: { not: userId },
+        read: false,
+      },
+    });
+
+    return NextResponse.json({ conversations: enriched, unreadCount: unreadMessagesCount });
   } catch (e) {
     console.error('[api/conversations GET] DB error:', e);
     return NextResponse.json(
       {
         conversations: [],
+        unreadCount: 0,
         demo: true,
         error: 'Gagal mengambil percakapan. Detail: ' + (e instanceof Error ? e.message : String(e)),
       },

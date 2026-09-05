@@ -346,15 +346,23 @@ async function main() {
         certificationScore: 96,
         portfolioScore: 88,
         completedProjects: Math.floor(Math.random() * 25) + 8,
-        strengths: ["Kualitas Pengerjaan Sesuai Spesifikasi", "Legalitas & Sertifikat Lengkap", "Fleksibilitas Minimum Order"],
-        weaknesses: ["Perlu Tambahan Mesin untuk Lonjakan Order Skala Sangat Besar"],
         suggestions: ["Pertahankan kecepatan respon penawaran RFQ"],
       },
     });
 
+    // Create initial DB Review
+    await prisma.review.create({
+      data: {
+        umkmId: profile.id,
+        companyId: companyProfiles[0]?.id || "seed-company",
+        rating: 5,
+        comment: `Mitra ${profile.businessName} memberikan hasil produksi sangat presisi, responsif, dan pengiriman barang sesuai kesepakatan B2B.`,
+      },
+    }).catch(() => {});
+
     umkmProfiles.push(profile);
   }
-  console.log(`Seeded ${umkmProfiles.length} UMKM profiles (Mitra UMKM / Supplier Lokal) with products, certifications, machines, and trust scores.`);
+  console.log(`Seeded ${umkmProfiles.length} UMKM profiles with products, certifications, machines, trust scores, and database reviews.`);
 
   // 5. Seed RFQs (Created by Corporate Buyers looking for UMKM Suppliers)
   const rfqData = [

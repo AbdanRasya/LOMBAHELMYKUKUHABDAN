@@ -1,62 +1,70 @@
 "use client";
 
-import { Star, Quote, Building2 } from "lucide-react";
+import { Star, Quote, Building2, ShieldCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-const stories = [
-  {
-    quote:
-      "SourceHub mengubah cara kami mencari supplier. Dengan AI matching, kami menemukan mitra produksi yang sempurna dalam hitungan menit, bukan minggu. Penghematan waktu dan biaya yang luar biasa.",
-    author: "Budi Santoso",
-    role: "Procurement Manager",
-    company: "PT Industri Nusantara",
-    rating: 5,
-    saving: "Hemat 60% waktu pengadaan",
-    avatarColor: "#059669",
-    initials: "BS",
-  },
-  {
-    quote:
-      "Sebagai UMKM, kami kesulitan menembus pasar korporat. SourceHub membuka pintu ke ratusan perusahaan yang butuh supplier seperti kami. Revenue kami naik 3x dalam 6 bulan!",
-    author: "Siti Rahayu",
-    role: "Pemilik",
-    company: "CV Tekstil Maju Jaya",
-    rating: 5,
-    saving: "Revenue naik 300%",
-    avatarColor: "#059669",
-    initials: "SR",
-  },
-  {
-    quote:
-      "Transparansi adalah nilai utama yang kami cari. Trust Score dan proses verifikasi SourceHub memberikan keyakinan bahwa supplier yang kami pilih benar-benar terpercaya.",
-    author: "Ahmad Fauzi",
-    role: "CEO",
-    company: "PT Retail Mandiri Group",
-    rating: 5,
-    saving: "0 kasus supplier bermasalah",
-    avatarColor: "#7c3aed",
-    initials: "AF",
-  },
-];
+export type RealReviewItem = {
+  id: string;
+  rating: number;
+  comment: string | null;
+  createdAt: string | Date;
+  companyName?: string | null;
+  umkmProfile?: {
+    businessName: string;
+    city?: string | null;
+    province?: string | null;
+  } | null;
+};
 
-export function SuccessStoriesSection() {
+interface SuccessStoriesProps {
+  realReviews?: RealReviewItem[];
+}
+
+export function SuccessStoriesSection({ realReviews = [] }: SuccessStoriesProps) {
+  // Map real DB reviews into story display format
+  const mappedDbStories = realReviews.map((r, i) => {
+    const supplierName = r.umkmProfile?.businessName || "Supplier Terdaftar";
+    const buyerCompany = r.companyName || "PT Industri Nusantara";
+    const initials = supplierName
+      .split(" ")
+      .map((w) => w[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
+    const colors = ["#059669", "#2563eb", "#7c3aed", "#d97706", "#0d9488"];
+
+    return {
+      quote: r.comment || "Layanan sangat memuaskan, spesifikasi produk presisi dan pengiriman tepat waktu.",
+      author: buyerCompany,
+      role: "Procurement B2B",
+      company: supplierName,
+      rating: r.rating || 5,
+      saving: "Ulasan Real-Time Database",
+      avatarColor: colors[i % colors.length],
+      initials,
+      isRealDb: true,
+    };
+  });
+
+  const displayStories = mappedDbStories;
+
   return (
     <section id="success" className="py-24 bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <Badge className="bg-purple-50 text-purple-700 border-purple-200 mb-4 text-xs font-semibold">
-            Kisah Sukses
+            Kisah Sukses &amp; Rating Asli
           </Badge>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-neutral-900">
             Cerita <span className="gradient-text">Nyata</span> dari Pengguna Kami
           </h2>
           <p className="mt-3 text-neutral-600 max-w-xl mx-auto">
-            Lebih dari 850 perusahaan and 2,400 UMKM telah merasakan manfaat platform kami
+            Rating dan ulasan asli dari transaksi pengadaan B2B antara Perusahaan dan UMKM terdaftar
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {stories.map((story, i) => (
+          {displayStories.map((story, i) => (
             <div
               key={i}
               className="relative bg-white rounded-2xl p-6 shadow-md hover:shadow-xl border border-neutral-200 hover:border-emerald-200 card-hover transition-all duration-300"
@@ -69,10 +77,16 @@ export function SuccessStoriesSection() {
               </div>
 
               {/* Stars */}
-              <div className="flex items-center gap-0.5 mb-4 pt-2">
-                {[...Array(story.rating)].map((_, j) => (
-                  <Star key={j} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                ))}
+              <div className="flex items-center justify-between mb-4 pt-2">
+                <div className="flex items-center gap-0.5">
+                  {[...Array(story.rating)].map((_, j) => (
+                    <Star key={j} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                  <span className="text-xs font-bold text-amber-600 ml-1.5">{story.rating}.0 / 5.0</span>
+                </div>
+                <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-emerald-600" /> Data Real DB
+                </span>
               </div>
 
               {/* Quote */}

@@ -14,6 +14,7 @@ type ValidOrderStatus =
 
 const COMPANY_ALLOWED_STATUSES: ValidOrderStatus[] = [
   'CONFIRMED',
+  'DELIVERED',
   'COMPLETED',
   'CANCELLED',
   'DISPUTED',
@@ -21,6 +22,7 @@ const COMPANY_ALLOWED_STATUSES: ValidOrderStatus[] = [
 const UMKM_ALLOWED_STATUSES: ValidOrderStatus[] = [
   'IN_PRODUCTION',
   'SHIPPED',
+  'DELIVERED',
   'CANCELLED',
   'DISPUTED',
 ];

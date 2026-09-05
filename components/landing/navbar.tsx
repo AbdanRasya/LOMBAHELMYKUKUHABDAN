@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, Sparkles, ChevronRight } from "lucide-react";
+import { Menu, X, Boxes, ChevronRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import type { Role } from "@prisma/client";
@@ -56,8 +56,8 @@ export function Navbar() {
           <div className="flex items-center justify-between h-13 px-5">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 group shrink-0">
-              <div className="w-7 h-7 rounded-full bg-emerald-600 flex items-center justify-center shadow-sm group-hover:shadow-emerald-200 transition-shadow">
-                <Sparkles className="w-3.5 h-3.5 text-white" />
+              <div className="w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center shadow-sm group-hover:shadow-emerald-200 transition-shadow">
+                <Boxes className="w-4 h-4 text-white" />
               </div>
               <span className="text-base font-bold text-slate-800">
                 Source<span className="text-emerald-600">Hub</span>

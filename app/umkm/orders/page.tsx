@@ -15,6 +15,7 @@ import {
   Send
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -87,6 +88,7 @@ export default function UMKMOrdersPage() {
   }, []);
 
   const updateOrderStatus = async (orderId: string, newStatus: OrderStatus, tracking?: string) => {
+    const tid = toast.loading("Memperbarui status pesanan...");
     try {
       const payload: UpdateOrderPayload = { status: newStatus };
       if (tracking) payload.trackingInfo = tracking;
@@ -96,13 +98,18 @@ export default function UMKMOrdersPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+      const data = await res.json();
       if (res.ok) {
         setOrders((prev) =>
           prev.map((o) => (o.id === orderId ? { ...o, status: newStatus, trackingInfo: tracking || o.trackingInfo } : o))
         );
+        toast.success(`Status pesanan diperbarui: ${STATUS_CONFIG[newStatus]?.label || newStatus}`, { id: tid });
+      } else {
+        toast.error(data.error || "Gagal memperbarui status pesanan", { id: tid });
       }
     } catch (error) {
       console.error("Failed to update status:", error);
+      toast.error("Terjadi kesalahan koneksi", { id: tid });
     }
   };
 
@@ -169,6 +176,11 @@ export default function UMKMOrdersPage() {
                       )}
                       {order.company?.companyName && (
                         <p className="text-xs text-slate-500">Pembeli: <span className="font-medium text-slate-700">{order.company.companyName}</span></p>
+                      )}
+                      {order.trackingInfo && (
+                        <p className="text-xs text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100 font-medium inline-block w-fit mt-1">
+                          📦 No. Resi: <span className="font-mono font-bold">{order.trackingInfo}</span>
+                        </p>
                       )}
                       <div className="text-2xl font-bold text-slate-900 mt-1">
                         {formatRupiah(order.totalAmount)}
