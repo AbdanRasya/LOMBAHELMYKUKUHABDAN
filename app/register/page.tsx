@@ -194,9 +194,13 @@ export default function RegisterPage() {
               />
               <Label htmlFor="terms" className="text-xs text-neutral-600 cursor-pointer">
                 Saya menyetujui{" "}
-                <Link href="/terms" className="text-blue-600 underline">Syarat & Ketentuan</Link>{" "}
+                <Link href="/terms" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-700">
+                  Syarat & Ketentuan
+                </Link>{" "}
                 dan{" "}
-                <Link href="/privacy" className="text-blue-600 underline">Kebijakan Privasi</Link>{" "}
+                <Link href="/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-700">
+                  Kebijakan Privasi
+                </Link>{" "}
                 SourceHub
               </Label>
             </div>

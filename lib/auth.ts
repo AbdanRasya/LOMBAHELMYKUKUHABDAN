@@ -95,14 +95,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   events: {
     async signIn({ user }) {
-      await db.systemLog.create({
-        data: {
-          userId: user.id,
-          action: "USER_SIGN_IN",
-          entity: "User",
-          entityId: user.id,
-        },
-      });
+      try {
+        await db.systemLog.create({
+          data: {
+            userId: user.id,
+            action: "USER_SIGN_IN",
+            entity: "User",
+            entityId: user.id,
+          },
+        });
+      } catch (logErr) {
+        console.error("Non-critical: systemLog on signIn failed:", logErr);
+      }
     },
   },
 });

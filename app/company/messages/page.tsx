@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { format } from "date-fns";
 import { MessageSquare, Send, Search, ArrowLeft, Lock, ShieldCheck } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
@@ -158,7 +159,9 @@ export default function CompanyMessagesPage() {
               <div className="flex flex-col items-center justify-center h-full p-6 text-center">
                 <MessageSquare className="w-12 h-12 text-slate-300 mb-3" />
                 <p className="text-slate-500 text-sm">Belum ada obrolan</p>
-                <Button variant="link" className="text-emerald-600 mt-2">Cari Supplier</Button>
+                <Link href="/company/suppliers">
+                  <Button variant="link" className="text-emerald-600 mt-2">Cari Supplier</Button>
+                </Link>
               </div>
             ) : (
               conversations.map((c) => (

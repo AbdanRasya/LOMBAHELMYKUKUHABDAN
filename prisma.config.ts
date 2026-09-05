@@ -2,13 +2,14 @@ import { defineConfig } from "prisma/config";
 import * as dotenv from "dotenv";
 import * as path from "path";
 
-dotenv.config({ path: path.resolve(__dirname, ".env") });
+const projectRoot = process.cwd();
+dotenv.config({ path: path.resolve(projectRoot, ".env") });
 
 export default defineConfig({
   migrations: {
     seed: "tsx ./prisma/seed.ts",
   },
   datasource: {
-    url: process.env.DATABASE_URL || "postgresql://username:password@ep-example.us-east-1.aws.neon.tech/sourcehub?sslmode=require",
+    url: process.env.DATABASE_URL!,
   },
 });

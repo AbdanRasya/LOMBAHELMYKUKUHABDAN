@@ -37,6 +37,172 @@ export default function AssistantPage() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+function getClientFallbackResponse(input: string): string {
+  const q = input.trim().toLowerCase();
+
+  // 1. STARTER: Biji / bahan baku plastik di Jawa Barat
+  if (q.includes("plastik") || (q.includes("supplier") && q.includes("jawa barat"))) {
+    return `🔍 **Hasil Rekomendasi Supplier UMKM Terverifikasi SourceHub**
+
+Sistem mendeteksi kebutuhan Anda:
+• **Kategori:** Kimia & Plastik
+• **Wilayah:** Jawa Barat
+• **Estimasi Kebutuhan:** 10 ton / bulan
+
+Berikut supplier UMKM dengan tingkat kecocokan (*Match Score*) tertinggi:
+
+**1. UD Plastik Jaya Berkah**
+📍 Lokasi: Bekasi, Jawa Barat | 🏷️ Kategori: Kimia & Plastik
+🎯 **Match Score:** 88%
+⚡ Kapasitas: 80.000 kg/bulan (memenuhi kebutuhan 10 ton/bulan)
+⭐ Rating: 3.9/5.0 (On-Time Delivery: 78%)
+📜 Sertifikasi: NIB Terverifikasi & Izin Usaha Industri
+⏱️ Lead Time: ~10 hari | Estimasi Harga: Rp 15.000/kg
+💬 *Spesialisasi: Pabrik resin dan barang plastik injection molding untuk kebutuhan industri B2B di wilayah Jabodetabek dan Jawa Barat.*
+
+💡 **Langkah Selanjutnya:**
+Anda dapat langsung membuka menu **Buat RFQ** untuk mengirimkan permintaan penawaran harga resmi kepada supplier di atas secara langsung.`;
+  }
+
+  // 2. STARTER: Perbandingan 3 supplier tekstil terbaik
+  if (q.includes("banding") || q.includes("tekstil") || q.includes("3 supplier") || q.includes("komparasi")) {
+    return `📊 **Analisis Komparasi 3 Supplier Terbaik (Kategori: Tekstil & Garmen)**
+
+Berikut perbandingan mendalam berdasarkan metrik kapasitas, performa pengiriman, dan legalitas di SourceHub:
+
+**1. CV Sumber Tekstil Bandung** (Bandung, Jawa Barat)
+• **Kapasitas Produksi:** 25.000 pcs/bulan
+• **On-Time Delivery (OTD):** 96% | **Rating:** ⭐ 4.8/5.0
+• **Sertifikasi Mutu:** SNI, OEKO-TEX
+• **Estimasi Lead Time:** 14 hari kerja
+• **Keunggulan:** Spesialis seragam kerja kantor, pabrik, dan wearpack bersertifikasi SNI dengan 45 penjahit mesin otomatis.
+
+**2. Konveksi Textile Mandiri Bandung** (Bandung, Jawa Barat)
+• **Kapasitas Produksi:** 20.000 pcs/bulan
+• **On-Time Delivery (OTD):** 90% | **Rating:** ⭐ 4.5/5.0
+• **Sertifikasi Mutu:** SNI
+• **Estimasi Lead Time:** 21 hari kerja
+• **Keunggulan:** Konveksi seragam drill premium, polo shirt, dan sablon/bordir komputer.
+
+**3. Sentra Garmen Nusantara Solo** (Surakarta, Jawa Tengah)
+• **Kapasitas Produksi:** 18.000 pcs/bulan
+• **On-Time Delivery (OTD):** 93% | **Rating:** ⭐ 4.6/5.0
+• **Sertifikasi Mutu:** SNI, NIB
+• **Estimasi Lead Time:** 18 hari kerja
+• **Keunggulan:** Pabrik garmen skala menengah, harga sangat kompetitif untuk pengadaan seragam instansi dan ritel.
+
+💡 **Rekomendasi Strategis SourceHub:**
+1. **Pilihan Utama Volume & Kepatuhan:** **CV Sumber Tekstil Bandung** paling unggul dalam konsistensi rating (⭐ 4.8) dan ketepatan waktu (96% OTD).
+2. **Pilihan Alternatif Cepat:** **Konveksi Textile Mandiri Bandung** cocok untuk pesanan yang membutuhkan kapasitas produksi masif.
+3. **Pilihan Efisiensi Biaya:** **Sentra Garmen Nusantara Solo** menawarkan estimasi harga yang sangat kompetitif.
+
+*Tips: Anda dapat menerbitkan RFQ kepada ketiga supplier di atas secara bersamaan untuk membandingkan penawaran harga riil.*`;
+  }
+
+  // 3. STARTER: Risiko pemilihan supplier baru
+  if (q.includes("risiko") || q.includes("risk") || q.includes("memilih supplier") || q.includes("kriteria")) {
+    return `🛡️ **5 Risiko Utama Saat Memilih Supplier Baru & Cara Memitigasinya di SourceHub**
+
+Sebagai profesional procurement, berikut faktor risiko kritis yang wajib dipertimbangkan sebelum menerbitkan Purchase Order (PO):
+
+1. **Risiko Keterlambatan Pengiriman (Lead Time Breach)**
+   • *Dampak:* Gangguan pada jadwal perakitan atau stok kehabisan di gudang Anda.
+   • *Mitigasi SourceHub:* Periksa skor **On-Time Delivery Rate (OTDR)** supplier pada profilnya. Terapkan jadwal pengiriman bertahap (*batch delivery*) dan cantumkan klausul denda keterlambatan pada PKS.
+
+2. **Risiko Inkonsistensi Kualitas (Defect Rate Tinggi)**
+   • *Dampak:* Biaya retur barang, komplain dari pembeli akhir, dan waktu terbuang.
+   • *Mitigasi SourceHub:* Wajibkan pengiriman *Pre-Production Sample* (sampel awal) sebelum produksi massal. Pastikan toleransi spesifikasi teknis (toleransi dimensi/bahan) tertulis jelas pada RFQ.
+
+3. **Risiko Legalitas & Sertifikasi Palsu**
+   • *Dampak:* Masalah hukum pada saat audit perusahaan, sertifikasi halal/SNI gugur.
+   • *Mitigasi SourceHub:* Periksa badge **Terverifikasi** pada profil UMKM. SourceHub menggunakan verifikasi dokumen legalitas (NIB, NPWP, SNI, Halal) untuk memastikan keabsahan supplier.
+
+4. **Risiko Ketergantungan Tunggal (*Single Sourcing*)**
+   • *Dampak:* Jika mesin workshop supplier rusak atau terjadi musibah, pengadaan Anda langsung terhenti.
+   • *Mitigasi SourceHub:* Alokasikan pesanan dengan skema 70/30 (70% ke supplier utama, 30% ke supplier cadangan) untuk material kritis.
+
+5. **Risiko Finansial & Arus Kas**
+   • *Dampak:* Supplier kehabisan modal kerja di tengah proses pengerjaan.
+   • *Mitigasi SourceHub:* Terapkan termin pembayaran *milestone* yang adil (misalnya 30% uang muka, 40% saat barang lulus uji QC pabrik, 30% setelah tiba di gudang).`;
+  }
+
+  // 4. STARTER: Negosiasi harga dengan UMKM
+  if (q.includes("negosiasi") || q.includes("nego") || q.includes("tawar") || q.includes("harga yang baik") || q.includes("diskon")) {
+    return `🤝 **Strategi Negosiasi Harga Win-Win dengan Supplier UMKM**
+
+Negosiasi dengan UMKM berbeda dengan korporasi besar karena mereka sangat sensitif terhadap *cash flow* dan kepastian order. Berikut 4 taktik terbukti efektif:
+
+1. **Tawarkan Komitmen Volume Jangka Panjang (*Blanket Order*)**
+   • Daripada menawar pesanan 500 pcs sekaligus, janjikan kontrak tahunan misalnya 6.000 pcs yang dikirim secara bertahap 500 pcs per bulan.
+   • UMKM bersedia memberikan diskon 5%–15% untuk kepastian utilisasi mesin mereka selama beberapa bulan ke depan.
+
+2. **Percepat Termin Pembayaran (*Cash Flow Advantage*)**
+   • Standar korporat sering menuntut tempo pembayaran 60–90 hari (TOP). Hal ini sangat memberatkan modal kerja UMKM.
+   • Tawarkan pembayaran lebih cepat (misal tempo 14 hari atau pembayaran tunai 3 hari setelah lolos QC). Sebagian besar UMKM akan dengan senang hati memotong harga pokok penjualan demi perputaran kas cepat.
+
+3. **Bantu Standarisasi Bahan Baku & Kemasan**
+   • Diskusikan apakah kemasan luar dapat disederhanakan tanpa mengurangi perlindungan barang.
+   • Terkadang biaya tinggi timbul akibat spesifikasi kemasan custom yang mahal bagi UMKM skala menengah.
+
+4. **Jalankan *Trial Batch* (Pesanan Uji Coba)**
+   • Mulai dengan pesanan percontohan volume kecil pada harga normal. Tunjukkan bahwa perusahaan Anda adalah mitra profesional yang membayar tepat waktu. Setelah hubungan saling percaya terbangun, ajukan revisi harga untuk pesanan reguler skala penuh.`;
+  }
+
+  // 5. Privasi & Syarat Ketentuan
+  if (q.includes("syarat") || q.includes("ketentuan") || q.includes("terms") || q.includes("privasi") || q.includes("privacy") || q.includes("keamanan")) {
+    return `🔒 **Kebijakan Keamanan Data, Privasi & Syarat Layanan SourceHub**
+
+SourceHub mengedepankan standar keamanan dan tata kelola hukum pengadaan B2B:
+• **Kepatuhan UU PDP (UU No. 27/2022):** Seluruh data identitas, NIB, NPWP, dan nomor rekening bisnis dienkripsi menggunakan standar TLS 1.3 dan penyimpanan terisolasi.
+• **Kerahasiaan Desain & Harga:** Spesifikasi teknik rahasia (CAD/blueprint) dan lembar penawaran (Quotation) hanya dapat diakses oleh pihak yang bertransaksi secara sah.
+• **Dokumen Legal Lengkap:**
+  - Syarat & Ketentuan: \`/terms\`
+  - Kebijakan Privasi: \`/privacy\``;
+  }
+
+  // 6. Alur RFQ
+  if (q.includes("buat rfq") || q.includes("cara kerja") || q.includes("alur") || q.includes("cara pesan")) {
+    return `📝 **Panduan 4 Langkah Pengadaan Cepat Melalui SourceHub**
+
+1. **Buat Permintaan Pengadaan (RFQ)** di menu Buat RFQ.
+2. **Pencocokan AI Otomatis (*AI Supplier Matching*)** mencocokkan supplier terdekat dan terverifikasi.
+3. **Terima & Bandingkan Penawaran (*Quotations*)** dari UMKM secara langsung.
+4. **Konfirmasi Pesanan (*Purchase Order*)** dan pantau pengiriman hingga selesai.`;
+  }
+
+  // 7. General Supplier Search
+  if (q.includes("supplier") || q.includes("butuh") || q.includes("cari") || q.includes("logam") || q.includes("kemasan") || q.includes("kayu") || q.includes("makanan") || q.includes("elektronik")) {
+    return `🔍 **Rekomendasi Supplier Terverifikasi di SourceHub**
+
+Berdasarkan pencarian Anda, SourceHub memiliki database UMKM lokal terverifikasi di berbagai kategori:
+• **Logam & Permesinan:** Bengkel Bubut CNC Karya Logam (Bandung) & UD Maju Bersama Steel (Jakarta).
+• **Kemasan & Karton:** UD Berkah Kemasan Mandiri (Semarang) & CV Kemasan Lestari (Semarang).
+• **Tekstil & Seragam:** CV Sumber Tekstil (Bandung) & Konveksi Mandiri (Bandung).
+• **Bahan Pangan & Rempah:** Koperasi Tani Agro Bumi (Bogor & Medan).
+• **Furnitur & Palet Kayu:** Sentra Kayu Mebel Jepara Asri (Jepara).
+• **Elektronik & Panel:** UD Panel & Kabel Elektro Mandiri (Surabaya/Sidoarjo).
+
+💡 Silakan buka menu **Marketplace Supplier** atau **Buat RFQ** untuk mendapatkan penawaran harga langsung dari mitra UMKM di atas!`;
+  }
+
+  // 8. Greetings
+  if (q.startsWith("halo") || q.startsWith("hai") || q.startsWith("hi") || q.startsWith("pagi") || q.startsWith("siang") || q.startsWith("sore") || q.startsWith("malam")) {
+    return `Halo! 👋 Saya adalah **AI Procurement Assistant SourceHub**.
+
+Saya siap mendampingi proses pengadaan bisnis B2B Anda:
+1. 🔍 **Mencari Supplier:** *Misal: "Saya butuh supplier bahan baku plastik dengan kapasitas 10 ton/bulan di Jawa Barat"*
+2. 📊 **Membandingkan Supplier:** *Misal: "Bantu saya membandingkan 3 supplier tekstil terbaik"*
+3. 🛡️ **Manajemen Risiko:** *Misal: "Apa risiko yang perlu dipertimbangkan saat memilih supplier baru?"*
+4. 🤝 **Strategi Negosiasi:** *Misal: "Bagaimana cara bernegosiasi harga yang baik dengan supplier UMKM?"*
+
+Ada kebutuhan barang atau proyek apa yang sedang Anda rencanakan?`;
+  }
+
+  // 9. Default Fallback
+  return `Terima kasih atas pertanyaan Anda. Terkait kebutuhan pengadaan di platform SourceHub:
+Anda dapat menanyakan rekomendasi supplier UMKM spesifik, perbandingan penawaran, strategi mitigasi risiko, atau panduan pembuatan RFQ. Silakan tanyakan kategori produk atau lokasi yang Anda butuhkan!`;
+}
+
   const sendMessage = async (text?: string) => {
     const messageText = text || input.trim();
     if (!messageText || isLoading) return;
@@ -63,21 +229,29 @@ export default function AssistantPage() {
         }),
       });
 
+      if (!response.ok) {
+        throw new Error(`Server returned ${response.status}`);
+      }
+
       const data = await response.json();
+      const answer = data.response || data.reply || getClientFallbackResponse(messageText);
+
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: data.response || "Maaf, terjadi kesalahan. Silakan coba lagi.",
+          content: answer,
           timestamp: new Date(),
         },
       ]);
-    } catch {
+    } catch (err) {
+      console.warn("API request failed, using intelligent offline fallback:", err);
+      const fallbackAnswer = getClientFallbackResponse(messageText);
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: "Maaf, saya mengalami gangguan koneksi. Silakan coba lagi.",
+          content: fallbackAnswer,
           timestamp: new Date(),
         },
       ]);

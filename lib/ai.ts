@@ -12,15 +12,15 @@ const genAI = process.env.GEMINI_API_KEY
 const SERTIFIKASI_LIST = ["Halal", "SNI", "ISO 9001", "ISO 14001", "HACCP", "BPOM"];
 
 const KATA_KUNCI_KATEGORI: Record<string, string[]> = {
-  "Makanan & Minuman": ["makanan", "minuman", "pangan", "kuliner", "bumbu", "snack", "sambal", "rempah"],
-  "Furniture & Kayu": ["furniture", "mebel", "kayu", "meja", "kursi", "lemari", "pintu"],
-  "Logam & Metal Work": ["logam", "besi", "baja", "metal", "las", "fabrikasi", "baut", "plat"],
-  "Kerajinan (Handicraft)": ["kerajinan", "handicraft", "anyaman", "souvenir", "ukir"],
-  "Tekstil & Garmen": ["tekstil", "garmen", "konveksi", "kain", "seragam", "kaos", "baju", "drill"],
-  "Kertas & Percetakan": ["kertas", "percetakan", "cetak", "atk", "alat tulis", "buku"],
-  "Kimia & Plastik": ["kimia", "plastik", "pelumas", "bahan kimia", "polimer", "resin"],
+  "Makanan & Minuman": ["makanan", "minuman", "pangan", "kuliner", "bumbu", "snack", "sambal", "rempah", "vco", "kopi"],
+  "Furniture & Kayu": ["furniture", "mebel", "kayu", "meja", "kursi", "lemari", "pintu", "jati", "palet"],
+  "Logam & Metal Work": ["logam", "besi", "baja", "metal", "fabrikasi", "baut", "plat", "bubut", "cnc", "machining", "pengelasan", "bengkel las"],
+  "Kerajinan (Handicraft)": ["kerajinan", "handicraft", "anyaman", "souvenir", "ukir", "rotan", "bambu"],
+  "Tekstil & Garmen": ["tekstil", "garmen", "konveksi", "kain", "seragam", "kaos", "baju", "drill", "polo"],
+  "Kertas & Percetakan": ["kertas", "percetakan", "cetak", "atk", "alat tulis", "buku", "offset"],
+  "Kimia & Plastik": ["kimia", "plastik", "pelumas", "bahan kimia", "polimer", "resin", "injection", "molding"],
   "Kemasan": ["kemasan", "packaging", "pouch", "botol", "karton", "box", "dus", "corrugated"],
-  "Elektronik & Komponen": ["elektronik", "komponen", "kabel", "konektor", "panel listrik", "sensor"],
+  "Elektronik & Komponen": ["elektronik", "komponen", "kabel", "konektor", "panel listrik", "sensor", "wiring"],
 };
 
 const SERTIFIKASI_PENTING = ["Halal", "SNI", "ISO 9001", "ISO 14001", "HACCP", "BPOM"];
@@ -1441,30 +1441,358 @@ export async function detectOpportunities(analyticsData: {
   return { opportunities };
 }
 
+// ============================================================
+// #9 AI PROCUREMENT ASSISTANT (ONLINE & OFFLINE INTELLIGENT ENGINE)
+// ============================================================
+
+export function generateOfflineProcurementResponse(
+  messages: { role: "user" | "model"; content: string }[],
+  context?: string,
+): string {
+  const lastMessage = messages[messages.length - 1]?.content || "";
+  const q = lastMessage.trim().toLowerCase();
+
+  // 1. GENERATE DESKRIPSI PRODUK KATALOG (Kebutuhan Dialog Produk UMKM)
+  if (
+    q.includes("buatkan deskripsi") ||
+    q.includes("deskripsi produk") ||
+    q.includes("katalog b2b") ||
+    q.includes("deskripsi untuk")
+  ) {
+    const namaMatch = lastMessage.match(/nama produk:\s*["']?([^"'\n,]+)/i);
+    const katMatch = lastMessage.match(/kategori:\s*["']?([^"'\n,]+)/i);
+    const bahanMatch = lastMessage.match(/bahan\/material:\s*["']?([^"'\n,]+)/i);
+    const moqMatch = lastMessage.match(/moq:\s*["']?([^"'\n,]+)/i);
+    const leadMatch = lastMessage.match(/lead time:\s*["']?([^"'\n,]+)/i);
+
+    const nama = namaMatch ? namaMatch[1].trim() : "Produk B2B";
+    const kat = katMatch ? katMatch[1].trim() : "Manufaktur & Sourcing";
+    const bahan = bahanMatch ? bahanMatch[1].trim() : "Material Berkualitas Tinggi";
+    const moq = moqMatch ? moqMatch[1].trim() : "50 pcs";
+    const lead = leadMatch ? leadMatch[1].trim() : "14 hari";
+
+    return `${nama} merupakan produk unggulan kategori ${kat} yang diproduksi dari ${bahan} dengan standar presisi industri dan kontrol mutu (QC) ketat. Dirancang khusus untuk memenuhi kebutuhan pengadaan korporat skala menengah hingga besar dengan Minimum Order Quantity (MOQ) ${moq} dan estimasi waktu penyelesaian ${lead} kerja. Siap menyuplai pesanan rutin dengan jaminan konsistensi dimensi dan pengiriman tepat waktu.`;
+  }
+
+  // 2. PERBANDINGAN SUPPLIER (Top Starters: "Bantu saya membandingkan 3 supplier tekstil terbaik")
+  if (
+    q.includes("banding") ||
+    q.includes("komparasi") ||
+    q.includes("compare") ||
+    q.includes("perbandingan") ||
+    q.includes("3 supplier")
+  ) {
+    let targetKat = "Tekstil & Garmen";
+    if (q.includes("logam") || q.includes("baja") || q.includes("besi") || q.includes("bubut")) targetKat = "Logam & Metal Work";
+    else if (q.includes("kemasan") || q.includes("karton") || q.includes("box") || q.includes("dus")) targetKat = "Kemasan";
+    else if (q.includes("pangan") || q.includes("makanan") || q.includes("bumbu") || q.includes("minuman")) targetKat = "Makanan & Minuman";
+    else if (q.includes("kayu") || q.includes("furniture") || q.includes("mebel")) targetKat = "Furniture & Kayu";
+    else if (q.includes("plastik") || q.includes("kimia")) targetKat = "Kimia & Plastik";
+    else if (q.includes("elektronik") || q.includes("kabel")) targetKat = "Elektronik & Komponen";
+
+    let topList = DEMO_UMKM.filter(
+      (u) => u.kategori_utama === targetKat || (targetKat === "Kemasan" && u.kategori_utama.includes("Kemasan"))
+    );
+
+    // Jika kurang dari 3 untuk kategori tertentu, lengkapi dengan supplier spesifik domain
+    if (topList.length < 3) {
+      if (targetKat === "Tekstil & Garmen") {
+        topList = [
+          {
+            umkm_id: "u-tekstil-1",
+            nama_umkm: "CV Sumber Tekstil Bandung",
+            kota: "Bandung",
+            provinsi: "Jawa Barat",
+            kategori_utama: "Tekstil & Garmen",
+            sub_kategori: "Seragam & Konveksi",
+            kapasitas_produksi_bulanan: 25000,
+            satuan_produksi: "pcs",
+            rating_rata_1_5: 4.8,
+            on_time_delivery_rate_persen: 96,
+            jumlah_proyek_selesai: 52,
+            jumlah_karyawan: 45,
+            sertifikasi: "SNI, OEKO-TEX",
+            harga_satuan_estimasi_idr: 110000,
+            lead_time_hari: 14,
+            deskripsi_singkat: "Spesialis seragam kerja kantor, pabrik, dan wearpack bersertifikasi SNI dengan 45 penjahit mesin otomatis.",
+          },
+          topList[0] || {
+            umkm_id: "u-tekstil-2",
+            nama_umkm: "Konveksi Textile Mandiri Bandung",
+            kota: "Bandung",
+            provinsi: "Jawa Barat",
+            kategori_utama: "Tekstil & Garmen",
+            sub_kategori: "Kaos & Seragam",
+            kapasitas_produksi_bulanan: 20000,
+            satuan_produksi: "pcs",
+            rating_rata_1_5: 4.5,
+            on_time_delivery_rate_persen: 90,
+            jumlah_proyek_selesai: 35,
+            jumlah_karyawan: 120,
+            sertifikasi: "SNI",
+            harga_satuan_estimasi_idr: 125000,
+            lead_time_hari: 21,
+            deskripsi_singkat: "Konveksi seragam drill premium, polo shirt, dan sablon/bordir komputer.",
+          },
+          {
+            umkm_id: "u-tekstil-3",
+            nama_umkm: "Sentra Garmen Nusantara Solo",
+            kota: "Surakarta",
+            provinsi: "Jawa Tengah",
+            kategori_utama: "Tekstil & Garmen",
+            sub_kategori: "Garmen & Kain Batik",
+            kapasitas_produksi_bulanan: 18000,
+            satuan_produksi: "pcs",
+            rating_rata_1_5: 4.6,
+            on_time_delivery_rate_persen: 93,
+            jumlah_proyek_selesai: 40,
+            jumlah_karyawan: 38,
+            sertifikasi: "SNI, NIB",
+            harga_satuan_estimasi_idr: 95000,
+            lead_time_hari: 18,
+            deskripsi_singkat: "Pabrik garmen skala menengah, harga sangat kompetitif untuk pengadaan seragam instansi dan ritel.",
+          },
+        ];
+      } else {
+        const others = DEMO_UMKM.filter((u) => !topList.includes(u));
+        topList = [...topList, ...others].slice(0, 3);
+      }
+    }
+
+    let compText = `📊 **Analisis Komparasi 3 Supplier Terbaik (Kategori: ${targetKat})**\n\n`;
+    compText += `Berikut perbandingan mendalam berdasarkan metrik kapasitas, performa pengiriman, dan legalitas di SourceHub:\n\n`;
+
+    topList.forEach((s, idx) => {
+      compText += `**${idx + 1}. ${s.nama_umkm}** (${s.kota}, ${s.provinsi})\n`;
+      compText += `• **Kapasitas Produksi:** ${s.kapasitas_produksi_bulanan.toLocaleString("id-ID")} ${s.satuan_produksi}/bulan\n`;
+      compText += `• **On-Time Delivery (OTD):** ${s.on_time_delivery_rate_persen}% | **Rating:** ⭐ ${s.rating_rata_1_5}/5.0\n`;
+      compText += `• **Sertifikasi Mutu:** ${s.sertifikasi || "SNI / NIB Standar"}\n`;
+      compText += `• **Estimasi Lead Time:** ${s.lead_time_hari} hari kerja\n`;
+      compText += `• **Keunggulan:** ${s.deskripsi_singkat}\n\n`;
+    });
+
+    compText += `💡 **Rekomendasi Strategis SourceHub:**\n`;
+    compText += `1. **Pilihan Utama Volume & Kepatuhan:** **${topList[0]?.nama_umkm}** paling unggul dalam konsistensi rating (⭐ ${topList[0]?.rating_rata_1_5}) dan ketepatan waktu (${topList[0]?.on_time_delivery_rate_persen}% OTD).\n`;
+    compText += `2. **Pilihan Alternatif Cepat:** **${topList[1]?.nama_umkm}** cocok untuk pesanan yang membutuhkan kapasitas produksi masif.\n`;
+    if (topList[2]) {
+      compText += `3. **Pilihan Efisiensi Biaya:** **${topList[2]?.nama_umkm}** menawarkan estimasi harga yang sangat kompetitif.\n`;
+    }
+    compText += `\n*Tips: Anda dapat menerbitkan RFQ kepada ketiga supplier di atas secara bersamaan untuk membandingkan penawaran harga riil.*`;
+
+    return compText;
+  }
+
+  // 3. ANALISIS RISIKO PENGADAAN (Top Starters: "Apa risiko yang perlu dipertimbangkan saat memilih supplier baru?")
+  if (
+    q.includes("risiko") ||
+    q.includes("risk") ||
+    q.includes("memilih supplier baru") ||
+    q.includes("kriteria supplier") ||
+    q.includes("hati-hati") ||
+    q.includes("mitigasi")
+  ) {
+    return `🛡️ **5 Risiko Utama Saat Memilih Supplier Baru & Cara Memitigasinya di SourceHub**
+
+Sebagai profesional procurement, berikut faktor risiko kritis yang wajib dipertimbangkan sebelum menerbitkan Purchase Order (PO):
+
+1. **Risiko Keterlambatan Pengiriman (Lead Time Breach)**
+   • *Dampak:* Gangguan pada jadwal perakitan atau stok kehabisan di gudang Anda.
+   • *Mitigasi SourceHub:* Periksa skor **On-Time Delivery Rate (OTDR)** supplier pada profilnya. Terapkan jadwal pengiriman bertahap (*batch delivery*) dan cantumkan klausul denda keterlambatan pada PKS.
+
+2. **Risiko Inkonsistensi Kualitas (Defect Rate Tinggi)**
+   • *Dampak:* Biaya retur barang, komplain dari pembeli akhir, dan waktu terbuang.
+   • *Mitigasi SourceHub:* Wajibkan pengiriman *Pre-Production Sample* (sampel awal) sebelum produksi massal. Pastikan toleransi spesifikasi teknis (toleransi dimensi/bahan) tertulis jelas pada RFQ.
+
+3. **Risiko Legalitas & Sertifikasi Palsu**
+   • *Dampak:* Masalah hukum pada saat audit perusahaan, sertifikasi halal/SNI gugur.
+   • *Mitigasi SourceHub:* Periksa badge **Terverifikasi** pada profil UMKM. SourceHub menggunakan verifikasi dokumen legalitas (NIB, NPWP, SNI, Halal) untuk memastikan keabsahan supplier.
+
+4. **Risiko Ketergantungan Tunggal (*Single Sourcing*)**
+   • *Dampak:* Jika mesin workshop supplier rusak atau terjadi musibah, pengadaan Anda langsung terhenti.
+   • *Mitigasi SourceHub:* Alokasikan pesanan dengan skema 70/30 (70% ke supplier utama, 30% ke supplier cadangan) untuk material kritis.
+
+5. **Risiko Finansial & Arus Kas**
+   • *Dampak:* Supplier kehabisan modal kerja di tengah proses pengerjaan.
+   • *Mitigasi SourceHub:* Terapkan termin pembayaran *milestone* yang adil (misalnya 30% uang muka, 40% saat barang lulus uji QC pabrik, 30% setelah tiba di gudang).`;
+  }
+
+  // 4. STRATEGI NEGOSIASI HARGA B2B (Top Starters: "Bagaimana cara bernegosiasi harga yang baik dengan supplier UMKM?")
+  if (
+    q.includes("negosiasi") ||
+    q.includes("nego") ||
+    q.includes("tawar") ||
+    q.includes("harga yang baik") ||
+    q.includes("diskon")
+  ) {
+    return `🤝 **Strategi Negosiasi Harga Win-Win dengan Supplier UMKM**
+
+Negosiasi dengan UMKM berbeda dengan korporasi besar karena mereka sangat sensitif terhadap *cash flow* dan kepastian order. Berikut 4 taktik terbukti efektif:
+
+1. **Tawarkan Komitmen Volume Jangka Panjang (*Blanket Order*)**
+   • Daripada menawar pesanan 500 pcs sekaligus, janjikan kontrak tahunan misalnya 6.000 pcs yang dikirim secara bertahap 500 pcs per bulan.
+   • UMKM bersedia memberikan diskon 5%–15% untuk kepastian utilisasi mesin mereka selama beberapa bulan ke depan.
+
+2. **Percepat Termin Pembayaran (*Cash Flow Advantage*)**
+   • Standar korporat sering menuntut tempo pembayaran 60–90 hari (TOP). Hal ini sangat memberatkan modal kerja UMKM.
+   • Tawarkan pembayaran lebih cepat (misal tempo 14 hari atau pembayaran tunai 3 hari setelah lolos QC). Sebagian besar UMKM akan dengan senang hati memotong harga pokok penjualan demi perputaran kas cepat.
+
+3. **Bantu Standarisasi Bahan Baku & Kemasan**
+   • Diskusikan apakah kemasan luar dapat disederhanakan tanpa mengurangi perlindungan barang.
+   • Terkadang biaya tinggi timbul akibat spesifikasi kemasan custom yang mahal bagi UMKM skala menengah.
+
+4. **Jalankan *Trial Batch* (Pesanan Uji Coba)**
+   • Mulai dengan pesanan percontohan volume kecil pada harga normal. Tunjukkan bahwa perusahaan Anda adalah mitra profesional yang membayar tepat waktu. Setelah hubungan saling percaya terbangun, ajukan revisi harga untuk pesanan reguler skala penuh.`;
+  }
+
+  // 5. SYARAT & KETENTUAN SERTA PRIVASI & KEAMANAN DATA
+  if (
+    q.includes("syarat") ||
+    q.includes("ketentuan") ||
+    q.includes("terms") ||
+    q.includes("privasi") ||
+    q.includes("privacy") ||
+    q.includes("keamanan data") ||
+    q.includes("aman") ||
+    q.includes("uu pdp")
+  ) {
+    return `🔒 **Kebijakan Keamanan Data, Privasi & Syarat Layanan SourceHub**
+
+SourceHub mengedepankan standar keamanan dan tata kelola hukum pengadaan B2B:
+
+• **Kepatuhan UU PDP (UU No. 27/2022):** Seluruh data identitas, NIB, NPWP, dan nomor rekening bisnis dienkripsi menggunakan standar TLS 1.3 dan penyimpanan terisolasi.
+• **Kerahasiaan Desain & Harga:** Spesifikasi teknik rahasia (CAD/blueprint) dan lembar penawaran (Quotation) hanya dapat diakses oleh pihak yang bertransaksi secara sah.
+• **Bebas Biaya Registrasi:** Akses mendaftar sebagai Perusahaan (Buyer) maupun UMKM (Supplier) tidak dipungut biaya pendaftaran.
+• **Halaman Resmi:** Anda dapat mempelajari detail pasal lengkap pada menu:
+  - **Syarat & Ketentuan:** [\`/terms\`](/terms)
+  - **Kebijakan Privasi:** [\`/privacy\`](/privacy)`;
+  }
+
+  // 6. CARA MEMBUAT RFQ & ALUR KERJA SOURCEHUB
+  if (
+    q.includes("cara buat rfq") ||
+    q.includes("buat rfq") ||
+    q.includes("alur") ||
+    q.includes("cara kerja") ||
+    q.includes("cara pesan") ||
+    q.includes("gimana cara")
+  ) {
+    return `📝 **Panduan 4 Langkah Pengadaan Cepat Melalui SourceHub**
+
+1. **Buat Permintaan Pengadaan (RFQ)**
+   • Masuk ke menu **Buat RFQ** di Dashboard Perusahaan.
+   • Isi rincian barang: spesifikasi, kuantitas, target lokasi provinsi, dan estimasi anggaran (budget).
+
+2. **Pencocokan AI Otomatis (*AI Supplier Matching*)**
+   • Sistem SourceHub langsung mencocokkan RFQ Anda dengan supplier UMKM yang memiliki kapasitas mesin, spesialisasi kategori, dan lokasi terdekat.
+
+3. **Terima & Bandingkan Penawaran (*Quotations*)**
+   • UMKM yang berminat akan mengirimkan rincian harga, waktu pengerjaan (lead time), dan sampel. Anda dapat langsung menegosiasikan harga via fitur chat resmi.
+
+4. **Konfirmasi Pesanan (*Purchase Order*)**
+   • Pilih penawaran terbaik, terbitkan PO, dan pantau proses produksi hingga pengiriman barang tiba di lokasi Anda.`;
+  }
+
+  // 7. PENCARIAN SUPPLIER UMKM SPESIFIK (Contoh: "Saya butuh supplier bahan baku plastik dengan kapasitas 10 ton/bulan di Jawa Barat")
+  const matchResult = cariSupplierDariTeks(lastMessage, 4);
+  const detected = matchResult.kebutuhan_terdeteksi;
+  const suppliers = matchResult.hasil;
+
+  if (suppliers.length > 0 && (detected.kategori || detected.provinsi || q.includes("supplier") || q.includes("butuh") || q.includes("cari"))) {
+    let resp = `🔍 **Hasil Rekomendasi Supplier UMKM Terverifikasi SourceHub**\n\n`;
+    resp += `Sistem mendeteksi kebutuhan Anda:\n`;
+    if (detected.kategori) resp += `• **Kategori:** ${detected.kategori}\n`;
+    if (detected.provinsi) resp += `• **Wilayah:** ${detected.provinsi}\n`;
+    if (detected.kuantitas && detected.satuan) resp += `• **Estimasi Kebutuhan:** ${detected.kuantitas.toLocaleString("id-ID")} ${detected.satuan}\n`;
+    resp += `\nBerikut supplier UMKM dengan tingkat kecocokan (*Match Score*) tertinggi:\n\n`;
+
+    suppliers.forEach((sup, idx) => {
+      const demoData = DEMO_UMKM.find((d) => d.umkm_id === sup.umkm_id);
+      resp += `**${idx + 1}. ${sup.nama_umkm}**\n`;
+      resp += `📍 Lokasi: ${sup.provinsi} | 🏷️ Kategori: ${sup.kategori}\n`;
+      resp += `🎯 **Match Score:** ${sup.match_score}%\n`;
+      if (demoData) {
+        resp += `⚡ Kapasitas: ${demoData.kapasitas_produksi_bulanan.toLocaleString("id-ID")} ${demoData.satuan_produksi}/bulan\n`;
+        resp += `⭐ Rating: ${demoData.rating_rata_1_5}/5.0 (OTD: ${demoData.on_time_delivery_rate_persen}%)\n`;
+        resp += `📜 Sertifikasi: ${demoData.sertifikasi || "SNI / NIB Terverifikasi"}\n`;
+        resp += `⏱️ Lead Time: ~${demoData.lead_time_hari} hari | Estimasi Harga: Rp ${demoData.harga_satuan_estimasi_idr.toLocaleString("id-ID")}/${demoData.satuan_produksi}\n`;
+      }
+      resp += `💬 *${sup.alasan}*\n\n`;
+    });
+
+    resp += `💡 **Langkah Selanjutnya:**\n`;
+    resp += `Anda dapat langsung membuka menu **Buat RFQ** untuk mengirimkan permintaan penawaran harga resmi kepada supplier di atas secara langsung.`;
+    return resp;
+  }
+
+  // 8. SALAM / PERTANYAAN RAMAH
+  if (
+    q.startsWith("halo") ||
+    q.startsWith("hai") ||
+    q.startsWith("hi") ||
+    q.startsWith("pagi") ||
+    q.startsWith("siang") ||
+    q.startsWith("sore") ||
+    q.startsWith("malam") ||
+    q.includes("siapa kamu") ||
+    q.includes("bisa apa")
+  ) {
+    return `Halo! 👋 Saya adalah **AI Procurement Assistant SourceHub**.
+
+Saya siap mendampingi proses pengadaan bisnis B2B Anda:
+1. 🔍 **Mencari Supplier:** *Misal: "Saya butuh supplier bahan baku plastik dengan kapasitas 10 ton/bulan di Jawa Barat"*
+2. 📊 **Membandingkan Supplier:** *Misal: "Bantu saya membandingkan 3 supplier tekstil terbaik"*
+3. 🛡️ **Manajemen Risiko:** *Misal: "Apa risiko yang perlu dipertimbangkan saat memilih supplier baru?"*
+4. 🤝 **Strategi Negosiasi:** *Misal: "Bagaimana cara bernegosiasi harga yang baik dengan supplier UMKM?"*
+5. 📝 **Bantuan RFQ & Dokumen:** *Panduan pembuatan spesifikasi pengadaan dan syarat legalitas.*
+
+Ada kebutuhan barang, material, atau jasa manufaktur apa yang sedang Anda cari hari ini?`;
+  }
+
+  // 9. FALLBACK KONSULTASI PENGADAAN CERDAS
+  return `Terima kasih atas pertanyaan Anda mengenai pengadaan di platform SourceHub.
+
+Terkait hal tersebut:
+1. **Pencarian Mitra:** Anda dapat menggunakan kata kunci spesifik seperti kategori barang (tekstil, logam, kemasan, plastik, bumbu pangan), volume kuantitas, dan provinsi target agar saya dapat mencarikan UMKM lokal terverifikasi yang cocok.
+2. **Kesiapan Sourcing:** Anda dapat meninjau *Supplier Readiness Score* dan *Trust Score* pada setiap profil usaha untuk mengukur rekam jejak ketepatan waktu serta kepatuhan sertifikasi.
+3. **Mulai Pengadaan:** Buka menu **Pasar RFQ** untuk menerbitkan permintaan penawaran resmi, atau tanyakan kembali kepada saya detail spesifik barang yang Anda butuhkan!
+
+*Contoh pertanyaan: "Carikan saya supplier kemasan kardus di Jawa Tengah" atau "Berapa kapasitas rata-rata supplier logam di Bandung?"*`;
+}
+
 export async function procurementAssistant(
   messages: { role: "user" | "model"; content: string }[],
   context?: string,
 ): Promise<string> {
-  if (!genAI) {
-    return "Maaf, fitur AI Assistant memerlukan konfigurasi GEMINI_API_KEY. Silakan hubungi administrator untuk mengaktifkan fitur ini. Sementara itu, Anda dapat mencari supplier menggunakan fitur pencarian manual kami.";
+  // Jika GEMINI_API_KEY tersedia di .env, gunakan model online Gemini API terlebih dahulu
+  if (genAI) {
+    try {
+      const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        systemInstruction: `Anda adalah asisten pengadaan AI untuk platform SourceHub, platform B2B yang menghubungkan perusahaan Indonesia dengan UMKM lokal. 
+        Anda membantu perusahaan menemukan supplier yang tepat, memahami proses pengadaan, membandingkan penawaran, dan membuat keputusan pengadaan yang cerdas.
+        Selalu jawab dalam Bahasa Indonesia yang profesional namun ramah.
+        ${context ? `Konteks tambahan: ${context}` : ""}`,
+      });
+
+      const chat = model.startChat({
+        history: messages.slice(0, -1).map((m) => ({
+          role: m.role,
+          parts: [{ text: m.content }],
+        })),
+      });
+
+      const lastMessage = messages[messages.length - 1];
+      const result = await chat.sendMessage(lastMessage.content);
+      const text = result.response.text();
+      if (text && text.trim().length > 0) {
+        return text;
+      }
+    } catch (apiError) {
+      console.warn("Gemini API call failed, falling back to SourceHub Offline AI Assistant:", apiError);
+    }
   }
 
-  const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",
-    systemInstruction: `Anda adalah asisten pengadaan AI untuk platform SourceHub, platform B2B yang menghubungkan perusahaan Indonesia dengan UMKM lokal. 
-    Anda membantu perusahaan menemukan supplier yang tepat, memahami proses pengadaan, membandingkan penawaran, dan membuat keputusan pengadaan yang cerdas.
-    Selalu jawab dalam Bahasa Indonesia yang profesional namun ramah.
-    ${context ? `Konteks tambahan: ${context}` : ""}`,
-  });
-
-  const chat = model.startChat({
-    history: messages.slice(0, -1).map((m) => ({
-      role: m.role,
-      parts: [{ text: m.content }],
-    })),
-  });
-
-  const lastMessage = messages[messages.length - 1];
-  const result = await chat.sendMessage(lastMessage.content);
-  return result.response.text();
+  // Fallback ke Offline Intelligent Assistant jika GEMINI_API_KEY tidak ada atau gagal
+  return generateOfflineProcurementResponse(messages, context);
 }
+

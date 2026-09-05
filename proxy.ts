@@ -1,5 +1,6 @@
-import { auth } from "@/lib/auth";
+import NextAuth from "next-auth";
 import { NextResponse, type NextRequest } from "next/server";
+import type { Role } from "@prisma/client";
 
 export const config = {
   matcher: [
@@ -14,6 +15,45 @@ export const config = {
   ],
 };
 
+type JwtWithRole = {
+  id?: string;
+  role?: Role;
+  emailVerified?: Date | null;
+};
+
+type SessionUserWithRole = {
+  id?: string;
+  role?: Role;
+  emailVerified?: Date | null;
+};
+
+const { auth } = NextAuth({
+  session: { strategy: "jwt" },
+  trustHost: true,
+  providers: [],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        const u = user as unknown as { id: string; role: Role; emailVerified: Date | null };
+        token.id = u.id;
+        token.role = u.role;
+        token.emailVerified = u.emailVerified;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        const t = token as JwtWithRole;
+        const s = session.user as SessionUserWithRole;
+        s.id = t.id;
+        s.role = t.role;
+        s.emailVerified = t.emailVerified;
+      }
+      return session;
+    },
+  },
+});
+
 const AUTH_PATHS = [
   "/login",
   "/register",
@@ -24,12 +64,15 @@ const AUTH_PATHS = [
 
 function buildCsp(nonce: string, isDev: boolean, isApi: boolean): string {
   if (isApi) {
-    return [
+    const apiDirectives = [
       "default-src 'self'",
       "frame-ancestors 'none'",
       "base-uri 'self'",
-      "upgrade-insecure-requests",
-    ].join("; ");
+    ];
+    if (!isDev) {
+      apiDirectives.push("upgrade-insecure-requests");
+    }
+    return apiDirectives.join("; ");
   }
 
   const parts = [
@@ -42,8 +85,8 @@ function buildCsp(nonce: string, isDev: boolean, isApi: boolean): string {
     "base-uri 'self'",
     "form-action 'self'",
     "frame-ancestors 'none'",
-    "upgrade-insecure-requests",
-    `connect-src 'self'${isDev ? " ws://localhost:3000 wss://localhost:3000" : ""}`,
+    ...(isDev ? [] : ["upgrade-insecure-requests"]),
+    `connect-src 'self' http://localhost:3000 https://localhost:3000${isDev ? " ws://localhost:3000 wss://localhost:3000" : ""}`,
     "worker-src 'self' blob:",
     "manifest-src 'self'",
   ];
@@ -65,10 +108,12 @@ function applySecurityHeaders(
     "camera=(), microphone=(), geolocation=(), interest-cohort=()",
   );
   response.headers.set("X-XSS-Protection", "1; mode=block");
-  response.headers.set(
-    "Strict-Transport-Security",
-    "max-age=63072000; includeSubDomains; preload",
-  );
+  if (!isDev) {
+    response.headers.set(
+      "Strict-Transport-Security",
+      "max-age=63072000; includeSubDomains; preload",
+    );
+  }
   response.headers.set("X-DNS-Prefetch-Control", "off");
   response.headers.set("X-Download-Options", "noopen");
   response.headers.set("X-Permitted-Cross-Domain-Policies", "none");
