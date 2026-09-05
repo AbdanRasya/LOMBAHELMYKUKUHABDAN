@@ -85,7 +85,7 @@ export function SuccessStoriesSection({ realReviews = [] }: SuccessStoriesProps)
                   <span className="text-xs font-bold text-amber-600 ml-1.5">{story.rating}.0 / 5.0</span>
                 </div>
                 <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3 text-emerald-600" /> Data Real DB
+                  <ShieldCheck className="w-3 h-3 text-emerald-600" /> Terverifikasi
                 </span>
               </div>
 

@@ -531,7 +531,7 @@ Berlaku Hingga: 15-03-2027`;
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
     const mimeType = fileName.endsWith(".png") ? "image/png" : fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") ? "image/jpeg" : "image/*";
     const result = await model.generateContent([
       "Ekstrak semua informasi dari sertifikat ini. Berikan hasil OCR lengkap dalam format teks biasa, sertakan semua field seperti nomor sertifikat, nama usaha, produk, tanggal terbit, tanggal berakhir.",
@@ -1256,7 +1256,7 @@ export async function matchSuppliers(
       .sort((a, b) => b.matchScore - a.matchScore);
   }
 
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
   const prompt = `
 Anda adalah sistem AI untuk platform pengadaan B2B Indonesia bernama PUSAKA.
 Tugas Anda adalah mencocokkan supplier (UMKM) dengan permintaan pengadaan (RFQ) perusahaan.
@@ -1387,7 +1387,7 @@ export async function parseRFQFromText(naturalText: string): Promise<{
 
   if (!genAI) return defaultResult;
 
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
   const prompt = `
 Anda adalah asisten pengadaan untuk platform B2B Indonesia.
 Ubah teks berikut menjadi format RFQ terstruktur dalam JSON (tanpa markdown):
@@ -1879,28 +1879,31 @@ export async function procurementAssistant(
 ): Promise<string> {
   // Jika GEMINI_API_KEY tersedia di .env, gunakan model online Gemini API terlebih dahulu
   if (genAI) {
-    try {
-      const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
-        systemInstruction: `${PUSAKA_KNOWLEDGE_BASE}
-        ${context ? `Konteks peran pengguna saat ini: ${context}` : ""}`,
-      });
+    const candidateModels = ["gemini-3.6-flash", "gemini-flash-latest", "gemini-2.5-flash-lite", "gemini-1.5-flash"];
+    for (const modelName of candidateModels) {
+      try {
+        const model = genAI.getGenerativeModel({
+          model: modelName,
+          systemInstruction: `${PUSAKA_KNOWLEDGE_BASE}
+          ${context ? `Konteks peran pengguna saat ini: ${context}` : ""}`,
+        });
 
-      const chat = model.startChat({
-        history: messages.slice(0, -1).map((m) => ({
-          role: m.role,
-          parts: [{ text: m.content }],
-        })),
-      });
+        const chat = model.startChat({
+          history: messages.slice(0, -1).map((m) => ({
+            role: m.role,
+            parts: [{ text: m.content }],
+          })),
+        });
 
-      const lastMessage = messages[messages.length - 1];
-      const result = await chat.sendMessage(lastMessage.content);
-      const text = result.response.text();
-      if (text && text.trim().length > 0) {
-        return text;
+        const lastMessage = messages[messages.length - 1];
+        const result = await chat.sendMessage(lastMessage.content);
+        const text = result.response.text();
+        if (text && text.trim().length > 0) {
+          return text;
+        }
+      } catch (apiError) {
+        console.warn(`Gemini model ${modelName} call failed, trying next or fallback:`, apiError);
       }
-    } catch (apiError) {
-      console.warn("Gemini API call failed, falling back to PUSAKA Offline AI Assistant:", apiError);
     }
   }
 

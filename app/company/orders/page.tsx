@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
@@ -19,6 +19,7 @@ import {
   Building2,
   Clock,
   AlertTriangle,
+  Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -107,9 +108,9 @@ const ORDER_STEPS = [
 
 // Bank transfer info (simulated)
 const BANK_ACCOUNTS = [
-  { bank: "BCA", logo: "ðŸ¦", norek: "1234567890", atas: "PT PUSAKA Indonesia" },
-  { bank: "BNI", logo: "ðŸ¦", norek: "9876543210", atas: "PT PUSAKA Indonesia" },
-  { bank: "Mandiri", logo: "ðŸ¦", norek: "1122334455", atas: "PT PUSAKA Indonesia" },
+  { bank: "BCA", logo: "🏦", norek: "1234567890", atas: "PT PUSAKA Indonesia" },
+  { bank: "BNI", logo: "🏦", norek: "9876543210", atas: "PT PUSAKA Indonesia" },
+  { bank: "Mandiri", logo: "🏦", norek: "1122334455", atas: "PT PUSAKA Indonesia" },
 ];
 
 // Payment Modal
@@ -283,7 +284,7 @@ function PaymentModal({
               </div>
 
               <div style={{ background: "#f8fafc", borderRadius: "0.75rem", padding: "0.75rem", fontSize: "0.7rem", color: "#64748b" }}>
-                <p style={{ fontWeight: 600, color: "#475569", marginBottom: "0.25rem" }}>ðŸ“‹ Order #{order.id.slice(0, 8).toUpperCase()}</p>
+                <p style={{ fontWeight: 600, color: "#475569", marginBottom: "0.25rem" }}>📋 Order #{order.id.slice(0, 8).toUpperCase()}</p>
                 <p>{order.rfq?.title || "Pesanan B2B"}</p>
                 <p>Supplier: {order.umkm?.businessName || "-"}</p>
               </div>
@@ -295,7 +296,7 @@ function PaymentModal({
             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 <button type="button" onClick={() => setStep("choose")} style={{ background: "none", border: "none", color: "#3b82f6", cursor: "pointer", fontSize: "0.8rem", padding: 0 }}>
-                  â† Kembali
+                  ← Kembali
                 </button>
               </div>
 
@@ -456,14 +457,14 @@ function PaymentModal({
                 <CheckCircle style={{ width: "2.5rem", height: "2.5rem", color: "#16a34a" }} />
               </div>
               <div>
-                <h3 style={{ fontWeight: 700, fontSize: "1.25rem", color: "#0f172a" }}>Pembayaran Dikonfirmasi! ðŸŽ‰</h3>
+                <h3 style={{ fontWeight: 700, fontSize: "1.25rem", color: "#0f172a" }}>Pembayaran Dikonfirmasi!</h3>
                 <p style={{ fontSize: "0.8rem", color: "#64748b", marginTop: "0.5rem" }}>
                   Bukti transfer Anda sedang diverifikasi. Supplier akan segera memulai produksi.
                 </p>
               </div>
               <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: "0.75rem", padding: "0.875rem", width: "100%", fontSize: "0.8rem", color: "#166534" }}>
-                <p>âœ… Email konfirmasi telah dikirim ke akun Anda</p>
-                <p style={{ marginTop: "0.25rem" }}>âœ… Supplier mendapat notifikasi untuk memulai produksi</p>
+                <p className="flex items-center gap-1.5"><CheckCircle className="w-3.5 h-3.5 shrink-0" /> Email konfirmasi telah dikirim ke akun Anda</p>
+                <p className="flex items-center gap-1.5" style={{ marginTop: "0.25rem" }}><CheckCircle className="w-3.5 h-3.5 shrink-0" /> Supplier mendapat notifikasi untuk memulai produksi</p>
               </div>
             </div>
           )}
@@ -566,19 +567,18 @@ function ReviewModal({
                   onMouseEnter={() => setHoverRating(star)}
                   onMouseLeave={() => setHoverRating(0)}
                   style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem" }}
+                  aria-label={`Beri bintang ${star}`}
                 >
-                  <span
-                    style={{
-                      fontSize: "2rem",
-                      color: star <= (hoverRating || rating) ? "#f59e0b" : "#cbd5e1",
-                      transition: "color 0.15s",
-                    }}
-                  >
-                    â˜…
-                  </span>
+                  <Star
+                    className={`w-8 h-8 transition-colors ${
+                      star <= (hoverRating || rating)
+                        ? "fill-amber-400 text-amber-400"
+                        : "text-slate-200 fill-slate-100"
+                    }`}
+                  />
                 </button>
               ))}
-              <span style={{ fontSize: "0.9rem", fontWeight: 700, color: "#d97706", marginLeft: "0.5rem" }}>
+              <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "#d97706", marginLeft: "0.5rem" }}>
                 {rating}.0 / 5.0
               </span>
             </div>
@@ -605,8 +605,9 @@ function ReviewModal({
             />
           </div>
 
-          <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", padding: "0.75rem", borderRadius: "0.75rem", fontSize: "0.75rem", color: "#166534" }}>
-            â­ Ulasan Anda akan disimpan ke database &amp; ditampilkan secara transparan di profil supplier dan kisah sukses platform.
+          <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", padding: "0.75rem", borderRadius: "0.75rem", fontSize: "0.75rem", color: "#166534", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <CheckCircle className="w-4 h-4 shrink-0 text-emerald-600" />
+            <span>Ulasan Anda akan ditampilkan secara transparan di profil supplier dan etalase platform.</span>
           </div>
 
           <Button
@@ -742,7 +743,7 @@ export default function CompanyOrdersPage() {
                       <span className="font-mono font-medium text-slate-900">
                         #{order.id.slice(0, 8).toUpperCase()}
                       </span>
-                      <span className="text-sm text-slate-500">â€¢</span>
+                      <span className="text-sm text-slate-400">•</span>
                       <span className="text-sm text-slate-500">
                         {format(new Date(order.createdAt), "dd MMM yyyy")}
                       </span>
@@ -756,8 +757,8 @@ export default function CompanyOrdersPage() {
                       </p>
                     )}
                     {order.trackingInfo && (
-                      <p className="text-xs text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100 font-medium inline-block w-fit mt-1">
-                        ðŸ“¦ No. Resi / Pengiriman: <span className="font-mono font-bold">{order.trackingInfo}</span>
+                      <p className="text-xs text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100 font-medium inline-flex items-center gap-1.5 w-fit mt-1">
+                        <Truck className="w-3.5 h-3.5" /> No. Resi / Pengiriman: <span className="font-mono font-bold">{order.trackingInfo}</span>
                       </p>
                     )}
                     <div className="text-2xl font-bold text-slate-900 mt-1">
