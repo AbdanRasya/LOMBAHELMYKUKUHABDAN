@@ -7,7 +7,7 @@
   **Platform AI-Powered B2B Sourcing Pertama di Indonesia yang Menghubungkan Korporasi dengan UMKM Lokal Terpercaya**
   
   [![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_Site-success?style=for-the-badge)](https://pusaka.id)
-  [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/manut-team/pusaka)
+  [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/AbdanRasya/LOMBAHELMYKUKUHABDAN)
   [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
   
   **Submission for ITECHNO CUP 2026 - Web Development**
@@ -21,6 +21,7 @@
 ## 📋 Daftar Isi
 
 - [Tentang Proyek](#-tentang-proyek)
+- [Tim Developer](#-tim-developer)
 - [Fitur Unggulan](#-fitur-unggulan)
 - [Demo & Screenshot](#-demo--screenshot)
 - [Teknologi](#-teknologi)
@@ -29,7 +30,6 @@
 - [Penggunaan](#-penggunaan)
 - [API Documentation](#-api-documentation)
 - [Testing](#-testing)
-- [Tim Developer](#-tim-developer)
 - [Lisensi](#-lisensi)
 
 ---
@@ -38,9 +38,9 @@
 
 | Nama | Peran | GitHub |
 |------|-------|--------|
-| **Manut Team Lead** | Project Lead & Full Stack Developer | [GitHub](https://github.com/manut-team) |
-| **Frontend Developer** | Frontend & UI/UX Specialist | [GitHub](https://github.com/manut-team) |
-| **Backend Developer** | Backend & AI Systems Engineer | [GitHub](https://github.com/manut-team) |
+| **Helmy Asyraf Risqi Ariebowo** | Project Lead & Backend AI | [GitHub](https://github.com/henzih) |
+| **Muhammad Kukuh Fauzi Prasetyadi** | Frontend & QA | [GitHub](https://github.com/KukuhFauzy) |
+| **Abdan Muhammad Izzan Rasyadan** | Backend & Frontend | [GitHub](https://github.com/AbdanRasya) |
 
 ---
 
@@ -48,25 +48,27 @@
 
 ### Latar Belakang
 
-Banyak perusahaan korporasi membutuhkan supplier lokal yang mampu memenuhi kebutuhan produksi skala besar. Namun, mereka kerap kesulitan menemukan UMKM yang sesuai berdasarkan kriteria spesifik seperti kapasitas produksi, lokasi geografis, standar kualitas, legalitas (NIB, NPWP, SIUP), dan sertifikasi mutu (SNI, Halal). 
+Banyak perusahaan korporasi membutuhkan supplier lokal yang mampu memenuhi kebutuhan produksi skala besar. Namun, mereka kerap kesulitan menemukan UMKM yang sesuai berdasarkan kriteria spesifik seperti kapasitas produksi, lokasi geografis, standar kualitas, legalitas (NIB, NPWP, SIUP), dan sertifikasi mutu (SNI, Halal, TKDN). 
 
 Di sisi lain, jutaan UMKM lokal Indonesia memiliki produk berkualitas tinggi dan kemampuan manufaktur yang andal, namun kesulitan menembus pasar korporat akibat keterbatasan jaringan, informasi tender B2B, dan transparansi kesiapan usaha.
 
 ### Solusi yang Ditawarkan
 
-**PUSAKA** hadir sebagai platform B2B sourcing berbasis kecerdasan buatan (AI) yang menjembatani UMKM lokal dengan perusahaan buyer secara transparan, efisien, dan terstruktur. Melalui PUSAKA, perusahaan dapat dengan cepat menemukan supplier terverifikasi, membuat *Request for Quotation* (RFQ), mengelola pesanan, serta menganalisis *Trust Score* supplier.
+**PUSAKA** (*Pusat Pengadaan & Akreditasi Supplier Nusantara*) hadir sebagai platform B2B sourcing berbasis kecerdasan buatan (AI) yang menjembatani UMKM lokal dengan perusahaan buyer secara transparan, efisien, dan terstruktur. Melalui PUSAKA, perusahaan dapat dengan cepat menemukan supplier terverifikasi, membuat *Request for Quotation* (RFQ), mengelola pesanan, serta menganalisis *Trust Score* supplier.
 
 Kecerdasan Buatan (Google Gemini AI) diintegrasikan untuk:
 - Mencocokkan kebutuhan pengadaan perusahaan dengan UMKM secara cerdas (*AI Supplier Matching*).
 - Mengkalkulasi tingkat kesiapan usaha (*Supplier Readiness Score*).
 - Membaca dan memverifikasi dokumen legalitas (*AI Document Reader*).
 - Memetakan ketimpangan pasokan wilayah di Indonesia (*AI Supply Gap Map*).
+- Memberikan konsultasi pengadaan & bisnis 24/7 (*PUSAKA AI Assistant*).
 
 ### Tujuan Proyek
 
 - 🎯 **Tujuan Utama**: Mempermudah perusahaan menemukan supplier UMKM lokal yang kredibel sekaligus membuka akses pasar B2B bagi UMKM Indonesia.
 - 📊 **Target Pengguna**: UMKM lokal sebagai supplier dan perusahaan/industri sebagai korporasi buyer.
 - 💡 **Value Proposition**: Mengubah proses pengadaan B2B yang lambat dan manual menjadi ekosistem digital yang cepat, transparan, terukur, dan didukung kecerdasan buatan.
+- 🌏 **Dukungan SDG**: Berkontribusi nyata terhadap **SDG 8** (Pekerjaan Layak & Pertumbuhan Ekonomi) dan **SDG 9** (Industri, Inovasi, & Infrastruktur).
 
 ---
 
@@ -80,6 +82,7 @@ Kecerdasan Buatan (Google Gemini AI) diintegrasikan untuk:
 | **Supplier Readiness Score** | Evaluasi otomatis kesiapan legalitas, kapasitas produksi, mesin pabrik, dan sertifikasi UMKM dengan skor 0–100. | Memberikan penilaian objektif bagi buyer dan panduan perbaikan bagi UMKM. |
 | **RFQ & Quotation System** | Perusahaan membuat permintaan kebutuhan material/barang modal, kemudian UMKM mengirimkan penawaran terstruktur secara langsung. | Proses nego dan sourcing menjadi transparan, terdokumentasi, dan bebas salah paham. |
 | **AI Supply Gap Map** | Peta interaktif (React Leaflet) yang memetakan wilayah dan kategori industri dengan ketimpangan pasokan (high opportunity / low supply). | Membantu UMKM menemukan peluang ekspansi pasar baru di daerah yang membutuhkan. |
+| **PUSAKA AI Assistant** | Asisten pengadaan AI interaktif (didukung Google Gemini) yang dapat diakses di akun Company, UMKM, maupun floating shortcut button. | Memberikan konsultasi pengadaan, tips RFQ, dan navigasi fitur platform secara instan 24/7. |
 
 ### Fitur Tambahan
 
@@ -136,7 +139,7 @@ API Engine   : Next.js Server Actions & API Routes
 Database     : PostgreSQL (Neon Serverless PostgreSQL Adapter)
 ORM          : Prisma ORM v7/v8
 Authentication: Auth.js / NextAuth.js v5 (Credentials Provider & Bcrypt)
-AI Engine    : Google Generative AI (Gemini 2.5 Flash API)
+AI Engine    : Google Generative AI (Gemini 2.5 Flash API) + Dual-Engine Offline Knowledge Base
 ```
 
 #### DevOps & Tools
@@ -154,25 +157,6 @@ Code Quality : ESLint 9, TypeScript Type Checking
 | **Prisma & Neon PostgreSQL** | ORM type-safe dengan database serverless yang responsif, skalabel, serta mendukung transaksi B2B yang kompleks. |
 | **Google Gemini AI** | Model kecerdasan buatan tercepat dan akurat untuk analisis dokumen legalitas, pencocokan supplier, dan rekomendasi B2B. |
 | **Tailwind CSS v4 & shadcn/ui** | Desain antarmuka modern, responsif, aksesibel, dan memenuhi standar estetika SaaS profesional. |
-
-### Dependencies Utama
-
-```json
-{
-  "dependencies": {
-    "next": "16.3.0",
-    "react": "19.2.8",
-    "@prisma/client": "^7.10.0",
-    "@neondatabase/serverless": "^1.1.0",
-    "@google/generative-ai": "^0.24.1",
-    "next-auth": "^5.0.0-beta.32",
-    "lucide-react": "^1.29.0",
-    "recharts": "^3.10.1",
-    "react-leaflet": "^5.0.0",
-    "zod": "^4.4.3"
-  }
-}
-```
 
 ---
 
@@ -209,28 +193,30 @@ graph TD
 ### Folder Structure
 
 ```text
-sourcehub/
+pusaka/
 ├── app/
 │   ├── admin/            # Admin dashboard pages & management
-│   ├── api/              # API endpoints (rfq, suppliers, orders, reviews, ai)
+│   ├── api/              # API endpoints (rfq, suppliers, orders, reviews, ai, assistant)
 │   ├── company/          # Perusahaan buyer dashboard pages (rfq, orders, assistant)
-│   ├── umkm/             # UMKM supplier dashboard pages (profile, products, readiness)
+│   ├── umkm/             # UMKM supplier dashboard pages (profile, products, readiness, assistant)
 │   ├── globals.css       # Global styles & Tailwind CSS setup
 │   ├── layout.tsx        # Root layout component
 │   └── page.tsx          # Landing page (Homepage)
 ├── components/
 │   ├── admin/            # Admin UI components (Supply gap map, tables)
+│   ├── ai/               # Floating AI shortcut button & interactive components
 │   ├── landing/          # Landing page sections (Hero, Features, Suppliers, Reviews)
 │   ├── notifications/    # Real-time notification components
 │   ├── products/         # Product creation dialogs & cards
 │   └── ui/               # shadcn/ui base components
 ├── lib/
+│   ├── ai.ts             # Google Gemini AI & Dual-Engine Procurement Knowledge Base
 │   ├── auth.ts           # NextAuth.js v5 configuration
 │   └── db.ts             # Prisma Client & Neon Database Adapter initialization
 ├── prisma/
 │   ├── schema.prisma     # Complete Prisma database schema
 │   └── seed.ts           # Database seeder script
-└── public/               # Static assets & images
+└── public/               # Static assets, PUSAKA logos & images
 ```
 
 ---
@@ -249,8 +235,8 @@ Pastikan perangkat Anda telah terinstall:
 #### 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/manut-team/sourcehub.git
-cd sourcehub
+git clone https://github.com/AbdanRasya/LOMBAHELMYKUKUHABDAN.git
+cd LOMBAHELMYKUKUHABDAN
 ```
 
 #### 2️⃣ Install Dependencies
@@ -261,7 +247,7 @@ npm install
 
 #### 3️⃣ Setup Environment Variables
 
-Buat file `.env` di root folder `sourcehub`:
+Buat file `.env` di root folder proyek:
 
 ```env
 # Database Connection (Neon PostgreSQL)
@@ -269,10 +255,15 @@ DATABASE_URL="postgresql://user:password@ep-sample-123456.us-east-2.aws.neon.tec
 
 # Authentication (NextAuth / Auth.js v5)
 AUTH_SECRET="your-super-secret-auth-key-32-chars-long"
-NEXTAUTH_URL="http://localhost:3000"
+AUTH_URL="http://localhost:3000"
 
 # AI Integration (Google Gemini API)
 GEMINI_API_KEY="your_google_gemini_api_key"
+
+# App Configuration
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NEXT_PUBLIC_APP_NAME="PUSAKA"
+EMAIL_FROM="noreply@pusaka.id"
 ```
 
 #### 4️⃣ Setup Database & Seed Data
@@ -320,16 +311,17 @@ npm run lint
 
 #### Untuk Perusahaan (Buyer)
 1. **Registrasi / Login**: Masuk sebagai akun *Company*.
-2. **Cari Supplier**: Buka menu *Cari Supplier* dan filter berdasarkan lokasi, kriteria, atau rating.
-3. **Buat RFQ**: Buat permintaan kebutuhan barang/material melalui form terstruktur atau bantuan AI.
-4. **Pilih Penawaran & Pesan**: Terima penawaran dari UMKM, lakukan pemesanan, dan selesaikan transaksi.
+2. **Cari Supplier**: Buka menu *Cari Supplier* dan filter berdasarkan lokasi 34 provinsi, kategori, atau rating.
+3. **Buat RFQ**: Buat permintaan kebutuhan barang/material melalui form terstruktur atau bantuan AI Quick Input.
+4. **Pilih Penawaran & Pesan**: Terima penawaran dari UMKM, lakukan pemesanan, dan selesaikan transaksi via escrow aman.
 5. **Beri Rating & Ulasan**: Berikan ulasan dan bintang 1–5 setelah pesanan diterima.
 
 #### Untuk UMKM (Supplier)
-1. **Lengkapi Profil Digital**: Isi data usaha, unggah legalitas (NIB/NPWP), sertifikasi, dan foto pabrik untuk meningkatkan *Skor Kesiapan*.
-2. **Tambah Katalog Produk**: Daftarkan produk yang siap disuplai lengkap dengan foto dan kisaran harga.
-3. **Kirim Penawaran (Quotation)**: Telusuri *Pasar RFQ* dari perusahaan dan kirimkan harga penawaran terbaik.
-4. **Pantau Pesanan**: Update status produksi dan pengiriman hingga selesai.
+1. **Lengkapi Profil Digital**: Isi data usaha, unggah legalitas (NIB/NPWP), sertifikasi (TKDN/SNI/Halal), dan fasilitas mesin untuk meningkatkan *Skor Kesiapan*.
+2. **Tambah Katalog Produk**: Daftarkan produk yang siap disuplai lengkap dengan foto, MOQ, dan kisaran harga B2B.
+3. **Kirim Penawaran (Quotation)**: Telusuri *Pasar RFQ* dari perusahaan dan kirimkan harga penawaran terbaik serta lead time.
+4. **Konsultasi AI**: Gunakan *Asisten AI* untuk strategi harga, tips menang RFQ, dan informasi sertifikasi.
+5. **Pantau Pesanan**: Update status produksi dan pengiriman hingga selesai.
 
 ---
 
@@ -352,7 +344,7 @@ Production:  https://pusaka.id/api
 | **Quotations** | `GET`, `POST` | `/api/quotations` | Mengirim penawaran UMKM untuk RFQ |
 | **Orders** | `GET`, `PATCH` | `/api/orders/[id]` | Mengupdate status pesanan (Shipped/Delivered/Completed) |
 | **Reviews** | `GET`, `POST` | `/api/reviews` | Mengambil & menyimpan ulasan real-time ke DB |
-| **AI Assistant** | `POST` | `/api/assistant` | Obrolan AI rekomendasi supplier & analisis B2B |
+| **AI Assistant** | `POST` | `/api/assistant` | Tanya jawab AI seputar platform PUSAKA & analisis B2B |
 | **AI Matching** | `POST` | `/api/ai/matching/dari-teks` | Pencocokan AI berbasis deskripsi teks natural |
 
 ---
@@ -365,8 +357,8 @@ Production:  https://pusaka.id/api
 # TypeScript Compile Verification
 npx tsc --noEmit
 
-# Code Linting Check
-npm run lint
+# Production Build Test
+npm run build
 ```
 
 ---
